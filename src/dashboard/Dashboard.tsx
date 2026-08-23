@@ -657,7 +657,12 @@ function AgentDrawer() {
     api<{ providers: { id: string; models: Record<string, unknown> }[] }>('/agent/config/providers')
       .then((c) => {
         const zen = c.providers?.find((p) => p.id === 'opencode');
-        if (zen?.models) setModels(Object.keys(zen.models).filter((m) => m.includes('free')).sort());
+        if (zen?.models)
+          setModels(
+            Object.keys(zen.models)
+              .filter((m) => /(^|-)free$/.test(m) || m === 'big-pickle' || m.startsWith('deepseek'))
+              .sort()
+          );
       })
       .catch(() => {});
   }, []);
@@ -808,7 +813,7 @@ function AgentDrawer() {
       </div>
 
       {/* Composer */}
-      <div className="border-t border-white/[0.06] p-3 shrink-0 flex items-end gap-2">
+      <div className="border-t border-white/[0.06] px-4 py-3 shrink-0 w-full flex items-end gap-2">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -820,7 +825,7 @@ function AgentDrawer() {
           }}
           rows={1}
           placeholder={mode === 'build' ? 'Describe a change…' : 'Ask about the codebase…'}
-          className={`${input} resize-none max-h-28 text-xs`}
+          className={`${input} resize-none max-h-28 text-xs min-h-[40px] flex-1`}
           aria-label="Message the agent"
         />
         <button

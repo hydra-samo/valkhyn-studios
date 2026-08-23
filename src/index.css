@@ -406,3 +406,9 @@ html.lang-ar .text-9xl { font-size: 128px; }
   background-repeat: repeat;
   background-size: 256px 256px;
 }
+
+/* ── Native dropdown options (dashboard selects) ────────────────────────── */
+select option {
+  background-color: #060c09;
+  color: #f3f4f6;
+}
