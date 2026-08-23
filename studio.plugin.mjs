@@ -1,5 +1,7 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
+import { execFile } from 'node:child_process';
 
 /**
  * HYDRA Studio — local API for the /dashboard console.
@@ -73,6 +75,58 @@ export function hydraStudio() {
           } catch {
             return send(res, 502, { ok: false, error: 'agent server unreachable (hydra-agent.service down?)' });
           }
+        }
+
+        // ── Environment: skills / mcp servers / plugins ─────────────
+        if (p === '/env' && req.method === 'GET') {
+          const home = os.homedir();
+          const listDir = (dir) => {
+            try {
+              return fs
+                .readdirSync(dir, { withFileTypes: true })
+                .filter((e) => e.isDirectory() && !e.name.startsWith('.'))
+                .map((e) => e.name);
+            } catch {
+              return [];
+            }
+          };
+          const skills = [
+            ...listDir(path.join(home, '.agents', 'skills')).map((n) => ({ name: n, src: 'global' })),
+            ...listDir(path.join(process.cwd(), '.opencode', 'skills')).map((n) => ({ name: n, src: 'project' })),
+          ];
+          let mcps = [];
+          let plugins = [];
+          try {
+            const r = await fetch('http://127.0.0.1:17171/config');
+            const cfg = await r.json();
+            mcps = Object.entries(cfg.mcp || {}).map(([name, v]) => ({
+              name,
+              type: v?.type || 'local',
+              enabled: v?.enabled !== false,
+            }));
+            plugins = Array.isArray(cfg.plugin) ? cfg.plugin : [];
+          } catch {}
+          return send(res, 200, { skills, mcps, plugins });
+        }
+
+        // ── Open Computer Use toggle (wraps ~/bin ocu-toggle) ───────
+        if (p === '/ocu' && (req.method === 'GET' || req.method === 'POST')) {
+          let state;
+          if (req.method === 'POST') {
+            const buf = await readBody(req);
+            try {
+              state = JSON.parse(buf.toString('utf8') || '{}').state;
+            } catch {}
+          }
+          const args = state ? [String(state)] : [];
+          if (state && !['on', 'off', 'block'].includes(state)) {
+            return send(res, 400, { ok: false, error: 'state must be on|off|block' });
+          }
+          const bin = path.join(os.homedir(), '.config', 'opencode', 'bin', 'ocu-toggle');
+          return execFile(bin, args, { timeout: 5000 }, (err, stdout) => {
+            if (err) return send(res, 500, { ok: false, error: String(err.message || err) });
+            send(res, 200, { ok: true, output: String(stdout).trim() });
+          });
         }
 
         // ── Repo tree + file viewer (dashboard Files panel) ─────────

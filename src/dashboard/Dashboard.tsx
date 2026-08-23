@@ -656,9 +656,12 @@ function AtmospherePanel() {
 
 /* ── Agent drawer (persistent across panels) ─────────────────────────── */
 
-type ChatMsg = { role: 'user' | 'assistant'; text: string };
+type ChatMsg = { role: 'user' | 'assistant'; text: string; attachments?: string[] };
+type Staged = { file: File; name: string };
+type AgentDef = { name: string; description?: string };
 
 const SESSION_KEY = 'hydra-agent-session';
+const UI_AGENTS = ['plan', 'build', 'os-debloater', 'explore', 'vision'];
 
 function AgentDrawer() {
   const { t } = useLanguage();
@@ -666,26 +669,65 @@ function AgentDrawer() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
-  const [mode, setMode] = useState<'plan' | 'build'>(
-    () => (localStorage.getItem('hydra-agent-mode') as 'plan' | 'build') || 'plan'
-  );
-  const [models, setModels] = useState<string[]>([]);
+  const [agents, setAgents] = useState<string[]>(UI_AGENTS);
+  const [agent, setAgent] = useState<string>(() => localStorage.getItem('hydra-agent-agent') || 'plan');
+  const [models, setModels] = useState<{ id: string; ctx: number }[]>([]);
   const [model, setModel] = useState<string>(() => localStorage.getItem('hydra-agent-model') || 'x-preview-f-free');
+  const [usage, setUsage] = useState<{ tok: number; cost: number }>({ tok: 0, cost: 0 });
+  const [staged, setStaged] = useState<Staged[]>([]);
+  const [plusOpen, setPlusOpen] = useState(false);
+  const [ocu, setOcu] = useState<'on' | 'off' | 'block'>('off');
+  const [skills, setSkills] = useState<{ name: string; src: string }[]>([]);
+  const [envInfo, setEnvInfo] = useState<{ mcps: { name: string; type: string; enabled: boolean }[]; plugins: string[] } | null>(null);
+  const attachRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Agents from the live server (fall back to the known five)
   useEffect(() => {
-    api<{ providers: { id: string; models: Record<string, unknown> }[] }>('/agent/config/providers')
-      .then((c) => {
-        const zen = c.providers?.find((p) => p.id === 'opencode');
-        if (zen?.models)
-          setModels(
-            Object.keys(zen.models)
-              .filter((m) => /(^|-)free$/.test(m) || m === 'big-pickle' || m.startsWith('deepseek'))
-              .sort()
-          );
+    api<AgentDef[]>('/agent')
+      .then((list) => {
+        const names = list.filter((a) => UI_AGENTS.includes(a.name)).map((a) => a.name);
+        if (names.length) setAgents(UI_AGENTS.filter((n) => names.includes(n)));
       })
       .catch(() => {});
   }, []);
+
+  // Free models + context limits
+  useEffect(() => {
+    api<{ providers: { id: string; models: Record<string, { limit?: { context?: number } }> }[] }>('/agent/config/providers')
+      .then((c) => {
+        const zen = c.providers?.find((p) => p.id === 'opencode');
+        if (!zen?.models) return;
+        setModels(
+          Object.entries(zen.models)
+            .filter(([id]) => /(^|-)free$/.test(id) || id === 'big-pickle' || id.startsWith('deepseek'))
+            .map(([id, m]) => ({ id, ctx: m.limit?.context ?? 200_000 }))
+            .sort((a, b) => a.id.localeCompare(b.id))
+        );
+      })
+      .catch(() => {});
+  }, []);
+
+  // Skills + MCP/plugins env
+  useEffect(() => {
+    api<{ skills: { name: string; src: string }[]; mcps: { name: string; type: string; enabled: boolean }[]; plugins: string[] }>('/env')
+      .then((e) => {
+        setSkills(e.skills);
+        setEnvInfo({ mcps: e.mcps, plugins: e.plugins });
+      })
+      .catch(() => {});
+    api<{ output: string }>('/ocu').then((r) => {
+      if (r.output.includes('FREE MODE')) setOcu('on');
+      else if (r.output.includes('DISABLED')) setOcu('block');
+      else setOcu('off');
+    }).catch(() => {});
+  }, []);
+
+  const toggleOcu = () => {
+    const next = ocu === 'on' ? 'off' : 'on';
+    setOcu(next);
+    api('/ocu', { method: 'POST', body: JSON.stringify({ state: next }) }).catch(() => {});
+  };
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -693,11 +735,25 @@ function AgentDrawer() {
 
   const send = async () => {
     const text = input.trim();
-    if (!text || busy) return;
+    if ((!text && staged.length === 0) || busy) return;
     setInput('');
     setBusy(true);
-    setMessages((m) => [...m, { role: 'user', text }]);
+
+    // Stage attachments to disk so the agent can read them with its own tools
+    let promptText = text;
+    const attachedPaths: string[] = [];
     try {
+      for (const st of staged) {
+        const p = await upload(st.file, `_attachments/${Date.now().toString(36)}-${safeName(st.name)}`);
+        attachedPaths.push(p);
+        void st;
+      }
+      if (attachedPaths.length) {
+        promptText = `${text ? text + '\n\n' : ''}Attached file(s):\n${attachedPaths.map((p) => `- public:${p}`).join('\n')}`;
+      }
+      setMessages((m) => [...m, { role: 'user', text, attachments: attachedPaths }]);
+      setStaged([]);
+
       let sid = sessionId;
       if (!sid) {
         const s = await api<{ id: string }>('/agent/session', {
@@ -709,15 +765,24 @@ function AgentDrawer() {
         localStorage.setItem(SESSION_KEY, sid);
         setSessionId(sid);
       }
-      const res = await api<{ parts?: { type: string; text?: string }[] }>(`/agent/session/${sid}/message`, {
+      const res = await api<{
+        info?: { tokens?: { input?: number; output?: number; cache?: { read?: number }; reasoning?: number }; cost?: number };
+        parts?: { type: string; text?: string }[];
+      }>(`/agent/session/${sid}/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          parts: [{ type: 'text', text }],
-          agent: mode,
+          parts: [{ type: 'text', text: promptText }],
+          agent,
           ...(model ? { model: { providerID: 'opencode', modelID: model } } : {}),
         }),
       });
+      const info = res.info ?? {};
+      const tk = info.tokens ?? {};
+      const ctxUsed = (tk.input ?? 0) + (tk.cache?.read ?? 0);
+      const prevTok = usage.tok;
+      setUsage((u) => ({ tok: Math.max(ctxUsed, u.tok + (tk.output ?? 0)), cost: +(u.cost + (info.cost ?? 0)).toFixed(4) }));
+      void prevTok;
       const reply = (res.parts ?? [])
         .filter((p) => p.type === 'text' && p.text)
         .map((p) => p.text)
@@ -734,68 +799,102 @@ function AgentDrawer() {
     }
   };
 
+  const modelCtx = models.find((m) => m.id === model)?.ctx ?? 200_000;
+  const ctxPct = Math.min(100, (usage.tok / modelCtx) * 100);
+
   return (
     <>
-      {/* Drawer header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] shrink-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <HydraLogo className="h-5 w-5 text-accent shrink-0" />
-          <span className="text-[10px] font-medium uppercase tracking-widest text-white/50 truncate">ox-alpha · {t('console.agent.selfHosted')}</span>
+      {/* Drawer header — agent switcher */}
+      <div className="px-3 pt-3 pb-2 shrink-0">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <HydraLogo className="h-5 w-5 text-accent shrink-0" />
+            <span className="text-[10px] font-medium uppercase tracking-widest text-white/50 truncate">ox-alpha · {t('console.agent.selfHosted')}</span>
+          </div>
+          <div className="flex items-center gap-1 shrink-0">
+            {sessionId && (
+              <button
+                onClick={() => {
+                  localStorage.removeItem(SESSION_KEY);
+                  setSessionId(null);
+                  setMessages([]);
+                  setUsage({ tok: 0, cost: 0 });
+                }}
+                className="h-6 px-2 rounded-md text-[9px] font-bold uppercase tracking-widest text-white/30 hover:text-white"
+                title={t('console.agent.newSession')}
+              >
+                ↺
+              </button>
+            )}
+          </div>
         </div>
-        <div className="flex items-center gap-1 shrink-0">
-          {(['plan', 'build'] as const).map((mo) => (
+        {/* Agent pills */}
+        <div className="flex flex-wrap gap-1" aria-label={t('console.agent.agent')}>
+          {agents.map((a) => (
             <button
-              key={mo}
+              key={a}
               onClick={() => {
-                setMode(mo);
-                localStorage.setItem('hydra-agent-mode', mo);
+                setAgent(a);
+                localStorage.setItem('hydra-agent-agent', a);
               }}
-              aria-pressed={mode === mo}
-              title={mo === 'plan' ? t('console.agent.planHint') : t('console.agent.buildHint')}
+              aria-pressed={agent === a}
+              title={
+                {
+                  plan: 'Read-only analysis & advice',
+                  build: 'Can edit files — changes go live instantly',
+                  'os-debloater': 'Cross-platform OS surgery specialist',
+                  explore: 'Fast codebase exploration',
+                  vision: 'Analyzes images/screenshots',
+                }[a] || a
+              }
               className={`h-6 px-2.5 rounded-md text-[9px] font-bold uppercase tracking-widest transition-colors ${
-                mode === mo
+                agent === a
                   ? 'border border-emerald-500/50 bg-emerald-500/10 text-accent'
                   : 'border border-white/10 text-white/40 hover:text-white'
               }`}
             >
-              {mo}
+              {a}
             </button>
           ))}
-          {sessionId && (
-            <button
-              onClick={() => {
-                localStorage.removeItem(SESSION_KEY);
-                setSessionId(null);
-                setMessages([]);
-              }}
-              className="h-6 px-2 rounded-md text-[9px] font-bold uppercase tracking-widest text-white/30 hover:text-white"
-              title={t('console.agent.newSession')}
-            >
-              ↺
-            </button>
-          )}
         </div>
       </div>
 
-      {/* Model picker */}
-      <div className="px-4 py-2.5 border-b border-white/[0.06] shrink-0 flex items-center gap-2">
-        <span className="text-[9px] font-medium uppercase tracking-widest text-white/30 shrink-0">{t('console.agent.freeModels')}</span>
+      {/* Model + context bar */}
+      <div className="px-3 pb-2.5 shrink-0 space-y-2">
         <select
           value={model}
           onChange={(e) => {
             setModel(e.target.value);
             localStorage.setItem('hydra-agent-model', e.target.value);
+            setUsage({ tok: 0, cost: 0 });
           }}
-          className="flex-1 min-w-0 h-7 rounded-md bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono px-2 cursor-pointer"
-          aria-label="Agent model"
+          className="w-full h-7 rounded-md bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono px-2 cursor-pointer"
+          aria-label={t('console.agent.freeModels')}
         >
           {models.length === 0 && <option value={model}>{model}</option>}
           {models.map((m) => (
-            <option key={m} value={m}>
-              {m === 'x-preview-f-free' ? `${m} — ox-alpha` : m}
+            <option key={m.id} value={m.id}>
+              {m.id === 'x-preview-f-free' ? `${m.id} — ox-alpha` : m.id}
             </option>
           ))}
         </select>
+        {/* Claude-style context bar */}
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-[3px] rounded-full bg-white/[0.08] overflow-hidden">
+            <motion.div
+              className="h-full rounded-full origin-left"
+              style={{
+                background: ctxPct > 85 ? '#ef4444' : 'linear-gradient(90deg,#059669,#34d399)',
+              }}
+              animate={{ scaleX: Math.max(ctxPct / 100, 0.005) }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            />
+          </div>
+          <span className="text-[9px] tabular-nums text-white/30 whitespace-nowrap">
+            {(usage.tok / 1000).toFixed(1)}k / {(modelCtx / 1000) >= 1000 ? `${modelCtx / 1000000}M` : `${Math.round(modelCtx / 1000)}k`}
+            {usage.cost > 0 && ` · $${usage.cost.toFixed(3)}`}
+          </span>
+        </div>
       </div>
 
       {/* Transcript */}
@@ -804,6 +903,11 @@ function AgentDrawer() {
           <div className="h-full flex flex-col items-center justify-center text-center gap-2 opacity-60 px-4">
             <HydraLogo className="h-7 w-7 text-accent/70" />
             <p className="text-xs text-white/50 leading-relaxed">{t('console.agent.empty')}</p>
+            {skills.length > 0 && (
+              <p className="text-[10px] text-white/25 leading-relaxed">
+                {skills.length} skills · {envInfo?.mcps.filter((m) => m.enabled).length ?? '?'} MCP servers · {envInfo?.plugins.length ?? 0} plugins loaded
+              </p>
+            )}
           </div>
         )}
         {messages.map((m, i) => (
@@ -815,6 +919,15 @@ function AgentDrawer() {
                   : 'bg-white/[0.03] border-white/[0.07] text-white/75'
               }`}
             >
+              {m.attachments && m.attachments.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-1.5">
+                  {m.attachments.map((a) => (
+                    <span key={a} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/25 text-accent">
+                      📎 {a.split('/').pop()}
+                    </span>
+                  ))}
+                </div>
+              )}
               {m.text}
             </div>
           </motion.div>
@@ -830,39 +943,148 @@ function AgentDrawer() {
         )}
       </div>
 
-      {/* Composer — single glass layer, minimal */}
-      <div className="border-t border-white/[0.06] p-3 shrink-0 w-full">
+      {/* Composer */}
+      <div className="border-t border-white/[0.06] p-3 shrink-0 space-y-2 relative">
+        {/* Staged attachment chips */}
+        {staged.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {staged.map((st, i) => (
+              <span key={i} className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/50">
+                {st.name.length > 24 ? `…${st.name.slice(-22)}` : st.name}
+                <button onClick={() => setStaged((s) => s.filter((_, j) => j !== i))} className="text-white/30 hover:text-red-400" aria-label={`Remove ${st.name}`}>×</button>
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* + popover menu */}
+        {plusOpen && (
+          <>
+            <div className="fixed inset-0 z-20" onClick={() => setPlusOpen(false)} aria-hidden="true" />
+            <motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute bottom-full left-3 right-3 mb-2 z-30 rounded-2xl border border-white/[0.08] bg-[#060c09]/95 backdrop-blur-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden max-h-[26rem] overflow-y-auto"
+            >
+              <MenuItem icon="📎" label={t('console.agent.attach')} onClick={() => { attachRef.current?.click(); setPlusOpen(false); }} />
+              <div className="border-t border-white/[0.05]" />
+              <MenuSection title={`${t('console.agent.skills')} (${skills.length})`}>
+                {skills.map((sk) => (
+                  <button
+                    key={sk.src + sk.name}
+                    onClick={() => {
+                      setInput((v) => `${v}${v.endsWith(' ') || !v ? '' : ' '}@${sk.name} `);
+                      setPlusOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-1.5 text-[11px] text-white/55 hover:text-white hover:bg-white/[0.04] flex items-center justify-between"
+                  >
+                    <span className="truncate">{sk.name}</span>
+                    <span className="text-[8px] uppercase tracking-widest text-white/20 shrink-0 ml-2">{sk.src}</span>
+                  </button>
+                ))}
+              </MenuSection>
+              <div className="border-t border-white/[0.05]" />
+              <MenuSection title={`${t('console.agent.mcps')} (${envInfo?.mcps.length ?? 0})`}>
+                {envInfo?.mcps.map((m) => (
+                  <div key={m.name} className="px-4 py-1.5 text-[11px] flex items-center justify-between">
+                    <span className="text-white/55 truncate">{m.name}</span>
+                    <span className={`shrink-0 h-1.5 w-1.5 rounded-full ${m.enabled ? 'bg-accent' : 'bg-white/15'}`} title={m.enabled ? 'enabled' : 'disabled'} />
+                  </div>
+                ))}
+              </MenuSection>
+              <div className="border-t border-white/[0.05]" />
+              <MenuSection title={`${t('console.agent.plugins')} (${envInfo?.plugins.length ?? 0})`}>
+                {envInfo?.plugins.map((pl) => (
+                  <div key={String(pl)} className="px-4 py-1.5 text-[11px] text-white/55 truncate">{String(pl)}</div>
+                ))}
+              </MenuSection>
+            </motion.div>
+          </>
+        )}
+
+        {/* Layered glass composer card */}
         <div className="w-full rounded-2xl bg-white/[0.04] backdrop-blur-md border border-white/[0.08] focus-within:border-emerald-500/50 focus-within:shadow-[0_0_24px_rgba(16,185,129,0.14)] transition-all duration-300">
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                void send();
-              }
-            }}
-            rows={1}
-            placeholder={mode === 'build' ? t('console.agent.phBuild') : t('console.agent.phPlan')}
-            className="w-full bg-transparent px-4 pt-3 pb-1 text-xs resize-none max-h-28 min-h-[44px] outline-none placeholder:text-white/25"
-            aria-label={t('console.agent.send')}
-          />
-          <div className="flex items-center justify-between px-3 pb-2">
-            <span className="text-[9px] font-medium uppercase tracking-widest text-white/25">
-              {mode === 'build' ? t('console.agent.buildHint') : t('console.agent.planHint')}
-            </span>
+          <div className="flex items-end">
+            <button
+              onClick={() => setPlusOpen(!plusOpen)}
+              aria-label="+"
+              aria-expanded={plusOpen}
+              className="h-[44px] w-10 shrink-0 rounded-l-2xl text-white/35 hover:text-accent hover:bg-white/[0.03] transition-colors text-lg leading-none"
+            >
+              +
+            </button>
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  void send();
+                }
+              }}
+              rows={1}
+              placeholder={agent === 'vision' ? 'Attach an image, then ask…' : agent === 'build' ? t('console.agent.phBuild') : t('console.agent.phPlan')}
+              className="flex-1 min-w-0 bg-transparent py-3 pr-2 text-xs resize-none max-h-28 min-h-[44px] outline-none placeholder:text-white/25"
+              aria-label={t('console.agent.send')}
+            />
             <button
               onClick={() => void send()}
-              disabled={busy || !input.trim()}
+              disabled={busy || (!input.trim() && staged.length === 0)}
               aria-label={t('console.agent.send')}
-              className="h-8 w-8 shrink-0 rounded-lg border border-emerald-500/30 bg-emerald-950/30 text-accent hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+              className="h-8 w-8 mr-2 mb-2 shrink-0 self-end rounded-lg border border-emerald-500/30 bg-emerald-950/30 text-accent hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
             >
               <Send size={13} />
             </button>
           </div>
         </div>
+
+        {/* Footer row: computer-use toggle + mode hint */}
+        <div className="flex items-center justify-between px-1">
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <Toggle checked={ocu === 'on'} onChange={toggleOcu} small />
+            <span className="text-[9px] font-medium uppercase tracking-widest text-white/35">{t('console.agent.computerUse')}</span>
+          </label>
+          <span className="text-[9px] font-medium uppercase tracking-widest text-white/25">
+            {agent === 'build' ? t('console.agent.buildHint') : agent === 'plan' ? t('console.agent.planHint') : agent}
+          </span>
+        </div>
+
+        <input
+          ref={attachRef}
+          type="file"
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            const files = Array.from(e.target.files ?? []);
+            if (files.length) setStaged((s) => [...s, ...files.map((f) => ({ file: f, name: f.name }))]);
+            e.target.value = '';
+          }}
+        />
       </div>
     </>
+  );
+}
+
+function MenuItem({ icon, label, onClick }: { icon: string; label: string; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="w-full text-left px-4 py-2.5 text-xs text-white/70 hover:text-white hover:bg-white/[0.04] flex items-center gap-2.5 transition-colors">
+      <span className="text-sm leading-none">{icon}</span>
+      {label}
+    </button>
+  );
+}
+
+function MenuSection({ title, children }: { title: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-2 text-[9px] font-semibold uppercase tracking-widest text-white/35 hover:text-white/60" aria-expanded={open}>
+        {title}
+        {open ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
+      </button>
+      {open && <div className="pb-1 max-h-40 overflow-y-auto">{children}</div>}
+    </div>
   );
 }
 
