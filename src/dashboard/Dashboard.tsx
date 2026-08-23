@@ -183,7 +183,7 @@ export default function Dashboard() {
 /* ── Shared styles (DESIGN.md: glassmorphic obsidian, never solid neon) ── */
 
 const ghostBtn =
-  'h-8 px-3 rounded-lg border border-emerald-500/25 bg-emerald-950/30 text-[10px] font-semibold uppercase tracking-wider text-white/70 hover:border-emerald-500/50 hover:text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all inline-flex items-center gap-1.5';
+  'h-8 px-3 rounded-xl border border-emerald-500/25 bg-emerald-950/30 text-[10px] font-semibold uppercase tracking-wider text-white/70 hover:border-emerald-500/50 hover:text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all inline-flex items-center gap-1.5';
 const input =
   'w-full bg-white/[0.04] border border-white/[0.08] focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all placeholder:text-white/25';
 const fieldLabel = 'block text-[10px] font-medium uppercase tracking-widest text-white/40 mb-1.5';
@@ -241,7 +241,7 @@ function ContentPanel() {
           <ul>
             {projects.map((p) => (
               <li key={p.id} className="flex items-center gap-4 px-5 py-3.5 border-b border-white/[0.04] last:border-0">
-                <span className="w-14 h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] overflow-hidden shrink-0">
+                <span className="w-14 h-9 rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-hidden shrink-0">
                   {p.thumbnail && <img src={p.thumbnail} alt="" className="w-full h-full object-cover" />}
                 </span>
                 <span className="flex-1 min-w-0">
@@ -326,7 +326,7 @@ function ImportTargets() {
             multiple
             onChange={(e) => void submit()}
             disabled={busy}
-            className="block w-full text-[11px] text-white/40 file:h-9 file:mr-3 file:px-3 file:rounded-lg file:border file:border-emerald-500/30 file:bg-emerald-950/30 file:text-white/80 file:text-[10px] file:uppercase file:tracking-wider file:cursor-pointer cursor-pointer"
+            className="block w-full text-[11px] text-white/40 file:h-9 file:mr-3 file:px-3 file:rounded-xl file:border file:border-emerald-500/30 file:bg-emerald-950/30 file:text-white/80 file:text-[10px] file:uppercase file:tracking-wider file:cursor-pointer cursor-pointer"
           />
         </div>
       </div>
@@ -636,7 +636,7 @@ function AtmospherePanel() {
                 <select
                   value={l.blend}
                   onChange={(e) => patchLayer(id, { blend: e.target.value })}
-                  className="h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] px-2 cursor-pointer"
+                  className="h-8 rounded-xl bg-white/[0.04] border border-white/[0.08] text-[11px] px-2 cursor-pointer"
                   aria-label={`${t(LAYER_KEYS[id] ?? id)} blend mode`}
                 >
                   {BLENDS.map((b) => (
@@ -822,7 +822,7 @@ function AgentDrawer() {
                   setMessages([]);
                   setUsage({ tok: 0, cost: 0 });
                 }}
-                className="h-6 px-2 rounded-md text-[9px] font-bold uppercase tracking-widest text-white/30 hover:text-white"
+                className="h-6 px-2 rounded-xl text-[9px] font-bold uppercase tracking-widest text-white/30 hover:text-white"
                 title={t('console.agent.newSession')}
               >
                 ↺
@@ -849,7 +849,7 @@ function AgentDrawer() {
                   vision: 'Analyzes images/screenshots',
                 }[a] || a
               }
-              className={`h-6 px-2.5 rounded-md text-[9px] font-bold uppercase tracking-widest transition-colors ${
+              className={`h-6 px-2.5 rounded-xl text-[9px] font-bold uppercase tracking-widest transition-colors ${
                 agent === a
                   ? 'border border-emerald-500/50 bg-emerald-500/10 text-accent'
                   : 'border border-white/10 text-white/40 hover:text-white'
@@ -876,7 +876,7 @@ function AgentDrawer() {
             localStorage.setItem('hydra-agent-variant', keep);
             setUsage({ tok: 0, cost: 0 });
           }}
-          className="flex-1 min-w-0 h-7 rounded-md bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono px-2 cursor-pointer"
+          className="flex-1 min-w-0 h-7 rounded-xl bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono px-2 cursor-pointer"
           aria-label={t('console.agent.freeModels')}
         >
           {models.length === 0 && <option value={model}>{model}</option>}
@@ -893,7 +893,7 @@ function AgentDrawer() {
               setVariant(e.target.value);
               localStorage.setItem('hydra-agent-variant', e.target.value);
             }}
-            className="w-[4.5rem] shrink-0 h-7 rounded-md bg-white/[0.04] border border-emerald-500/25 text-[10px] font-mono px-1.5 cursor-pointer"
+            className="w-[4.5rem] shrink-0 h-7 rounded-xl bg-white/[0.04] border border-emerald-500/25 text-[10px] font-mono px-1.5 cursor-pointer"
             aria-label="Variant"
             title="Reasoning effort"
           >
@@ -977,7 +977,7 @@ function AgentDrawer() {
         {staged.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {staged.map((st, i) => (
-              <span key={i} className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white/50">
+              <span key={i} className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-1 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white/50">
                 {st.name.length > 24 ? `…${st.name.slice(-22)}` : st.name}
                 <button onClick={() => setStaged((s) => s.filter((_, j) => j !== i))} className="text-white/30 hover:text-red-400" aria-label={`Remove ${st.name}`}>×</button>
               </span>
@@ -1060,7 +1060,7 @@ function AgentDrawer() {
               onClick={() => void send()}
               disabled={busy || (!input.trim() && staged.length === 0)}
               aria-label={t('console.agent.send')}
-              className="h-8 w-8 mr-2 mb-2 shrink-0 self-end rounded-lg border border-emerald-500/30 bg-emerald-950/30 text-accent hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+              className="h-8 w-8 mr-2 mb-2 shrink-0 self-end rounded-xl border border-emerald-500/30 bg-emerald-950/30 text-accent hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
             >
               <Send size={13} />
             </button>
@@ -1202,7 +1202,7 @@ function AddProjectForm({ onDone }: { onDone: () => void }) {
           <div className="flex items-center gap-3 pt-1">
             <button
               type="submit"
-              className="h-9 px-5 rounded-lg border border-emerald-500/30 bg-emerald-950/30 text-[10px] font-semibold uppercase tracking-wider text-white inline-flex items-center gap-2 hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all"
+              className="h-9 px-5 rounded-xl border border-emerald-500/30 bg-emerald-950/30 text-[10px] font-semibold uppercase tracking-wider text-white inline-flex items-center gap-2 hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all"
             >
               <Upload size={12} /> {t('console.publish')}
             </button>
@@ -1241,7 +1241,7 @@ function FileField({ label: lbl, inputRef, ...rest }: React.InputHTMLAttributes<
         {...rest}
         ref={inputRef}
         type="file"
-        className="block w-full text-[11px] text-white/40 file:h-9 file:mr-3 file:px-3 file:rounded-lg file:border file:border-emerald-500/30 file:bg-emerald-950/30 file:text-white/80 file:text-[10px] file:uppercase file:tracking-wider file:cursor-pointer cursor-pointer"
+        className="block w-full text-[11px] text-white/40 file:h-9 file:mr-3 file:px-3 file:rounded-xl file:border file:border-emerald-500/30 file:bg-emerald-950/30 file:text-white/80 file:text-[10px] file:uppercase file:tracking-wider file:cursor-pointer cursor-pointer"
       />
     </div>
   );
