@@ -16,8 +16,40 @@ import {
   PanelRightOpen,
   Send,
 } from 'lucide-react';
+import { Highlight, type PrismTheme } from 'prism-react-renderer';
 import { HydraLogo } from '../components/HydraLogo';
 import { useLanguage } from '../i18n/LanguageContext';
+
+/* VSCode-grade token colors on the HYDRA palette (DESIGN.md tokens) */
+const hydraTheme: PrismTheme = {
+  plain: { color: '#d7dde3', backgroundColor: 'transparent' },
+  styles: [
+    { types: ['comment', 'prolog', 'doctype', 'cdata'], style: { color: '#5b6b66', fontStyle: 'italic' } },
+    { types: ['punctuation'], style: { color: '#8fa39b' } },
+    { types: ['keyword', 'control', 'directive', 'unit', 'boolean'], style: { color: '#34d399' } },
+    { types: ['string', 'char', 'attr-value', 'regex'], style: { color: '#a7f3d0' } },
+    { types: ['number'], style: { color: '#6ee7b7' } },
+    { types: ['function', 'method'], style: { color: '#e2e8f0' } },
+    { types: ['tag', 'selector', 'deleted'], style: { color: '#f87171' } },
+    { types: ['attr-name', 'class-name', 'maybe-class-name'], style: { color: '#5eead4' } },
+    { types: ['property', 'constant', 'symbol'], style: { color: '#99f6e4' } },
+    { types: ['operator', 'entity', 'url'], style: { color: '#94a3b8' } },
+    { types: ['variable', 'inserted'], style: { color: '#f3f4f6' } },
+    { types: ['important', 'bold'], style: { fontWeight: 'bold' as const } },
+  ],
+};
+
+const EXT_LANG: Record<string, string> = {
+  ts: 'typescript', tsx: 'tsx', js: 'javascript', jsx: 'jsx', mjs: 'javascript', cjs: 'javascript',
+  json: 'json', css: 'css', html: 'markup', svg: 'markup', xml: 'markup',
+  md: 'markdown', py: 'python', sh: 'bash', bash: 'bash', zsh: 'bash',
+  yml: 'yaml', yaml: 'yaml', lua: 'lua', toml: 'toml', sql: 'sql',
+};
+
+function langOf(path: string): string {
+  const ext = path.split('.').pop()?.toLowerCase() ?? '';
+  return EXT_LANG[ext] ?? 'clike';
+}
 
 /**
  * HYDRA Studio Console (/dashboard).
@@ -452,9 +484,25 @@ function FilesPanel() {
               <span className="font-mono">{selected.path}</span> — binary or too large ({selected.reason ?? 'binary'}).
             </div>
           ) : (
-            <pre className="p-5 text-[11px] leading-relaxed font-mono text-white/60 whitespace-pre-wrap break-words">
-              {selected.text}
-            </pre>
+            <Highlight code={selected.text ?? ''} language={langOf(selected.path)} theme={hydraTheme}>
+              {({ style, tokens, getLineProps, getTokenProps }) => (
+                <pre
+                  className="p-4 text-[11px] leading-relaxed font-mono overflow-x-auto"
+                  style={{ ...style, whiteSpace: 'pre' }}
+                >
+                  {tokens.map((line, i) => (
+                    <div key={i} {...getLineProps({ line })} className="table-row">
+                      <span className="table-cell select-none pr-4 text-right text-white/15 w-8">{i + 1}</span>
+                      <span className="table-cell">
+                        {line.map((token, k) => (
+                          <span key={k} {...getTokenProps({ token })} />
+                        ))}
+                      </span>
+                    </div>
+                  ))}
+                </pre>
+              )}
+            </Highlight>
           )}
         </div>
       </div>
