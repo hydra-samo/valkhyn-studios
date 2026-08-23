@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { ACTIVE_ASSETS } from './assetRegistry';
 import { useMotionStore } from './MotionStore';
 import { VideoLayer } from './VideoLayer';
+import ATMOSPHERE from '../../data/atmosphere.json';
 
 interface HydraMotionEngineProps {
   deviceTier: 'low' | 'medium' | 'high';
@@ -26,14 +27,16 @@ export function HydraMotionEngine({ deviceTier }: HydraMotionEngineProps) {
   const store = useMotionStore();
 
   const visibleAssets = useMemo(() => {
+    if (!ATMOSPHERE.master) return [];
     return ACTIVE_ASSETS.filter((asset) => {
+      if (ATMOSPHERE.layers[asset.id]?.enabled === false) return false;
       if (deviceTier === 'low') return false;
       if (deviceTier === 'medium') return asset.mediumTier;
       return true;
     });
   }, [deviceTier]);
 
-  if (deviceTier === 'low') return null;
+  if (deviceTier === 'low' || !ATMOSPHERE.master) return null;
 
   return (
     <div
@@ -52,6 +55,7 @@ export function HydraMotionEngine({ deviceTier }: HydraMotionEngineProps) {
           asset={asset}
           motionStore={store}
           affordable={true}
+          layerCfg={ATMOSPHERE.layers[asset.id]}
         />
       ))}
     </div>

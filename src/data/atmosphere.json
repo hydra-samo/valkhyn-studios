@@ -1,0 +1,13 @@
+{
+  "master": true,
+  "grain": true,
+  "layers": {
+    "haze":           { "enabled": true, "opacity": 1.0, "blend": "soft-light" },
+    "env-secondary":  { "enabled": true, "opacity": 1.0, "blend": "screen" },
+    "env-primary":    { "enabled": true, "opacity": 1.0, "blend": "screen" },
+    "dust":           { "enabled": true, "opacity": 1.0, "blend": "screen" },
+    "wisp":           { "enabled": true, "opacity": 1.0, "blend": "overlay" },
+    "geometry-primary": { "enabled": true, "opacity": 1.0, "blend": "screen" },
+    "env-fragment":   { "enabled": true, "opacity": 1.0, "blend": "screen" }
+  }
+}

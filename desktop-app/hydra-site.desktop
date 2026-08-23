@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=HYDRA Studio
+Comment=Live local portfolio (always-on server)
+Exec=/usr/bin/helium-browser --app=http://127.0.0.1:1717/ --class=HYDRAStudioSite
+Icon=/home/hydrasamo/Projects HYDRA/HYDRA SAMO LABS/PORTFOLIO/public/brand/hero-logo.png
+Terminal=false
+Categories=Development;Graphics;
+StartupWMClass=HYDRAStudioSite

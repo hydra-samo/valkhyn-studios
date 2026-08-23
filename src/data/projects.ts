@@ -1,12 +1,10 @@
 import type { Project } from '../types';
+import raw from './projects.json';
 
 /**
  * Single source of truth for showcased work.
- *
- * NO FAKE CONTENT (workspace rule): PROJECTS stays empty until real, released
- * work exists. To add a project: append a Project object — media lives in
- * /public/work/<id>/ (poster.jpg, video.mp4). The site renders the designed
- * empty state while this list is empty; the horizontal chapter + takeover
- * activate automatically with the first entry.
+ * Edited live by the Studio dashboard (/dashboard) via the local API —
+ * every write hot-reloads the site. NO FAKE CONTENT: stays empty until
+ * real, released work exists.
  */
-export const PROJECTS: Project[] = [];
+export const PROJECTS = raw as Project[];
