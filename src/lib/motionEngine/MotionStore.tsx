@@ -170,87 +170,91 @@ export function MotionStoreProvider({ lenisRef, children }: MotionStoreProviderP
     };
   }, [reMeasure]);
 
-  // Lenis onScroll — update MotionValues every frame (no React state)
+  // Scroll source of truth: native window.scrollY. Lenis smooths the window
+  // natively, so this captures wheel, keyboard, scrollbar, anchor AND
+  // programmatic scrolls — anything that moves the page.
   useEffect(() => {
-    const lenis = lenisRef.current;
-    if (!lenis) return;
-
     let ticking = false;
+    let lastY = window.scrollY;
 
-    const onScroll = (lenisInstance: Lenis) => {
-      if (ticking) return;
-      ticking = true;
+    const compute = () => {
+      ticking = false;
 
-      requestAnimationFrame(() => {
-        ticking = false;
+      const scrollY = window.scrollY;
+      const docHeight = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      );
+      const velocity = scrollY - lastY;
+      lastY = scrollY;
 
-        const scrollY = lenisInstance.animatedScroll;
-        const docHeight = lenisInstance.limit;
-        const velocity = lenisInstance.velocity;
+      store.rawScrollY.set(scrollY);
+      store.docHeight.set(docHeight);
+      store.scrollProgress.set(docHeight > 0 ? clamp(scrollY / docHeight, 0, 1) : 0);
+      store.scrollVelocity.set(velocity);
 
-        store.rawScrollY.set(scrollY);
-        store.docHeight.set(docHeight);
-        store.scrollProgress.set(docHeight > 0 ? clamp(scrollY / docHeight, 0, 1) : 0);
-        store.scrollVelocity.set(velocity);
+      // Direction: -1 up, 0 idle, 1 down
+      const absVel = Math.abs(velocity);
+      store.scrollDirection.set(absVel < 0.1 ? 0 : velocity > 0 ? 1 : -1);
 
-        // Direction: -1 up, 0 idle, 1 down
-        const absVel = Math.abs(velocity);
-        store.scrollDirection.set(absVel < 0.1 ? 0 : velocity > 0 ? 1 : -1);
+      // Damped velocity — exponential smoothing for spring-like inertia
+      dampedVelRef.current = dampedVelRef.current * 0.85 + velocity * 0.15;
+      store.dampedVelocity.set(dampedVelRef.current);
 
-        // Damped velocity — exponential smoothing for spring-like inertia
-        // Factor 0.15 = smooth, responsive enough for 60fps
-        dampedVelRef.current = dampedVelRef.current * 0.85 + velocity * 0.15;
-        store.dampedVelocity.set(dampedVelRef.current);
+      // Motion intensity: 0–1 based on velocity magnitude, eased for natural feel
+      const rawIntensity = clamp(absVel / 12, 0, 1);
+      const easedIntensity = easeOutExpo(rawIntensity);
+      store.motionIntensity.set(easedIntensity);
 
-        // Motion intensity: 0–1 based on velocity magnitude, eased for natural feel
-        const rawIntensity = clamp(absVel / 12, 0, 1);
-        const easedIntensity = easeOutExpo(rawIntensity);
-        store.motionIntensity.set(easedIntensity);
+      // Find current section
+      const sections = sectionsRef.current;
+      let currentIdx = 0;
+      let sectionProgress = 0;
+      let transitionProgress = 0;
 
-        // Find current section
-        const sections = sectionsRef.current;
-        let currentIdx = 0;
-        let sectionProgress = 0;
-        let transitionProgress = 0;
+      if (sections.length > 0) {
+        for (let i = sections.length - 1; i >= 0; i--) {
+          if (scrollY >= sections[i].top - window.innerHeight * 0.4) {
+            currentIdx = i;
+            const sec = sections[i];
+            sectionProgress = sec.height > 0
+              ? clamp((scrollY - sec.top) / sec.height, 0, 1)
+              : 0;
 
-        if (sections.length > 0) {
-          for (let i = sections.length - 1; i >= 0; i--) {
-            if (scrollY >= sections[i].top - window.innerHeight * 0.4) {
-              currentIdx = i;
-              const sec = sections[i];
-              sectionProgress = sec.height > 0
-                ? clamp((scrollY - sec.top) / sec.height, 0, 1)
-                : 0;
-
-              // Transition zones at section boundaries — smooth crossfade
-              const zone = window.innerHeight * 0.15;
-              for (let j = Math.max(0, i - 1); j <= Math.min(sections.length - 1, i + 1); j++) {
-                if (j === i) continue;
-                const boundary = j < i ? sections[i].top : sections[i].bottom;
-                const dist = Math.abs(scrollY - boundary);
-                if (dist < zone) {
-                  // Ease the transition for smoother crossfade
-                  const raw = 1 - dist / zone;
-                  transitionProgress = Math.max(transitionProgress, easeInOutCubic(raw));
-                }
+            // Transition zones at section boundaries — smooth crossfade
+            const zone = window.innerHeight * 0.15;
+            for (let j = Math.max(0, i - 1); j <= Math.min(sections.length - 1, i + 1); j++) {
+              if (j === i) continue;
+              const boundary = j < i ? sections[i].top : sections[i].bottom;
+              const dist = Math.abs(scrollY - boundary);
+              if (dist < zone) {
+                const raw = 1 - dist / zone;
+                transitionProgress = Math.max(transitionProgress, easeInOutCubic(raw));
               }
-              break;
             }
+            break;
           }
         }
+      }
 
-        store.currentSection.set((sections[currentIdx]?.id as SectionId) ?? 'hero');
-        store.sectionProgress.set(sectionProgress);
-        store.transitionProgress.set(clamp(transitionProgress, 0, 1));
+      store.currentSection.set((sections[currentIdx]?.id as SectionId) ?? 'hero');
+      store.sectionProgress.set(sectionProgress);
+      store.transitionProgress.set(clamp(transitionProgress, 0, 1));
 
-        // Notify subscribers (VideoLayers etc.)
-        (store as any)._notify?.();
-      });
+      // Notify subscribers (VideoLayers etc.)
+      (store as any)._notify?.();
     };
 
-    lenis.on('scroll', onScroll);
-    return () => { lenis.off('scroll', onScroll); };
-  }, [lenisRef, store]);
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(compute);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    compute();
+    return () => { window.removeEventListener('scroll', onScroll); };
+  }, [store]);
 
   return (
     <MotionStoreContext.Provider value={store}>
