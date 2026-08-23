@@ -6,6 +6,7 @@ import { Lang } from '../i18n/translations';
 import { cn } from '../lib/utils';
 import { MagneticButton } from './MagneticButton';
 import { HydraLogo } from './HydraLogo';
+import { ease, duration } from '../lib/motionTokens';
 import { useCoarsePointer } from '../hooks/useCoarsePointer';
 import { useDeviceTier } from '../hooks/useDeviceTier';
 
@@ -53,7 +54,7 @@ export const PreSplashSelector: React.FC<PreSplashSelectorProps> = ({
         opacity: 0,
         scale: 0.97,
         ...(cheapMotion ? {} : { filter: 'blur(8px)' }),
-        transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+        transition: { duration: duration.quick, ease: ease.cinematic },
       }}
       className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[var(--bg-canvas)] text-[var(--text-main)] select-none"
     >

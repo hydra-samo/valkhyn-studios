@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { CinematicSection } from './motion/CinematicSection';
 import { Reveal } from './motion/Reveal';
+import { ease, duration } from '../lib/motionTokens';
 import { useLanguage } from '../i18n/LanguageContext';
 
 /**
@@ -68,7 +69,7 @@ export const AboutSection = React.memo(function AboutSection() {
                     initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}
                     whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                     viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.6, delay: 0.4 + idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: duration.mid, delay: 0.4 + idx * 0.1, ease: ease.cinematic }}
                   >
                     <h3 className="text-white/80 text-sm font-bold uppercase tracking-wider">
                       {label}

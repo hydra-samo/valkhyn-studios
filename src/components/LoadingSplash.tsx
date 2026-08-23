@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, animate, useMotionValue, useTransform, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
 import { HydraLogo } from './HydraLogo';
+import { ease, duration } from '../lib/motionTokens';
 
 interface LoadingSplashProps {
   onComplete: () => void;
@@ -57,7 +58,7 @@ export const LoadingSplash: React.FC<LoadingSplashProps> = ({ onComplete }) => {
 
     const controls = animate(progress, 100, {
       duration: BAR_DURATION,
-      ease: [0.16, 1, 0.3, 1],
+      ease: ease.cinematic,
       onUpdate: (v) => setPercent(Math.round(v)),
     });
 
@@ -80,7 +81,7 @@ export const LoadingSplash: React.FC<LoadingSplashProps> = ({ onComplete }) => {
         opacity: 0,
         scale: 1.02,
         filter: 'blur(8px)',
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+        transition: { duration: duration.mid, ease: ease.cinematic },
       }}
       onClick={onComplete}
       title={t('splash.skip')}

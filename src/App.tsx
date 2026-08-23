@@ -8,6 +8,8 @@ import { LoadingSplash } from './components/LoadingSplash';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
 import { PersistentPortrait } from './components/PersistentPortrait';
+import { CustomCursor } from './components/CustomCursor';
+import { ProgressRail } from './components/ProgressRail';
 import { useLenis } from './hooks/useLenis';
 
 const ProjectsSection = React.lazy(() =>
@@ -114,6 +116,10 @@ function AppInner() {
             <Navigation
               onOpenBrief={() => setIsOpenBriefModal(true)}
             />
+
+            {/* ── Craft layer ─────────────────────────────────────────────── */}
+            <CustomCursor />
+            <ProgressRail />
 
             {/* ── Continuous Content Flow ──────────────────────────────────── */}
             <main className="relative z-10">

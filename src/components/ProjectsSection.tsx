@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CinematicSection } from './motion/CinematicSection';
 import { Reveal } from './motion/Reveal';
+import { ease, duration, stagger } from '../lib/motionTokens';
 import { useLanguage } from '../i18n/LanguageContext';
 import { PROJECTS } from '../data/portfolioData';
 
@@ -72,7 +73,7 @@ export const ProjectsSection = React.memo(function ProjectsSection() {
                 initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: duration.base, ease: ease.cinematic }}
                 className="col-span-full"
               >
                 <div className="relative aspect-[16/10] rounded-2xl border border-accent/[0.1] bg-accent/[0.02] overflow-hidden flex flex-col items-center justify-center gap-4 p-8">
@@ -95,7 +96,7 @@ export const ProjectsSection = React.memo(function ProjectsSection() {
                   initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
                   animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
-                  transition={{ duration: 0.6, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: duration.mid, delay: idx * stagger.item, ease: ease.cinematic }}
                   className="group relative aspect-[16/10] rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden hover:border-accent/20 transition-all duration-500"
                 >
                   {/* Gradient overlay */}
