@@ -101,19 +101,19 @@ export default function Dashboard() {
     <div className="h-screen flex flex-col bg-[#060c09] text-[#f3f4f6] overflow-hidden relative" style={{ colorScheme: 'dark' }}>
       {/* Translucent aurora under-layer — panels float on this */}
       <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-1/4 left-1/3 -translate-x-1/2 w-[52rem] h-[40rem] rounded-full bg-[#10b981]/[0.055] blur-[130px]" />
-        <div className="absolute bottom-[-20%] left-[-10%] w-[44rem] h-[36rem] rounded-full bg-[#059669]/[0.05] blur-[120px]" />
-        <div className="absolute top-1/3 right-[-12%] w-[38rem] h-[34rem] rounded-full bg-[#34d399]/[0.035] blur-[110px]" />
+        <div className="absolute -top-1/4 left-1/3 -translate-x-1/2 w-[52rem] h-[40rem] rounded-full bg-[#10b981]/[0.08] blur-[130px]" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[44rem] h-[36rem] rounded-full bg-[#059669]/[0.075] blur-[120px]" />
+        <div className="absolute top-1/3 right-[-12%] w-[38rem] h-[34rem] rounded-full bg-[#34d399]/[0.055] blur-[110px]" />
       </div>
 
       {/* Header lockup */}
-      <header className="relative z-10 flex items-center justify-between px-5 h-14 shrink-0 border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-md">
+      <header className="relative z-10 flex items-center justify-between px-5 h-14 shrink-0 border-b border-white/[0.08] bg-white/[0.04] backdrop-blur-md">
         <div className="flex items-center gap-3">
           <HydraLogo className="h-6 w-6 text-accent hydra-mark-glow" />
           <span className="font-display font-bold tracking-[-0.02em] text-sm uppercase">
             HYDRA <span className="text-accent">SAMO</span>
           </span>
-          <span className="text-[10px] font-medium uppercase tracking-widest text-white/35 ml-1 hidden sm:inline">
+          <span className="text-[10px] font-medium uppercase tracking-widest text-white/52 ml-1 hidden sm:inline">
             {t('console.subtitle')}
           </span>
         </div>
@@ -137,7 +137,7 @@ export default function Dashboard() {
       {/* Body: rail · panel · agent drawer */}
       <div className="relative z-10 flex flex-1 min-h-0">
         {/* Activity rail */}
-        <nav className="w-14 shrink-0 flex flex-col items-center gap-1 py-3 border-r border-white/[0.06] bg-white/[0.015]" aria-label="Console panels">
+        <nav className="w-14 shrink-0 flex flex-col items-center gap-1 py-3 border-r border-white/[0.08] bg-white/[0.035]" aria-label="Console panels">
           {(
             [
               ['content', FolderOpen, 'Content & Imports'],
@@ -151,7 +151,7 @@ export default function Dashboard() {
               title={title}
               aria-pressed={panel === id}
               className={`relative h-10 w-10 rounded-xl flex items-center justify-center transition-colors ${
-                panel === id ? 'bg-white/[0.06] text-accent' : 'text-white/40 hover:text-white hover:bg-white/[0.03]'
+                panel === id ? 'bg-white/[0.06] text-accent' : 'text-white/58 hover:text-white hover:bg-white/[0.055]'
               }`}
             >
               {panel === id && <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[2px] rounded-full bg-accent" />}
@@ -171,7 +171,7 @@ export default function Dashboard() {
 
         {/* Persistent agent drawer — mounts once, survives panel switches */}
         {agentOpen && (
-          <aside className="w-[24rem] xl:w-[26rem] shrink-0 border-l border-white/[0.06] bg-white/[0.02] backdrop-blur-md flex flex-col min-h-0">
+          <aside className="w-[24rem] xl:w-[26rem] shrink-0 border-l border-white/[0.08] bg-white/[0.04] backdrop-blur-md flex flex-col min-h-0">
             <AgentDrawer />
           </aside>
         )}
@@ -185,8 +185,8 @@ export default function Dashboard() {
 const ghostBtn =
   'h-8 px-3 rounded-xl border border-emerald-500/25 bg-emerald-950/30 text-[10px] font-semibold uppercase tracking-wider text-white/70 hover:border-emerald-500/50 hover:text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all inline-flex items-center gap-1.5';
 const input =
-  'w-full bg-white/[0.04] border border-white/[0.08] focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all placeholder:text-white/25';
-const fieldLabel = 'block text-[10px] font-medium uppercase tracking-widest text-white/40 mb-1.5';
+  'w-full bg-white/[0.04] border border-white/[0.08] focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all placeholder:text-white/42';
+const fieldLabel = 'block text-[10px] font-medium uppercase tracking-widest text-white/58 mb-1.5';
 
 function PanelTitle({ children }: { children: React.ReactNode }) {
   return (
@@ -218,15 +218,15 @@ function ContentPanel() {
       <PanelTitle>
         {t('console.content.title').split('&')[0]}<span className="text-accent">&amp;</span>{t('console.content.title').split('&')[1] ?? ''}
       </PanelTitle>
-      <p className="text-sm text-white/45 mb-5">{t('console.content.desc')}</p>
+      <p className="text-sm text-white/60 mb-5">{t('console.content.desc')}</p>
 
       <ImportTargets />
       <ImportProjectsJson onDone={refresh} />
 
       {/* Projects list */}
       <section className="glass-card rounded-2xl overflow-hidden" aria-label="Published work">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
-          <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.08]">
+          <span className="text-[10px] font-medium uppercase tracking-widest text-white/58">
             {t('console.published')} ({projects?.length ?? '…'})
           </span>
           <button onClick={refresh} className={ghostBtn} title="Refresh">
@@ -234,25 +234,25 @@ function ContentPanel() {
           </button>
         </div>
         {projects === null ? (
-          <p className="px-5 py-6 text-sm text-white/30">Loading…</p>
+          <p className="px-5 py-6 text-sm text-white/48">Loading…</p>
         ) : projects.length === 0 ? (
-          <p className="px-5 py-6 text-sm text-white/30">{t('console.noneYet')}</p>
+          <p className="px-5 py-6 text-sm text-white/48">{t('console.noneYet')}</p>
         ) : (
           <ul>
             {projects.map((p) => (
-              <li key={p.id} className="flex items-center gap-4 px-5 py-3.5 border-b border-white/[0.04] last:border-0">
-                <span className="w-14 h-9 rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-hidden shrink-0">
+              <li key={p.id} className="flex items-center gap-4 px-5 py-3.5 border-b border-white/[0.08] last:border-0">
+                <span className="w-14 h-9 rounded-xl bg-white/[0.055] border border-white/[0.08] overflow-hidden shrink-0">
                   {p.thumbnail && <img src={p.thumbnail} alt="" className="w-full h-full object-cover" />}
                 </span>
                 <span className="flex-1 min-w-0">
                   <span className="block text-sm font-semibold truncate">{p.title}</span>
-                  <span className="block text-[11px] text-white/35 truncate">
+                  <span className="block text-[11px] text-white/52 truncate">
                     {p.client} · {p.year} · {p.tag}
                   </span>
                 </span>
                 <button
                   onClick={() => remove(p.id)}
-                  className="h-8 w-8 rounded-full text-white/30 hover:text-red-400 hover:bg-red-500/10 flex items-center justify-center transition-colors"
+                  className="h-8 w-8 rounded-full text-white/48 hover:text-red-400 hover:bg-red-500/10 flex items-center justify-center transition-colors"
                   aria-label={`Delete ${p.title}`}
                 >
                   <Trash2 size={14} />
@@ -298,7 +298,7 @@ function ImportTargets() {
   return (
     <section className="glass-card rounded-2xl p-5 space-y-4" aria-label="Import section files">
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">{t('console.import.title')}</span>
+        <span className="text-[10px] font-medium uppercase tracking-widest text-white/58">{t('console.import.title')}</span>
         {done && (
           <span className="text-[10px] text-accent inline-flex items-center gap-1">
             <Check size={11} /> {t('console.import.live', { n: done.length })}
@@ -326,17 +326,17 @@ function ImportTargets() {
             multiple
             onChange={(e) => void submit()}
             disabled={busy}
-            className="block w-full text-[11px] text-white/40 file:h-9 file:mr-3 file:px-3 file:rounded-xl file:border file:border-emerald-500/30 file:bg-emerald-950/30 file:text-white/80 file:text-[10px] file:uppercase file:tracking-wider file:cursor-pointer cursor-pointer"
+            className="block w-full text-[11px] text-white/58 file:h-9 file:mr-3 file:px-3 file:rounded-xl file:border file:border-emerald-500/30 file:bg-emerald-950/30 file:text-white/80 file:text-[10px] file:uppercase file:tracking-wider file:cursor-pointer cursor-pointer"
           />
         </div>
       </div>
-      <p className="text-[11px] text-white/25">
+      <p className="text-[11px] text-white/42">
         {t(TARGET_HINT_KEYS[target] ?? '')} · uploads go straight to public/ and hot-reload the site
       </p>
       {done && done.length > 0 && (
         <ul className="space-y-1">
           {done.map((d) => (
-            <li key={d} className="text-[11px] font-mono text-white/40">
+            <li key={d} className="text-[11px] font-mono text-white/58">
               {d}
             </li>
           ))}
@@ -351,8 +351,8 @@ function ImportProjectsJson({ onDone }: { onDone: () => void }) {
   return (
     <label className="glass-card rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:border-emerald-500/30 transition-colors">
       <span>
-        <span className="block text-[10px] font-medium uppercase tracking-widest text-white/40 mb-0.5">{t('console.bulk.title')}</span>
-        <span className="block text-xs text-white/45">{t('console.bulk.desc')}</span>
+        <span className="block text-[10px] font-medium uppercase tracking-widest text-white/58 mb-0.5">{t('console.bulk.title')}</span>
+        <span className="block text-xs text-white/60">{t('console.bulk.desc')}</span>
       </span>
       <Upload size={15} className="text-accent shrink-0" />
       <input
@@ -415,14 +415,14 @@ function FilesPanel() {
       <PanelTitle>
         {t('console.files.title')}
       </PanelTitle>
-      <p className="text-sm text-white/45 mb-5">{t('console.files.desc')}</p>
+      <p className="text-sm text-white/60 mb-5">{t('console.files.desc')}</p>
 
       <div className="glass-card rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[260px_1fr] min-h-[28rem]">
         {/* Tree */}
-        <div className="border-b md:border-b-0 md:border-r border-white/[0.06] overflow-y-auto max-h-[32rem] md:max-h-none py-2">
+        <div className="border-b md:border-b-0 md:border-r border-white/[0.08] overflow-y-auto max-h-[32rem] md:max-h-none py-2">
           <div className="flex items-center justify-between px-4 pb-2">
-            <span className="text-[10px] font-medium uppercase tracking-widest text-white/35">Explorer</span>
-            <button onClick={refresh} className="text-white/30 hover:text-white transition-colors" title="Refresh">
+            <span className="text-[10px] font-medium uppercase tracking-widest text-white/52">Explorer</span>
+            <button onClick={refresh} className="text-white/48 hover:text-white transition-colors" title="Refresh">
               <RefreshCw size={11} />
             </button>
           </div>
@@ -442,13 +442,13 @@ function FilesPanel() {
         {/* Viewer */}
         <div className="overflow-auto max-h-[32rem] md:max-h-none min-h-[16rem]">
           {!selected ? (
-            <div className="h-full flex items-center justify-center text-xs text-white/25 p-8 text-center">
+            <div className="h-full flex items-center justify-center text-xs text-white/42 p-8 text-center">
               Pick a file to preview its contents.
             </div>
           ) : loadingFile ? (
-            <p className="p-5 text-xs text-white/30">Reading…</p>
+            <p className="p-5 text-xs text-white/48">Reading…</p>
           ) : selected.binary ? (
-            <div className="p-5 text-xs text-white/40">
+            <div className="p-5 text-xs text-white/58">
               <span className="font-mono">{selected.path}</span> — binary or too large ({selected.reason ?? 'binary'}).
             </div>
           ) : (
@@ -513,18 +513,18 @@ function TreeRow({
           }
         }}
         className={`w-full text-left flex items-center gap-1.5 py-1 pr-2 text-xs transition-colors ${
-          selected === node.path ? 'bg-white/[0.05] text-white' : 'text-white/55 hover:bg-white/[0.03] hover:text-white'
+          selected === node.path ? 'bg-white/[0.05] text-white' : 'text-white/55 hover:bg-white/[0.055] hover:text-white'
         }`}
         style={{ paddingLeft: `${depth * 14 + 14}px` }}
       >
         {node.isDir ? (
           open ? (
-            <ChevronDown size={12} className="shrink-0 text-white/30" />
+            <ChevronDown size={12} className="shrink-0 text-white/48" />
           ) : (
-            <ChevronRight size={12} className="shrink-0 text-white/30" />
+            <ChevronRight size={12} className="shrink-0 text-white/48" />
           )
         ) : (
-          <FileIcon size={11} className="shrink-0 text-white/25" />
+          <FileIcon size={11} className="shrink-0 text-white/42" />
         )}
         <span className={`truncate ${node.isDir ? 'font-medium' : 'font-normal'}`}>{node.name}</span>
       </button>
@@ -577,7 +577,7 @@ function AtmospherePanel() {
     return (
       <>
         <PanelTitle>Atmosphere</PanelTitle>
-        <p className="text-sm text-white/30 mt-4">Loading…</p>
+        <p className="text-sm text-white/48 mt-4">Loading…</p>
       </>
     );
 
@@ -589,7 +589,7 @@ function AtmospherePanel() {
       <PanelTitle>
         {t('console.atm.title')}
       </PanelTitle>
-      <p className="text-sm text-white/45 mb-5">{t('console.atm.desc')}</p>
+      <p className="text-sm text-white/60 mb-5">{t('console.atm.desc')}</p>
 
       <div className="glass-card rounded-2xl divide-y divide-white/[0.06] mb-6">
         <SwitchRow label={t('console.atm.engine')} hint={t('console.atm.engineHint')} checked={cfg.master} onChange={(v) => save({ ...cfg, master: v })} />
@@ -597,8 +597,8 @@ function AtmospherePanel() {
       </div>
 
       <div className="glass-card rounded-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
-          <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">{t('console.atm.layers')}</span>
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.08]">
+          <span className="text-[10px] font-medium uppercase tracking-widest text-white/58">{t('console.atm.layers')}</span>
           {justSaved && (
             <span className="text-[10px] uppercase tracking-widest text-accent inline-flex items-center gap-1">
               <Check size={11} /> {t('console.atm.synced')}
@@ -611,14 +611,14 @@ function AtmospherePanel() {
             return (
               <li
                 key={id}
-                className="px-5 py-4 border-b border-white/[0.04] last:border-0 grid grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_130px_120px] items-center gap-x-4 gap-y-2"
+                className="px-5 py-4 border-b border-white/[0.08] last:border-0 grid grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_130px_120px] items-center gap-x-4 gap-y-2"
               >
                 <Toggle checked={l.enabled !== false} onChange={(v) => patchLayer(id, { enabled: v })} small />
                 <div className="min-w-0">
-                  <span className={`block text-sm font-medium ${l.enabled === false ? 'text-white/25 line-through' : ''}`}>
+                  <span className={`block text-sm font-medium ${l.enabled === false ? 'text-white/42 line-through' : ''}`}>
                     {t(LAYER_KEYS[id] ?? id)}
                   </span>
-                  <code className="block text-[10px] font-mono text-white/25">{id}</code>
+                  <code className="block text-[10px] font-mono text-white/42">{id}</code>
                 </div>
                 <label className="flex items-center gap-2 col-start-2 sm:col-start-auto">
                   <input
@@ -631,7 +631,7 @@ function AtmospherePanel() {
                     className="w-full accent-[#10b981]"
                     aria-label={`${t(LAYER_KEYS[id] ?? id)} opacity`}
                   />
-                  <span className="text-[10px] tabular-nums text-white/40 w-8">{Math.round(l.opacity * 100)}%</span>
+                  <span className="text-[10px] tabular-nums text-white/58 w-8">{Math.round(l.opacity * 100)}%</span>
                 </label>
                 <select
                   value={l.blend}
@@ -811,7 +811,7 @@ function AgentDrawer() {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2 min-w-0">
             <HydraLogo className="h-5 w-5 text-accent shrink-0" />
-            <span className="text-[10px] font-medium uppercase tracking-widest text-white/50 truncate">ox-alpha · {t('console.agent.selfHosted')}</span>
+            <span className="text-[10px] font-medium uppercase tracking-widest text-white/65 truncate">ox-alpha · {t('console.agent.selfHosted')}</span>
           </div>
           <div className="flex items-center gap-1 shrink-0">
             {sessionId && (
@@ -822,7 +822,7 @@ function AgentDrawer() {
                   setMessages([]);
                   setUsage({ tok: 0, cost: 0 });
                 }}
-                className="h-6 px-2 rounded-xl text-[9px] font-bold uppercase tracking-widest text-white/30 hover:text-white"
+                className="h-6 px-2 rounded-xl text-[9px] font-bold uppercase tracking-widest text-white/48 hover:text-white"
                 title={t('console.agent.newSession')}
               >
                 ↺
@@ -852,7 +852,7 @@ function AgentDrawer() {
               className={`h-6 px-2.5 rounded-xl text-[9px] font-bold uppercase tracking-widest transition-colors ${
                 agent === a
                   ? 'border border-emerald-500/50 bg-emerald-500/10 text-accent'
-                  : 'border border-white/10 text-white/40 hover:text-white'
+                  : 'border border-white/10 text-white/58 hover:text-white'
               }`}
             >
               {a}
@@ -918,7 +918,7 @@ function AgentDrawer() {
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             />
           </div>
-          <span className="text-[9px] tabular-nums text-white/30 whitespace-nowrap">
+          <span className="text-[9px] tabular-nums text-white/48 whitespace-nowrap">
             {(usage.tok / 1000).toFixed(1)}k / {(modelCtx / 1000) >= 1000 ? `${modelCtx / 1000000}M` : `${Math.round(modelCtx / 1000)}k`}
             {usage.cost > 0 && ` · $${usage.cost.toFixed(3)}`}
           </span>
@@ -930,9 +930,9 @@ function AgentDrawer() {
         {messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center text-center gap-2 opacity-60 px-4">
             <HydraLogo className="h-7 w-7 text-accent/70" />
-            <p className="text-xs text-white/50 leading-relaxed">{t('console.agent.empty')}</p>
+            <p className="text-xs text-white/65 leading-relaxed">{t('console.agent.empty')}</p>
             {skills.length > 0 && (
-              <p className="text-[10px] text-white/25 leading-relaxed">
+              <p className="text-[10px] text-white/42 leading-relaxed">
                 {skills.length} skills · {envInfo?.mcps.filter((m) => m.enabled).length ?? '?'} MCP servers · {envInfo?.plugins.length ?? 0} plugins loaded
               </p>
             )}
@@ -944,7 +944,7 @@ function AgentDrawer() {
               className={`max-w-[92%] rounded-xl px-3.5 py-2 text-xs leading-relaxed whitespace-pre-wrap border ${
                 m.role === 'user'
                   ? 'bg-emerald-950/30 border-emerald-500/25 text-white'
-                  : 'bg-white/[0.03] border-white/[0.07] text-white/75'
+                  : 'bg-white/[0.055] border-white/[0.07] text-white/75'
               }`}
             >
               {m.attachments && m.attachments.length > 0 && (
@@ -962,7 +962,7 @@ function AgentDrawer() {
         ))}
         {busy && (
           <div className="flex justify-start">
-            <div className="rounded-xl px-3.5 py-2 bg-white/[0.03] border border-white/[0.07] flex items-center gap-1">
+            <div className="rounded-xl px-3.5 py-2 bg-white/[0.055] border border-white/[0.07] flex items-center gap-1">
               {[0, 1, 2].map((d) => (
                 <span key={d} className="h-1 w-1 rounded-full bg-accent animate-bounce" style={{ animationDelay: `${d * 0.15}s` }} />
               ))}
@@ -972,14 +972,14 @@ function AgentDrawer() {
       </div>
 
       {/* Composer */}
-      <div className="border-t border-white/[0.06] p-3 shrink-0 space-y-2 relative">
+      <div className="border-t border-white/[0.08] p-3 shrink-0 space-y-2 relative">
         {/* Staged attachment chips */}
         {staged.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {staged.map((st, i) => (
-              <span key={i} className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-1 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white/50">
+              <span key={i} className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-1 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white/65">
                 {st.name.length > 24 ? `…${st.name.slice(-22)}` : st.name}
-                <button onClick={() => setStaged((s) => s.filter((_, j) => j !== i))} className="text-white/30 hover:text-red-400" aria-label={`Remove ${st.name}`}>×</button>
+                <button onClick={() => setStaged((s) => s.filter((_, j) => j !== i))} className="text-white/48 hover:text-red-400" aria-label={`Remove ${st.name}`}>×</button>
               </span>
             ))}
           </div>
@@ -1008,7 +1008,7 @@ function AgentDrawer() {
                     className="w-full text-left px-4 py-1.5 text-[11px] text-white/55 hover:text-white hover:bg-white/[0.04] flex items-center justify-between"
                   >
                     <span className="truncate">{sk.name}</span>
-                    <span className="text-[8px] uppercase tracking-widest text-white/20 shrink-0 ml-2">{sk.src}</span>
+                    <span className="text-[8px] uppercase tracking-widest text-white/38 shrink-0 ml-2">{sk.src}</span>
                   </button>
                 ))}
               </MenuSection>
@@ -1038,7 +1038,7 @@ function AgentDrawer() {
               onClick={() => setPlusOpen(!plusOpen)}
               aria-label="+"
               aria-expanded={plusOpen}
-              className="h-[44px] w-10 shrink-0 rounded-l-2xl text-white/35 hover:text-accent hover:bg-white/[0.03] transition-colors text-lg leading-none"
+              className="h-[44px] w-10 shrink-0 rounded-l-2xl text-white/52 hover:text-accent hover:bg-white/[0.055] transition-colors text-lg leading-none"
             >
               +
             </button>
@@ -1053,7 +1053,7 @@ function AgentDrawer() {
               }}
               rows={1}
               placeholder={agent === 'vision' ? 'Attach an image, then ask…' : agent === 'build' ? t('console.agent.phBuild') : t('console.agent.phPlan')}
-              className="flex-1 min-w-0 bg-transparent py-3 pr-2 text-xs resize-none max-h-28 min-h-[44px] outline-none placeholder:text-white/25"
+              className="flex-1 min-w-0 bg-transparent py-3 pr-2 text-xs resize-none max-h-28 min-h-[44px] outline-none placeholder:text-white/42"
               aria-label={t('console.agent.send')}
             />
             <button
@@ -1071,9 +1071,9 @@ function AgentDrawer() {
         <div className="flex items-center justify-between px-1">
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <Toggle checked={ocu === 'on'} onChange={toggleOcu} small />
-            <span className="text-[9px] font-medium uppercase tracking-widest text-white/35">{t('console.agent.computerUse')}</span>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-white/52">{t('console.agent.computerUse')}</span>
           </label>
-          <span className="text-[9px] font-medium uppercase tracking-widest text-white/25">
+          <span className="text-[9px] font-medium uppercase tracking-widest text-white/42">
             {agent === 'build' ? t('console.agent.buildHint') : agent === 'plan' ? t('console.agent.planHint') : agent}
           </span>
         </div>
@@ -1107,7 +1107,7 @@ function MenuSection({ title, children }: { title: string; children: React.React
   const [open, setOpen] = useState(false);
   return (
     <div>
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-2 text-[9px] font-semibold uppercase tracking-widest text-white/35 hover:text-white/60" aria-expanded={open}>
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-2 text-[9px] font-semibold uppercase tracking-widest text-white/52 hover:text-white/60" aria-expanded={open}>
         {title}
         {open ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
       </button>
@@ -1166,8 +1166,8 @@ function AddProjectForm({ onDone }: { onDone: () => void }) {
   return (
     <form onSubmit={submit} className="glass-card rounded-2xl p-5 space-y-4">
       <button type="button" onClick={() => setOpen(!open)} className="flex items-center justify-between w-full" aria-expanded={open}>
-        <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">{t('console.newCase')}</span>
-        <ChevronDown size={14} className={`text-white/40 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+        <span className="text-[10px] font-medium uppercase tracking-widest text-white/58">{t('console.newCase')}</span>
+        <ChevronDown size={14} className={`text-white/58 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
@@ -1212,7 +1212,7 @@ function AddProjectForm({ onDone }: { onDone: () => void }) {
               </span>
             )}
           </div>
-          <p className="text-[11px] text-white/25">{t('console.realNote')}</p>
+          <p className="text-[11px] text-white/42">{t('console.realNote')}</p>
         </motion.div>
       )}
     </form>
@@ -1241,7 +1241,7 @@ function FileField({ label: lbl, inputRef, ...rest }: React.InputHTMLAttributes<
         {...rest}
         ref={inputRef}
         type="file"
-        className="block w-full text-[11px] text-white/40 file:h-9 file:mr-3 file:px-3 file:rounded-xl file:border file:border-emerald-500/30 file:bg-emerald-950/30 file:text-white/80 file:text-[10px] file:uppercase file:tracking-wider file:cursor-pointer cursor-pointer"
+        className="block w-full text-[11px] text-white/58 file:h-9 file:mr-3 file:px-3 file:rounded-xl file:border file:border-emerald-500/30 file:bg-emerald-950/30 file:text-white/80 file:text-[10px] file:uppercase file:tracking-wider file:cursor-pointer cursor-pointer"
       />
     </div>
   );
@@ -1252,7 +1252,7 @@ function SwitchRow({ label: lbl, hint, checked, onChange }: { label: string; hin
     <div className="flex items-center justify-between px-5 py-4">
       <div>
         <span className="block text-sm font-medium">{lbl}</span>
-        <span className="block text-[11px] text-white/30">{hint}</span>
+        <span className="block text-[11px] text-white/48">{hint}</span>
       </div>
       <Toggle checked={checked} onChange={onChange} />
     </div>
