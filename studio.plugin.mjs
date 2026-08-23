@@ -75,6 +75,57 @@ export function hydraStudio() {
           }
         }
 
+        // ── Repo tree + file viewer (dashboard Files panel) ─────────
+        if (p === '/tree' && req.method === 'GET') {
+          const SKIP = new Set(['node_modules', '.git', 'dist', '.secrets']);
+          const out = [];
+          const walk = (dir, rel, depth) => {
+            if (depth > 8 || out.length > 3000) return;
+            let entries;
+            try {
+              entries = fs.readdirSync(dir, { withFileTypes: true });
+            } catch {
+              return;
+            }
+            for (const e of entries) {
+              if (SKIP.has(e.name)) continue;
+              const abs = path.join(dir, e.name);
+              const r = rel ? `${rel}/${e.name}` : e.name;
+              if (e.isDirectory()) {
+                out.push({ p: r, d: true });
+                walk(abs, r, depth + 1);
+              } else {
+                let size = 0;
+                try {
+                  size = fs.statSync(abs).size;
+                } catch {}
+                out.push({ p: r, d: false, s: size });
+              }
+            }
+          };
+          walk(process.cwd(), '', 0);
+          return send(res, 200, out);
+        }
+
+        if (p === '/file' && req.method === 'GET') {
+          const rel = String(url.searchParams.get('path') || '');
+          const abs = path.resolve(process.cwd(), rel);
+          if (!abs.startsWith(process.cwd()) || rel.includes('..')) {
+            return send(res, 403, { ok: false, error: 'outside repo' });
+          }
+          let stat;
+          try {
+            stat = fs.statSync(abs);
+          } catch {
+            return send(res, 404, { ok: false, error: 'not found' });
+          }
+          if (stat.size > 400 * 1024) return send(res, 200, { path: rel, binary: true, reason: 'too large' });
+          const buf = fs.readFileSync(abs);
+          // crude binary sniff: NUL byte in first 8000 bytes
+          if (buf.subarray(0, 8000).includes(0)) return send(res, 200, { path: rel, binary: true });
+          return send(res, 200, { path: rel, binary: false, text: buf.toString('utf8') });
+        }
+
         // ── Projects ────────────────────────────────────────────────
         if (p === '/projects' && req.method === 'GET') {
           return send(res, 200, readJson('projects.json', []));
@@ -114,11 +165,10 @@ export function hydraStudio() {
             .split('/')
             .map((seg) => safe(seg, 'x'))
             .join('/');
-          if (!dir.startsWith('work')) return send(res, 400, { ok: false, error: 'dir must start with work/' });
           const name = safe(url.searchParams.get('name'), 'file.bin');
           const destDir = path.join(PUB(), dir);
           const dest = path.join(destDir, name);
-          if (!dest.startsWith(path.join(PUB(), 'work'))) return send(res, 400, { ok: false, error: 'bad path' });
+          if (!dest.startsWith(PUB())) return send(res, 400, { ok: false, error: 'bad path' });
           fs.mkdirSync(destDir, { recursive: true });
           const ws = fs.createWriteStream(dest);
           req.pipe(ws);
