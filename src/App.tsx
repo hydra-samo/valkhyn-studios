@@ -1,7 +1,6 @@
 import React, { Suspense, useState, useEffect, useCallback } from 'react';
 import { motion, MotionConfig, AnimatePresence } from 'framer-motion';
 import { LanguageProvider } from './i18n/LanguageContext';
-import { ScrollProvider } from './contexts/ScrollContext';
 import { MotionStoreProvider, HydraMotionEngine } from './lib/motionEngine';
 import { useDeviceTier } from './hooks/useDeviceTier';
 import { PreSplashSelector } from './components/PreSplash';
@@ -86,8 +85,7 @@ function AppInner() {
 
       {/* Main content — continuous cinematic flow */}
       {splashPhase === 'done' && (
-        <ScrollProvider>
-          <MotionStoreProvider lenisRef={lenisRef}>
+        <MotionStoreProvider lenisRef={lenisRef}>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -154,7 +152,6 @@ function AppInner() {
             </main>
             </motion.div>
           </MotionStoreProvider>
-        </ScrollProvider>
       )}
     </MotionConfig>
   );
