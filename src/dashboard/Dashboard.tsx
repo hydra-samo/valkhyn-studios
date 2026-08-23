@@ -661,7 +661,7 @@ type Staged = { file: File; name: string };
 type AgentDef = { name: string; description?: string };
 
 const SESSION_KEY = 'hydra-agent-session';
-const UI_AGENTS = ['plan', 'build', 'os-debloater', 'explore', 'vision'];
+const UI_AGENTS = ['plan', 'build', 'explore', 'vision'];
 
 function AgentDrawer() {
   const { t } = useLanguage();
@@ -842,7 +842,7 @@ function AgentDrawer() {
                 {
                   plan: 'Read-only analysis & advice',
                   build: 'Can edit files — changes go live instantly',
-                  'os-debloater': 'Cross-platform OS surgery specialist',
+                  
                   explore: 'Fast codebase exploration',
                   vision: 'Analyzes images/screenshots',
                 }[a] || a
