@@ -58,7 +58,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenBrief }) => {
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pt-4 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+        'fixed top-0 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pt-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]',
         compact ? '-translate-y-full' : 'translate-y-0'
       )}
     >

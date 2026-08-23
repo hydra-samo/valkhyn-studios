@@ -57,12 +57,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCloseModal }) 
     setFormError(null);
 
     if (!formData.clientName.trim() || !formData.clientEmail.trim()) {
-      setFormError('Name and email are required.');
+      setFormError(t('contact.errRequired'));
       return;
     }
 
     if (!isFormConfigured) {
-      setFormError('Form endpoint not configured. Set VITE_FORM_ENDPOINT in your .env file.');
+      setFormError(t('contact.errConfigured'));
       return;
     }
 
@@ -84,7 +84,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCloseModal }) 
       setSubmitted(true);
     } catch {
       setIsSubmitting(false);
-      setFormError('Failed to send. Please try again.');
+      setFormError(t('contact.errFailed'));
     }
   };
 
@@ -131,9 +131,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCloseModal }) 
       <div className="mx-auto max-w-4xl relative z-10">
         {/* ── Section Header ──────────────────────────────────────────────── */}
         <Reveal cinematic className="text-center mb-12 sm:mb-16">
-          <span className="label-cinematic block mb-4">GET IN TOUCH</span>
+          <span className="label-cinematic block mb-4">{t('contact.headingLet')}</span>
           <h2 className="heading-cinematic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white mb-6">
-            LET&apos;S <span className="text-accent">CREATE</span>
+            {t('contact.headingLet')} <span className="text-accent">{t('contact.headingTogether')}</span>
           </h2>
           <p className="text-base sm:text-lg text-white/40 max-w-xl mx-auto">
             {t('hero.description')}
@@ -150,10 +150,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCloseModal }) 
                 className="text-center py-8"
               >
                 <h3 className="text-2xl font-medium tracking-tight uppercase font-display text-white mb-4">
-                  Brief Received
+                  {t('contact.successTitle')}
                 </h3>
                 <p className="text-base text-white/40 mb-8 leading-relaxed">
-                  Thank you, <strong className="text-white/80">{formData.clientName}</strong>. I&apos;ll review your brief and get back to you within 24 hours.
+                  {t('contact.successPrefix')} <strong className="text-white/80">{formData.clientName}</strong> {t('contact.successBody')}
                 </p>
                 <MagneticButton
                   onClick={() => {
@@ -162,43 +162,43 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCloseModal }) 
                   }}
                   className="px-8 py-3.5 min-h-[44px] bg-white/[0.05] border border-accent/20 text-white hover:bg-white/10 font-semibold text-sm uppercase tracking-wider rounded-full transition-all hover:shadow-[0_0_25px_rgba(0,168,107,0.15)]"
                 >
-                  Send Another Brief
+                  {t('btn.submitAnotherBrief')}
                 </MagneticButton>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label className={fieldLabel}>Service</label>
+                  <label className={fieldLabel}>{t('contact.labelService')}</label>
                   <SelectField
                     value={formData.services[0]}
                     onChange={(v) => setFormData((prev) => ({ ...prev, services: [v] }))}
                     options={[
-                      { value: 'video', label: 'Video Editing' },
-                      { value: 'motion', label: 'Motion Design' },
-                      { value: 'voice', label: 'Voice Over' },
-                      { value: 'full', label: 'Full Package' },
+                      { value: 'video', label: t('contact.service.video') },
+                      { value: 'motion', label: t('contact.service.motion') },
+                      { value: 'voice', label: t('contact.service.voice') },
+                      { value: 'full', label: t('contact.service.full') },
                     ]}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className={fieldLabel}>Name *</label>
+                    <label className={fieldLabel}>{t('contact.labelName')}</label>
                     <input
                       type="text"
                       required
-                      placeholder="Your name"
+                      placeholder={t('contact.phName')}
                       value={formData.clientName}
                       onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
                       className={glassInput}
                     />
                   </div>
                   <div>
-                    <label className={fieldLabel}>Email *</label>
+                    <label className={fieldLabel}>{t('contact.labelEmail')}</label>
                     <input
                       type="email"
                       required
-                      placeholder="you@example.com"
+                      placeholder={t('contact.phEmail')}
                       value={formData.clientEmail}
                       onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
                       className={glassInput}
@@ -208,38 +208,38 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCloseModal }) 
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className={fieldLabel}>Budget</label>
+                    <label className={fieldLabel}>{t('contact.labelBudget')}</label>
                     <SelectField
                       value={formData.budget}
                       onChange={(v) => setFormData({ ...formData, budget: v })}
                       options={[
-                        { value: '< $1,000', label: 'Under $1,000' },
-                        { value: '$1,000 - $3,000', label: '$1,000 - $3,000' },
-                        { value: '$3,000 - $7,000', label: '$3,000 - $7,000' },
-                        { value: '$7,000+', label: '$7,000+' },
+                        { value: '< $1,000', label: t('contact.budget.under1k') },
+                        { value: '$1,000 - $3,000', label: t('contact.budget.1to3') },
+                        { value: '$3,000 - $7,000', label: t('contact.budget.3to7') },
+                        { value: '$7,000+', label: t('contact.budget.7plus') },
                       ]}
                     />
                   </div>
                   <div>
-                    <label className={fieldLabel}>Timeline</label>
+                    <label className={fieldLabel}>{t('contact.labelTimeline')}</label>
                     <SelectField
                       value={formData.timeline}
                       onChange={(v) => setFormData({ ...formData, timeline: v })}
                       options={[
-                        { value: 'ASAP (< 7 Days)', label: 'ASAP' },
-                        { value: '1-2 Weeks', label: '1-2 Weeks' },
-                        { value: '3-4 Weeks', label: '3-4 Weeks' },
-                        { value: 'Flexible', label: 'Flexible' },
+                        { value: 'ASAP (< 7 Days)', label: t('contact.timeline.asap') },
+                        { value: '1-2 Weeks', label: t('contact.timeline.1to2') },
+                        { value: '3-4 Weeks', label: t('contact.timeline.3to4') },
+                        { value: 'Flexible', label: t('contact.timeline.flexible') },
                       ]}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className={fieldLabel}>Project Overview</label>
+                  <label className={fieldLabel}>{t('contact.labelProject')}</label>
                   <textarea
                     rows={4}
-                    placeholder="Tell me about your project..."
+                    placeholder={t('contact.phProject')}
                     value={formData.projectOverview}
                     onChange={(e) => setFormData({ ...formData, projectOverview: e.target.value })}
                     className={cn(glassInput, 'resize-none')}
@@ -273,11 +273,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCloseModal }) 
                     className="w-full py-5 min-h-[48px] bg-white/[0.05] border border-accent/20 text-white hover:bg-white/10 font-semibold text-base sm:text-lg uppercase tracking-wider rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(0,168,107,0.15)] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
-                      <span>Transmitting...</span>
+                      <span>{t('btn.transmitting')}</span>
                     ) : isFormConfigured ? (
-                      <span>Send Brief</span>
+                      <span>{t('btn.sendBrief')}</span>
                     ) : (
-                      <span>Form Not Configured</span>
+                      <span>{t('btn.formNotConfigured')}</span>
                     )}
                   </MagneticButton>
                 </motion.div>
