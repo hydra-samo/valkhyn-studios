@@ -671,8 +671,9 @@ function AgentDrawer() {
   const [busy, setBusy] = useState(false);
   const [agents, setAgents] = useState<string[]>(UI_AGENTS);
   const [agent, setAgent] = useState<string>(() => localStorage.getItem('hydra-agent-agent') || 'plan');
-  const [models, setModels] = useState<{ id: string; ctx: number }[]>([]);
+  const [models, setModels] = useState<{ id: string; ctx: number; variants: string[] }[]>([]);
   const [model, setModel] = useState<string>(() => localStorage.getItem('hydra-agent-model') || 'x-preview-f-free');
+  const [variant, setVariant] = useState<string>(() => localStorage.getItem('hydra-agent-variant') || '');
   const [usage, setUsage] = useState<{ tok: number; cost: number }>({ tok: 0, cost: 0 });
   const [staged, setStaged] = useState<Staged[]>([]);
   const [plusOpen, setPlusOpen] = useState(false);
@@ -694,14 +695,14 @@ function AgentDrawer() {
 
   // Free models + context limits
   useEffect(() => {
-    api<{ providers: { id: string; models: Record<string, { limit?: { context?: number } }> }[] }>('/agent/config/providers')
+    api<{ providers: { id: string; models: Record<string, { limit?: { context?: number }; variants?: Record<string, unknown> }> }[] }>('/agent/config/providers')
       .then((c) => {
         const zen = c.providers?.find((p) => p.id === 'opencode');
         if (!zen?.models) return;
         setModels(
           Object.entries(zen.models)
             .filter(([id]) => /(^|-)free$/.test(id) || id === 'big-pickle' || id.startsWith('deepseek'))
-            .map(([id, m]) => ({ id, ctx: m.limit?.context ?? 200_000 }))
+            .map(([id, m]) => ({ id, ctx: m.limit?.context ?? 200_000, variants: m.variants ? Object.keys(m.variants) : [] }))
             .sort((a, b) => a.id.localeCompare(b.id))
         );
       })
@@ -775,6 +776,7 @@ function AgentDrawer() {
           parts: [{ type: 'text', text: promptText }],
           agent,
           ...(model ? { model: { providerID: 'opencode', modelID: model } } : {}),
+          ...(variant ? { variant } : {}),
         }),
       });
       const info = res.info ?? {};
@@ -859,16 +861,22 @@ function AgentDrawer() {
         </div>
       </div>
 
-      {/* Model + context bar */}
+      {/* Model + variant + context bar */}
       <div className="px-3 pb-2.5 shrink-0 space-y-2">
+        <div className="flex items-center gap-1.5 min-w-0">
         <select
           value={model}
           onChange={(e) => {
-            setModel(e.target.value);
-            localStorage.setItem('hydra-agent-model', e.target.value);
+            const next = e.target.value;
+            setModel(next);
+            localStorage.setItem('hydra-agent-model', next);
+            const v = models.find((m) => m.id === next)?.variants ?? [];
+            const keep = variant && v.includes(variant) ? variant : '';
+            setVariant(keep);
+            localStorage.setItem('hydra-agent-variant', keep);
             setUsage({ tok: 0, cost: 0 });
           }}
-          className="w-full h-7 rounded-md bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono px-2 cursor-pointer"
+          className="flex-1 min-w-0 h-7 rounded-md bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono px-2 cursor-pointer"
           aria-label={t('console.agent.freeModels')}
         >
           {models.length === 0 && <option value={model}>{model}</option>}
@@ -878,6 +886,26 @@ function AgentDrawer() {
             </option>
           ))}
         </select>
+        {(models.find((m) => m.id === model)?.variants.length ?? 0) > 0 && (
+          <select
+            value={variant}
+            onChange={(e) => {
+              setVariant(e.target.value);
+              localStorage.setItem('hydra-agent-variant', e.target.value);
+            }}
+            className="w-[4.5rem] shrink-0 h-7 rounded-md bg-white/[0.04] border border-emerald-500/25 text-[10px] font-mono px-1.5 cursor-pointer"
+            aria-label="Variant"
+            title="Reasoning effort"
+          >
+            <option value="">auto</option>
+            {(models.find((m) => m.id === model)?.variants ?? []).map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
+        )}
+        </div>
         {/* Claude-style context bar */}
         <div className="flex items-center gap-2">
           <div className="flex-1 h-[3px] rounded-full bg-white/[0.08] overflow-hidden">
