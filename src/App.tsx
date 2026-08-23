@@ -170,9 +170,11 @@ export default function App() {
   // Studio console route — served by the same always-on local server
   if (typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '').endsWith('/dashboard')) {
     return (
-      <Suspense fallback={null}>
-        <Dashboard />
-      </Suspense>
+      <LanguageProvider>
+        <Suspense fallback={null}>
+          <Dashboard />
+        </Suspense>
+      </LanguageProvider>
     );
   }
   return (

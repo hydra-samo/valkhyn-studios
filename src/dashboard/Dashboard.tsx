@@ -17,6 +17,7 @@ import {
   Send,
 } from 'lucide-react';
 import { HydraLogo } from '../components/HydraLogo';
+import { useLanguage } from '../i18n/LanguageContext';
 
 /**
  * HYDRA Studio Console (/dashboard).
@@ -50,25 +51,33 @@ type Atmosphere = {
   layers: Record<string, { enabled: boolean; opacity: number; blend: string }>;
 };
 
-const LAYER_LABELS: Record<string, string> = {
-  haze: 'Haze',
-  'env-secondary': 'Blue Wash',
-  'env-primary': 'Volumetric Green',
-  dust: 'Dust Field',
-  wisp: 'Atmospheric Wisp',
-  'geometry-primary': 'Geometry (Work)',
-  'env-fragment': 'Signature Fragment (Work)',
+const LAYER_KEYS: Record<string, string> = {
+  haze: 'console.layer.haze',
+  'env-secondary': 'console.layer.env-secondary',
+  'env-primary': 'console.layer.env-primary',
+  dust: 'console.layer.dust',
+  wisp: 'console.layer.wisp',
+  'geometry-primary': 'console.layer.geometry-primary',
+  'env-fragment': 'console.layer.env-fragment',
+};
+
+const TARGET_HINT_KEYS: Record<string, string> = {
+  'hero-bg': 'console.import.bgHint',
+  'work-media': 'console.import.workHint',
+  'motion-layers': 'console.import.motionHint',
+  brand: 'console.import.brandHint',
+  audio: 'console.import.audioHint',
 };
 
 const BLENDS = ['screen', 'normal', 'overlay', 'soft-light', 'luminosity'];
 
 /** Section import targets — where uploaded files land in public/. */
-const IMPORT_TARGETS: { id: string; label: string; dir: string; hint: string }[] = [
-  { id: 'hero-bg', label: 'Hero Background', dir: 'background', hint: 'background.jpeg replacement lives here' },
-  { id: 'work-media', label: 'Work Media', dir: 'work/upload', hint: 'posters & videos for case studies' },
-  { id: 'motion-layers', label: 'Motion Layers', dir: 'motion', hint: 'name files NN.mp4 (e.g. 06.mp4)' },
-  { id: 'brand', label: 'Brand Assets', dir: 'brand', hint: 'logos, favicons, social cards' },
-  { id: 'audio', label: 'Voice Audio', dir: 'audio', hint: 'voice-over tracks for future playback' },
+const IMPORT_TARGETS: { id: string; label: string; dir: string }[] = [
+  { id: 'hero-bg', label: 'Hero Background', dir: 'background' },
+  { id: 'work-media', label: 'Work Media', dir: 'work/upload' },
+  { id: 'motion-layers', label: 'Motion Layers', dir: 'motion' },
+  { id: 'brand', label: 'Brand Assets', dir: 'brand' },
+  { id: 'audio', label: 'Voice Audio', dir: 'audio' },
 ];
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
@@ -78,6 +87,8 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export default function Dashboard() {
+  const { t, lang, setLang } = useLanguage();
+  const cycleLang = () => setLang(lang === 'en' ? 'fr' : lang === 'fr' ? 'ar' : 'en');
   const [panel, setPanel] = useState<'content' | 'files' | 'atmosphere'>('content');
   const [agentOpen, setAgentOpen] = useState(true);
   const [alive, setAlive] = useState(false);
@@ -103,7 +114,7 @@ export default function Dashboard() {
             HYDRA <span className="text-accent">SAMO</span>
           </span>
           <span className="text-[10px] font-medium uppercase tracking-widest text-white/35 ml-1 hidden sm:inline">
-            Studio Console
+            {t('console.subtitle')}
           </span>
         </div>
         <div className="flex items-center gap-3">
@@ -111,8 +122,11 @@ export default function Dashboard() {
             className={`h-1.5 w-1.5 rounded-full ${alive ? 'bg-accent shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-red-500'}`}
             title={alive ? 'Local server running' : 'Server unreachable'}
           />
+          <button onClick={cycleLang} className={ghostBtn} title="EN / FR / AR">
+            {lang.toUpperCase()}
+          </button>
           <a href="/" target="_blank" rel="noreferrer" className={ghostBtn}>
-            Open Site <ExternalLink size={11} />
+            {t('console.openSite')} <ExternalLink size={11} />
           </a>
           <button onClick={() => setAgentOpen(!agentOpen)} className={ghostBtn} title="Toggle agent drawer">
             {agentOpen ? <PanelRightClose size={13} /> : <PanelRightOpen size={13} />}
@@ -127,8 +141,8 @@ export default function Dashboard() {
           {(
             [
               ['content', FolderOpen, 'Content & Imports'],
-              ['files', FolderTree, 'Repo Files'],
-              ['atmosphere', Waves, 'Atmosphere'],
+              ['files', FolderTree, t('console.files.title')],
+              ['atmosphere', Waves, t('console.atm.title')],
             ] as const
           ).map(([id, Icon, title]) => (
             <button
@@ -183,6 +197,7 @@ function PanelTitle({ children }: { children: React.ReactNode }) {
 /* ── Content panel ───────────────────────────────────────────────────── */
 
 function ContentPanel() {
+  const { t } = useLanguage();
   const [projects, setProjects] = useState<Project[] | null>(null);
 
   const refresh = useCallback(() => {
@@ -201,9 +216,9 @@ function ContentPanel() {
   return (
     <>
       <PanelTitle>
-        Content <span className="text-accent">&amp;</span> Imports
+        {t('console.content.title').split('&')[0]}<span className="text-accent">&amp;</span>{t('console.content.title').split('&')[1] ?? ''}
       </PanelTitle>
-      <p className="text-sm text-white/45 mb-5">Import section files, publish projects — every change lands live.</p>
+      <p className="text-sm text-white/45 mb-5">{t('console.content.desc')}</p>
 
       <ImportTargets />
       <ImportProjectsJson onDone={refresh} />
@@ -212,7 +227,7 @@ function ContentPanel() {
       <section className="glass-card rounded-2xl overflow-hidden" aria-label="Published work">
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
           <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">
-            Published Work ({projects?.length ?? '…'})
+            {t('console.published')} ({projects?.length ?? '…'})
           </span>
           <button onClick={refresh} className={ghostBtn} title="Refresh">
             <RefreshCw size={11} />
@@ -221,7 +236,7 @@ function ContentPanel() {
         {projects === null ? (
           <p className="px-5 py-6 text-sm text-white/30">Loading…</p>
         ) : projects.length === 0 ? (
-          <p className="px-5 py-6 text-sm text-white/30">No published work yet.</p>
+          <p className="px-5 py-6 text-sm text-white/30">{t('console.noneYet')}</p>
         ) : (
           <ul>
             {projects.map((p) => (
@@ -254,6 +269,7 @@ function ContentPanel() {
 }
 
 function ImportTargets() {
+  const { t } = useLanguage();
   const [target, setTarget] = useState(IMPORT_TARGETS[0].id);
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -282,17 +298,17 @@ function ImportTargets() {
   return (
     <section className="glass-card rounded-2xl p-5 space-y-4" aria-label="Import section files">
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">Import Section Files</span>
+        <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">{t('console.import.title')}</span>
         {done && (
           <span className="text-[10px] text-accent inline-flex items-center gap-1">
-            <Check size={11} /> {done.length} file{done.length > 1 ? 's' : ''} live
+            <Check size={11} /> {t('console.import.live', { n: done.length })}
           </span>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={fieldLabel} htmlFor="import-target">
-            Target
+            {t('console.import.target')}
           </label>
           <select id="import-target" value={target} onChange={(e) => setTarget(e.target.value)} className={`${input} cursor-pointer`}>
             {IMPORT_TARGETS.map((t) => (
@@ -303,7 +319,7 @@ function ImportTargets() {
           </select>
         </div>
         <div>
-          <span className={fieldLabel}>Files</span>
+          <span className={fieldLabel}>{t('console.import.files')}</span>
           <input
             ref={fileRef}
             type="file"
@@ -315,7 +331,7 @@ function ImportTargets() {
         </div>
       </div>
       <p className="text-[11px] text-white/25">
-        {IMPORT_TARGETS.find((t) => t.id === target)?.hint} · uploads go straight to public/ and hot-reload the site
+        {t(TARGET_HINT_KEYS[target] ?? '')} · uploads go straight to public/ and hot-reload the site
       </p>
       {done && done.length > 0 && (
         <ul className="space-y-1">
@@ -331,11 +347,12 @@ function ImportTargets() {
 }
 
 function ImportProjectsJson({ onDone }: { onDone: () => void }) {
+  const { t } = useLanguage();
   return (
     <label className="glass-card rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:border-emerald-500/30 transition-colors">
       <span>
-        <span className="block text-[10px] font-medium uppercase tracking-widest text-white/40 mb-0.5">Bulk Import</span>
-        <span className="block text-xs text-white/45">Replace the project list from a projects.json export</span>
+        <span className="block text-[10px] font-medium uppercase tracking-widest text-white/40 mb-0.5">{t('console.bulk.title')}</span>
+        <span className="block text-xs text-white/45">{t('console.bulk.desc')}</span>
       </span>
       <Upload size={15} className="text-accent shrink-0" />
       <input
@@ -365,6 +382,7 @@ function ImportProjectsJson({ onDone }: { onDone: () => void }) {
 type TreeEntry = { p: string; d: boolean; s?: number };
 
 function FilesPanel() {
+  const { t } = useLanguage();
   const [entries, setEntries] = useState<TreeEntry[] | null>(null);
   const [openDirs, setOpenDirs] = useState<Set<string>>(new Set(['src', 'src/data']));
   const [selected, setSelected] = useState<{ path: string; binary?: boolean; text?: string; reason?: string } | null>(null);
@@ -395,9 +413,9 @@ function FilesPanel() {
   return (
     <>
       <PanelTitle>
-        Repo <span className="text-accent">Files</span>
+        {t('console.files.title')}
       </PanelTitle>
-      <p className="text-sm text-white/45 mb-5">Every file behind the site. The agent can edit any of them on request.</p>
+      <p className="text-sm text-white/45 mb-5">{t('console.files.desc')}</p>
 
       <div className="glass-card rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[260px_1fr] min-h-[28rem]">
         {/* Tree */}
@@ -533,6 +551,7 @@ function TreeRow({
 /* ── Atmosphere panel ────────────────────────────────────────────────── */
 
 function AtmospherePanel() {
+  const { t } = useLanguage();
   const [cfg, setCfg] = useState<Atmosphere | null>(null);
   const [justSaved, setJustSaved] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -568,26 +587,26 @@ function AtmospherePanel() {
   return (
     <>
       <PanelTitle>
-        Atmos<span className="text-accent">phere</span>
+        {t('console.atm.title')}
       </PanelTitle>
-      <p className="text-sm text-white/45 mb-5">The living layer behind every section — tuned in real time.</p>
+      <p className="text-sm text-white/45 mb-5">{t('console.atm.desc')}</p>
 
       <div className="glass-card rounded-2xl divide-y divide-white/[0.06] mb-6">
-        <SwitchRow label="Atmosphere Engine" hint="All video layers behind the content" checked={cfg.master} onChange={(v) => save({ ...cfg, master: v })} />
-        <SwitchRow label="Film Grain" hint="Full-screen texture overlay" checked={cfg.grain} onChange={(v) => save({ ...cfg, grain: v })} />
+        <SwitchRow label={t('console.atm.engine')} hint={t('console.atm.engineHint')} checked={cfg.master} onChange={(v) => save({ ...cfg, master: v })} />
+        <SwitchRow label={t('console.atm.grain')} hint={t('console.atm.grainHint')} checked={cfg.grain} onChange={(v) => save({ ...cfg, grain: v })} />
       </div>
 
       <div className="glass-card rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
-          <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">Layers</span>
+          <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">{t('console.atm.layers')}</span>
           {justSaved && (
             <span className="text-[10px] uppercase tracking-widest text-accent inline-flex items-center gap-1">
-              <Check size={11} /> Synced live
+              <Check size={11} /> {t('console.atm.synced')}
             </span>
           )}
         </div>
         <ul>
-          {Object.keys(LAYER_LABELS).map((id) => {
+          {Object.keys(LAYER_KEYS).map((id) => {
             const l = cfg.layers[id] ?? { enabled: true, opacity: 1, blend: 'screen' };
             return (
               <li
@@ -597,7 +616,7 @@ function AtmospherePanel() {
                 <Toggle checked={l.enabled !== false} onChange={(v) => patchLayer(id, { enabled: v })} small />
                 <div className="min-w-0">
                   <span className={`block text-sm font-medium ${l.enabled === false ? 'text-white/25 line-through' : ''}`}>
-                    {LAYER_LABELS[id]}
+                    {t(LAYER_KEYS[id] ?? id)}
                   </span>
                   <code className="block text-[10px] font-mono text-white/25">{id}</code>
                 </div>
@@ -610,7 +629,7 @@ function AtmospherePanel() {
                     value={l.opacity}
                     onChange={(e) => patchLayer(id, { opacity: Number(e.target.value) })}
                     className="w-full accent-[#10b981]"
-                    aria-label={`${LAYER_LABELS[id]} opacity`}
+                    aria-label={`${t(LAYER_KEYS[id] ?? id)} opacity`}
                   />
                   <span className="text-[10px] tabular-nums text-white/40 w-8">{Math.round(l.opacity * 100)}%</span>
                 </label>
@@ -618,7 +637,7 @@ function AtmospherePanel() {
                   value={l.blend}
                   onChange={(e) => patchLayer(id, { blend: e.target.value })}
                   className="h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] px-2 cursor-pointer"
-                  aria-label={`${LAYER_LABELS[id]} blend mode`}
+                  aria-label={`${t(LAYER_KEYS[id] ?? id)} blend mode`}
                 >
                   {BLENDS.map((b) => (
                     <option key={b} value={b}>
@@ -642,6 +661,7 @@ type ChatMsg = { role: 'user' | 'assistant'; text: string };
 const SESSION_KEY = 'hydra-agent-session';
 
 function AgentDrawer() {
+  const { t } = useLanguage();
   const [sessionId, setSessionId] = useState<string | null>(() => localStorage.getItem(SESSION_KEY));
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState('');
@@ -720,7 +740,7 @@ function AgentDrawer() {
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] shrink-0">
         <div className="flex items-center gap-2 min-w-0">
           <HydraLogo className="h-5 w-5 text-accent shrink-0" />
-          <span className="text-[10px] font-medium uppercase tracking-widest text-white/50 truncate">ox-alpha · self-hosted</span>
+          <span className="text-[10px] font-medium uppercase tracking-widest text-white/50 truncate">ox-alpha · {t('console.agent.selfHosted')}</span>
         </div>
         <div className="flex items-center gap-1 shrink-0">
           {(['plan', 'build'] as const).map((mo) => (
@@ -731,7 +751,7 @@ function AgentDrawer() {
                 localStorage.setItem('hydra-agent-mode', mo);
               }}
               aria-pressed={mode === mo}
-              title={mo === 'plan' ? 'Read-only analysis' : 'Can edit files — changes go live instantly'}
+              title={mo === 'plan' ? t('console.agent.planHint') : t('console.agent.buildHint')}
               className={`h-6 px-2.5 rounded-md text-[9px] font-bold uppercase tracking-widest transition-colors ${
                 mode === mo
                   ? 'border border-emerald-500/50 bg-emerald-500/10 text-accent'
@@ -749,7 +769,7 @@ function AgentDrawer() {
                 setMessages([]);
               }}
               className="h-6 px-2 rounded-md text-[9px] font-bold uppercase tracking-widest text-white/30 hover:text-white"
-              title="New session"
+              title={t('console.agent.newSession')}
             >
               ↺
             </button>
@@ -759,7 +779,7 @@ function AgentDrawer() {
 
       {/* Model picker */}
       <div className="px-4 py-2.5 border-b border-white/[0.06] shrink-0 flex items-center gap-2">
-        <span className="text-[9px] font-medium uppercase tracking-widest text-white/30 shrink-0">Zen free models</span>
+        <span className="text-[9px] font-medium uppercase tracking-widest text-white/30 shrink-0">{t('console.agent.freeModels')}</span>
         <select
           value={model}
           onChange={(e) => {
@@ -783,9 +803,7 @@ function AgentDrawer() {
         {messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center text-center gap-2 opacity-60 px-4">
             <HydraLogo className="h-7 w-7 text-accent/70" />
-            <p className="text-xs text-white/50 leading-relaxed">
-              Ask for changes while browsing any panel — edits land on the site live.
-            </p>
+            <p className="text-xs text-white/50 leading-relaxed">{t('console.agent.empty')}</p>
           </div>
         )}
         {messages.map((m, i) => (
@@ -812,30 +830,37 @@ function AgentDrawer() {
         )}
       </div>
 
-      {/* Composer */}
-      <div className="border-t border-white/[0.06] px-4 py-3 shrink-0 w-full flex items-end gap-2">
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              void send();
-            }
-          }}
-          rows={1}
-          placeholder={mode === 'build' ? 'Describe a change…' : 'Ask about the codebase…'}
-          className={`${input} resize-none max-h-28 text-xs min-h-[40px] flex-1`}
-          aria-label="Message the agent"
-        />
-        <button
-          onClick={() => void send()}
-          disabled={busy || !input.trim()}
-          aria-label="Send message"
-          className="h-10 w-10 shrink-0 rounded-xl border border-emerald-500/30 bg-emerald-950/30 text-accent hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
-        >
-          <Send size={14} />
-        </button>
+      {/* Composer — single glass layer, minimal */}
+      <div className="border-t border-white/[0.06] p-3 shrink-0 w-full">
+        <div className="w-full rounded-2xl bg-white/[0.04] backdrop-blur-md border border-white/[0.08] focus-within:border-emerald-500/50 focus-within:shadow-[0_0_24px_rgba(16,185,129,0.14)] transition-all duration-300">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                void send();
+              }
+            }}
+            rows={1}
+            placeholder={mode === 'build' ? t('console.agent.phBuild') : t('console.agent.phPlan')}
+            className="w-full bg-transparent px-4 pt-3 pb-1 text-xs resize-none max-h-28 min-h-[44px] outline-none placeholder:text-white/25"
+            aria-label={t('console.agent.send')}
+          />
+          <div className="flex items-center justify-between px-3 pb-2">
+            <span className="text-[9px] font-medium uppercase tracking-widest text-white/25">
+              {mode === 'build' ? t('console.agent.buildHint') : t('console.agent.planHint')}
+            </span>
+            <button
+              onClick={() => void send()}
+              disabled={busy || !input.trim()}
+              aria-label={t('console.agent.send')}
+              className="h-8 w-8 shrink-0 rounded-lg border border-emerald-500/30 bg-emerald-950/30 text-accent hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              <Send size={13} />
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -844,6 +869,7 @@ function AgentDrawer() {
 /* ── Add project form ────────────────────────────────────────────────── */
 
 function AddProjectForm({ onDone }: { onDone: () => void }) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [saved, setSaved] = useState(false);
   const posterRef = useRef<HTMLInputElement>(null);
@@ -890,22 +916,22 @@ function AddProjectForm({ onDone }: { onDone: () => void }) {
   return (
     <form onSubmit={submit} className="glass-card rounded-2xl p-5 space-y-4">
       <button type="button" onClick={() => setOpen(!open)} className="flex items-center justify-between w-full" aria-expanded={open}>
-        <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">New Case Study</span>
+        <span className="text-[10px] font-medium uppercase tracking-widest text-white/40">{t('console.newCase')}</span>
         <ChevronDown size={14} className={`text-white/40 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
         <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4 overflow-hidden">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field name="title" label="Title *" required placeholder="NEON GENESIS — Brand Film" />
-            <Field name="client" label="Client" placeholder="Real client or Spec / Concept Project" />
-            <Field name="year" label="Year" placeholder="2026" />
-            <Field name="tag" label="Tag" placeholder="Direction & Edit" />
+            <Field name="title" label={t('console.fTitle')} required placeholder="NEON GENESIS — Brand Film" />
+            <Field name="client" label={t('console.fClient')} placeholder="Spec / Concept Project" />
+            <Field name="year" label={t('console.fYear')} placeholder="2026" />
+            <Field name="tag" label={t('console.fTag')} placeholder="Direction & Edit" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className={fieldLabel} htmlFor="f-category">
-                Category
+                {t('console.fCategory')}
               </label>
               <select id="f-category" name="category" className={`${input} cursor-pointer`} defaultValue="video">
                 <option value="video">Video</option>
@@ -913,30 +939,30 @@ function AddProjectForm({ onDone }: { onDone: () => void }) {
                 <option value="direction">Direction</option>
               </select>
             </div>
-            <FileField inputRef={posterRef} label="Poster image" accept="image/*" />
-            <FileField inputRef={videoRef} label="Video (optional)" accept="video/mp4,video/webm" />
+            <FileField inputRef={posterRef} label={t('console.fPoster')} accept="image/*" />
+            <FileField inputRef={videoRef} label={t('console.fVideo')} accept="video/mp4,video/webm" />
           </div>
-          <Field name="description" label="Description" placeholder="One or two sentences about the piece." />
+          <Field name="description" label={t('console.fDesc')} placeholder="…" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field name="stack" label="Toolchain (comma-separated)" placeholder="Premiere Pro, After Effects" />
-            <Field name="deliverables" label="Deliverables (comma-separated)" placeholder="4K Master, Social Cutdowns" />
+            <Field name="stack" label={t('console.fStack')} placeholder="Premiere Pro, After Effects" />
+            <Field name="deliverables" label={t('console.fDeliv')} placeholder="4K Master, …" />
           </div>
-          <Field name="brief" label="Client brief" placeholder="What was asked of you." />
+          <Field name="brief" label={t('console.fBrief')} placeholder="…" />
 
           <div className="flex items-center gap-3 pt-1">
             <button
               type="submit"
               className="h-9 px-5 rounded-lg border border-emerald-500/30 bg-emerald-950/30 text-[10px] font-semibold uppercase tracking-wider text-white inline-flex items-center gap-2 hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all"
             >
-              <Upload size={12} /> Publish to Site
+              <Upload size={12} /> {t('console.publish')}
             </button>
             {saved && (
               <span className="text-xs text-accent inline-flex items-center gap-1">
-                <Check size={12} /> Live now
+                <Check size={12} /> {t('console.liveNow')}
               </span>
             )}
           </div>
-          <p className="text-[11px] text-white/25">Real work only — files land in public/work/&lt;id&gt;/ and publish immediately.</p>
+          <p className="text-[11px] text-white/25">{t('console.realNote')}</p>
         </motion.div>
       )}
     </form>
