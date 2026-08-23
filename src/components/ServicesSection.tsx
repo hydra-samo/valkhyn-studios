@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { CinematicSection } from './motion/CinematicSection';
 import { Reveal } from './motion/Reveal';
+import { PinnedSteps } from './process/PinnedSteps';
 import { useLanguage } from '../i18n/LanguageContext';
 import { PROCESS_STEPS as STEPS, COMPARISON_MATRIX as COMPARISON } from '../data/portfolioData';
 import { localizeProcessSteps, localizeComparison } from '../i18n/translations';
-import { ease, duration } from '../lib/motionTokens';
+import { ease, duration, stagger } from '../lib/motionTokens';
+import { useCoarsePointer } from '../hooks/useCoarsePointer';
 
 /**
  * Process / Services — editorial manifesto layout.
@@ -17,6 +19,9 @@ export const ServicesSection = React.memo(function ServicesSection() {
   const steps = localizeProcessSteps(STEPS, lang);
   const comparison = localizeComparison(COMPARISON, lang);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const reduceMotion = useReducedMotion();
+  const isCoarse = useCoarsePointer();
+  const pinEnabled = !reduceMotion && !isCoarse;
 
   return (
     <CinematicSection
@@ -44,11 +49,14 @@ export const ServicesSection = React.memo(function ServicesSection() {
         </Reveal>
 
         {/* ── Editorial Numbered Entries ──────────────────────────────────── */}
+        {pinEnabled ? (
+          <PinnedSteps steps={steps} />
+        ) : (
         <div className="flex flex-col">
           {steps.map((step, idx) => {
             const isHovered = hoveredIdx === idx;
             return (
-              <Reveal key={step.number} delay={idx * 0.06} cinematic>
+              <Reveal key={step.number} delay={idx * stagger.item} cinematic>
                 {/* Entry */}
                 <div
                   className="group relative py-10 sm:py-14 md:py-18"
@@ -63,7 +71,7 @@ export const ServicesSection = React.memo(function ServicesSection() {
                         animate={{
                           color: isHovered ? '#00FF9C' : '#00A86B',
                         }}
-                        transition={{ duration: 0.4, ease: ease.cinematic }}
+                        transition={{ duration: duration.quick, ease: ease.cinematic }}
                       >
                         {step.number}
                       </motion.span>
@@ -80,7 +88,7 @@ export const ServicesSection = React.memo(function ServicesSection() {
                           x: isHovered ? 4 : 0,
                           color: isHovered ? '#ffffff' : 'rgba(255,255,255,0.9)',
                         }}
-                        transition={{ duration: 0.4, ease: ease.cinematic }}
+                        transition={{ duration: duration.quick, ease: ease.cinematic }}
                       >
                         {step.title}
                       </motion.h3>
@@ -109,7 +117,7 @@ export const ServicesSection = React.memo(function ServicesSection() {
                       scaleX: isHovered ? 1 : 0.6,
                       opacity: isHovered ? 1 : 0.3,
                     }}
-                    transition={{ duration: 0.6, ease: ease.cinematic }}
+                    transition={{ duration: duration.mid, ease: ease.cinematic }}
                     style={{ backgroundColor: '#063C2C' }}
                   />
                 </motion.div>
@@ -117,6 +125,7 @@ export const ServicesSection = React.memo(function ServicesSection() {
             );
           })}
         </div>
+        )}
 
         {/* ── Comparison — Editorial Manifesto ────────────────────────────── */}
         <div className="mt-20 sm:mt-28">
