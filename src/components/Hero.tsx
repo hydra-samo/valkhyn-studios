@@ -2,10 +2,13 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
 import { ease, duration, stagger } from '../lib/motionTokens';
+import { HydraField } from '../lib/three/HydraField';
+import { useDeviceTier } from '../hooks/useDeviceTier';
 
 export const Hero = React.memo(function Hero() {
   const { t } = useLanguage();
   const ref = useRef<HTMLElement>(null);
+  const tier = useDeviceTier();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -24,6 +27,9 @@ export const Hero = React.memo(function Hero() {
       data-section="hero"
       className="relative w-full h-screen overflow-hidden"
     >
+      {/* ── WebGL particle field — high tier only ── */}
+      {tier === 'high' && <HydraField />}
+
       {/* ── Atmospheric Glow ── */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
