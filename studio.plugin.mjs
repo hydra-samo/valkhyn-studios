@@ -50,9 +50,30 @@ export function hydraStudio() {
   return {
     name: 'hydra-studio',
     configureServer(server) {
-      server.middlewares.use('/api', (req, res, next) => {
+      server.middlewares.use('/api', async (req, res, next) => {
         const url = new URL(req.url, 'http://local');
         const p = url.pathname;
+
+        // ── Agent proxy → self-hosted opencode (127.0.0.1:17171) ────
+        // Same-origin for the dashboard: no CORS, no token handling here.
+        if (p.startsWith('/agent')) {
+          const rest = p.slice('/agent'.length) + url.search;
+          const init = { method: req.method, headers: {} };
+          if (req.headers['content-type']) init.headers['content-type'] = req.headers['content-type'];
+          if (req.method !== 'GET' && req.method !== 'HEAD') {
+            const body = await readBody(req);
+            if (body.length) init.body = body;
+          }
+          try {
+            const r = await fetch(`http://127.0.0.1:17171${rest}`, init);
+            const text = await r.text();
+            res.statusCode = r.status;
+            res.setHeader('Content-Type', r.headers.get('content-type') || 'application/json');
+            return res.end(text);
+          } catch {
+            return send(res, 502, { ok: false, error: 'agent server unreachable (hydra-agent.service down?)' });
+          }
+        }
 
         // ── Projects ────────────────────────────────────────────────
         if (p === '/projects' && req.method === 'GET') {

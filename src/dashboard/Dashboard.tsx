@@ -60,7 +60,7 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export default function Dashboard() {
-  const [tab, setTab] = useState<'content' | 'atmosphere'>('content');
+  const [tab, setTab] = useState<'content' | 'atmosphere' | 'agent'>('content');
   const [alive, setAlive] = useState(false);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function Dashboard() {
 
       {/* Tabs */}
       <nav className="relative z-10 px-6 sm:px-10 pt-8 flex gap-2">
-        {(['content', 'atmosphere'] as const).map((t) => (
+        {(['content', 'atmosphere', 'agent'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -116,7 +116,7 @@ export default function Dashboard() {
       </nav>
 
       <main className="relative z-10 px-6 sm:px-10 py-8 max-w-4xl mx-auto">
-        {tab === 'content' ? <ContentTab /> : <AtmosphereTab />}
+        {tab === 'content' ? <ContentTab /> : tab === 'atmosphere' ? <AtmosphereTab /> : <AgentTab />}
       </main>
     </div>
   );
@@ -370,6 +370,189 @@ function AtmosphereTab() {
         </ul>
       </div>
       <p className="text-[11px] text-white/25">Changes apply to the open site windows in real time.</p>
+    </section>
+  );
+}
+
+/* ── Agent ───────────────────────────────────────────────────────────── */
+
+type ChatMsg = { role: 'user' | 'assistant'; text: string };
+
+const SESSION_KEY = 'hydra-agent-session';
+
+function AgentTab() {
+  const [sessionId, setSessionId] = useState<string | null>(
+    () => localStorage.getItem(SESSION_KEY)
+  );
+  const [messages, setMessages] = useState<ChatMsg[]>([]);
+  const [input, setInput] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [mode, setMode] = useState<'plan' | 'build'>(
+    () => (localStorage.getItem('hydra-agent-mode') as 'plan' | 'build') || 'plan'
+  );
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
+  }, [messages, busy]);
+
+  const send = async () => {
+    const text = input.trim();
+    if (!text || busy) return;
+    setInput('');
+    setBusy(true);
+    setMessages((m) => [...m, { role: 'user', text }]);
+    try {
+      let sid = sessionId;
+      if (!sid) {
+        const s = await api<{ id: string }>('/agent/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({}),
+        });
+        sid = s.id;
+        localStorage.setItem(SESSION_KEY, sid);
+        setSessionId(sid);
+      }
+      const res = await api<{ parts?: { type: string; text?: string }[] }>(
+        `/agent/session/${sid}/message`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ parts: [{ type: 'text', text }], agent: mode }),
+        }
+      );
+      const reply = (res.parts ?? [])
+        .filter((p) => p.type === 'text' && p.text)
+        .map((p) => p.text)
+        .join('\n')
+        .trim();
+      setMessages((m) => [...m, { role: 'assistant', text: reply || '(no text output)' }]);
+    } catch (e) {
+      setMessages((m) => [
+        ...m,
+        { role: 'assistant', text: `⚠ ${e instanceof Error ? e.message : String(e)} — is the agent server running?` },
+      ]);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="space-y-4" aria-label="Agent">
+      <div className="glass-card rounded-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(0,168,107,0.8)] shrink-0" />
+            <span className="label-cinematic truncate">ox-alpha · self-hosted</span>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {(['plan', 'build'] as const).map((mo) => (
+              <button
+                key={mo}
+                onClick={() => {
+                  setMode(mo);
+                  localStorage.setItem('hydra-agent-mode', mo);
+                }}
+                aria-pressed={mode === mo}
+                title={mo === 'plan' ? 'Read-only analysis & advice' : 'Can edit files — changes go live instantly'}
+                className={`h-7 px-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors ${
+                  mode === mo ? 'bg-accent text-black' : 'border border-white/10 text-white/50 hover:text-white'
+                }`}
+              >
+                {mo}
+              </button>
+            ))}
+            {sessionId && (
+              <button
+                onClick={() => {
+                  localStorage.removeItem(SESSION_KEY);
+                  setSessionId(null);
+                  setMessages([]);
+                }}
+                className="h-7 px-3 rounded-full border border-white/10 text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white"
+                title="New session"
+              >
+                Reset
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Transcript */}
+        <div ref={scrollRef} className="h-[46vh] overflow-y-auto px-5 py-4 space-y-3">
+          {messages.length === 0 && (
+            <div className="h-full flex flex-col items-center justify-center text-center gap-2 opacity-60">
+              <HydraLogo className="h-8 w-8 text-accent/70" />
+              <p className="text-sm text-white/50">Ask for changes — the site reacts live.</p>
+              <p className="text-[11px] text-white/25 max-w-sm">
+                “make the hero heading smaller” · “audit the About section” · “add a hover glow to project cards”
+              </p>
+            </div>
+          )}
+          {messages.map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap border ${
+                  m.role === 'user'
+                    ? 'bg-accent/15 border-accent/25 text-white'
+                    : 'bg-white/[0.03] border-white/[0.07] text-white/75'
+                }`}
+              >
+                {m.text}
+              </div>
+            </motion.div>
+          ))}
+          {busy && (
+            <div className="flex justify-start">
+              <div className="rounded-2xl px-4 py-2.5 bg-white/[0.03] border border-white/[0.07] flex items-center gap-1.5">
+                {[0, 1, 2].map((d) => (
+                  <span
+                    key={d}
+                    className="h-1.5 w-1.5 rounded-full bg-accent animate-bounce"
+                    style={{ animationDelay: `${d * 0.15}s` }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Composer */}
+        <div className="border-t border-white/[0.06] p-3.5 flex items-end gap-2.5">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                void send();
+              }
+            }}
+            rows={1}
+            placeholder={mode === 'build' ? 'Describe a change… it ships to the live site' : 'Ask about the codebase…'}
+            className={`${input} resize-none max-h-32`}
+            aria-label="Message the agent"
+          />
+          <button
+            onClick={() => void send()}
+            disabled={busy || !input.trim()}
+            className="h-10 px-5 rounded-xl bg-accent text-black text-[11px] font-bold uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent-soft transition-colors shrink-0"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+      <p className="text-[11px] text-white/25">
+        {mode === 'build'
+          ? 'Build mode can edit files in this repo — every edit hot-reloads into open site windows.'
+          : 'Plan mode is read-only — safe for questions and audits.'}
+      </p>
     </section>
   );
 }
