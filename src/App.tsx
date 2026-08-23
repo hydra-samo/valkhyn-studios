@@ -3,6 +3,9 @@ import { motion, MotionConfig, AnimatePresence } from 'framer-motion';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { MotionStoreProvider, HydraMotionEngine } from './lib/motionEngine';
 import { useDeviceTier } from './hooks/useDeviceTier';
+import ATMOSPHERE from './data/atmosphere.json';
+
+const Dashboard = React.lazy(() => import('./dashboard/Dashboard'));
 import { PreSplashSelector } from './components/PreSplash';
 import { LoadingSplash } from './components/LoadingSplash';
 import { Navigation } from './components/Navigation';
@@ -94,7 +97,7 @@ function AppInner() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
               {/* Film grain overlay — subtle texture across the entire canvas */}
-              <div className="film-grain" aria-hidden="true" />
+              {ATMOSPHERE.grain && <div className="film-grain" aria-hidden="true" />}
 
               {/* Fixed atmospheric background */}
               <div
@@ -164,6 +167,14 @@ function AppInner() {
 }
 
 export default function App() {
+  // Studio console route — served by the same always-on local server
+  if (typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '').endsWith('/dashboard')) {
+    return (
+      <Suspense fallback={null}>
+        <Dashboard />
+      </Suspense>
+    );
+  }
   return (
     <LanguageProvider>
       <AppInner />

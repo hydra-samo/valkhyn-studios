@@ -6,6 +6,8 @@ interface VideoLayerProps {
   asset: AssetConfig;
   motionStore: MotionStore;
   affordable: boolean;
+  /** Dashboard override — opacity multiplier + blend mode (atmosphere.json) */
+  layerCfg?: { enabled?: boolean; opacity?: number; blend?: string };
 }
 
 /**
@@ -17,12 +19,15 @@ interface VideoLayerProps {
  * - Ambient: seamless loop, staggered start offset
  * - Spatial/Signature: loop, playback rate tied to motion intensity
  */
-export function VideoLayer({ asset, motionStore, affordable }: VideoLayerProps) {
+export function VideoLayer({ asset, motionStore, affordable, layerCfg }: VideoLayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
   const wasPlayingRef = useRef(false);
   const initializedRef = useRef(false);
+
+  const baseOpacity = asset.baseOpacity * (layerCfg?.opacity ?? 1);
+  const blendMode = layerCfg?.blend ?? asset.blendMode;
 
   const isAmbient = asset.role.startsWith('environment') || asset.role === 'atmospheric_dust';
   const shouldLoop = isAmbient;
@@ -116,7 +121,7 @@ export function VideoLayer({ asset, motionStore, affordable }: VideoLayerProps) 
       }
 
       const targetOpacity = Math.min(0.85, Math.max(0,
-        asset.baseOpacity + velBoost + sectionBoost
+        baseOpacity + velBoost + sectionBoost
       ));
 
       containerRef.current.style.opacity = String(targetOpacity);
@@ -152,8 +157,8 @@ export function VideoLayer({ asset, motionStore, affordable }: VideoLayerProps) 
         zIndex: asset.zIndex,
         pointerEvents: 'none',
         overflow: 'hidden',
-        opacity: asset.baseOpacity,
-        mixBlendMode: asset.blendMode,
+        opacity: baseOpacity,
+        mixBlendMode: blendMode as React.CSSProperties['mixBlendMode'],
         willChange: 'opacity, transform',
         contain: 'strict',
         transition: 'opacity 0.3s ease-out, transform 0.1s linear',
