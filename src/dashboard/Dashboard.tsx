@@ -811,7 +811,7 @@ function AgentDrawer() {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2 min-w-0">
             <HydraLogo className="h-5 w-5 text-accent shrink-0" />
-            <span className="text-[10px] font-medium uppercase tracking-widest text-white/65 truncate">ox-alpha · {t('console.agent.selfHosted')}</span>
+            <span className="text-[10px] font-medium uppercase tracking-widest text-white/65 truncate">HYDRA AGENT</span>
           </div>
           <div className="flex items-center gap-1 shrink-0">
             {sessionId && (
