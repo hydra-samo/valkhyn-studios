@@ -160,58 +160,11 @@ export const ASSETS: AssetConfig[] = [
     lowTier: false,
     mediumTier: true,
   },
-
-  // ── HOLD (never rendered) ─────────────────────────────────────
-  {
-    id: 'hold-01',
-    src: '/motion/01.mp4',
-    role: 'hold',
-    depth: 'haze',
-    zIndex: 0,
-    baseOpacity: 0,
-    blendMode: 'screen',
-    sections: null,
-    velocityInfluence: 0,
-    parallaxSpeed: 1,
-    lazy: true,
-    lowTier: false,
-    mediumTier: false,
-  },
-  {
-    id: 'hold-15',
-    src: '/motion/15.mp4',
-    role: 'hold',
-    depth: 'haze',
-    zIndex: 0,
-    baseOpacity: 0,
-    blendMode: 'screen',
-    sections: null,
-    velocityInfluence: 0,
-    parallaxSpeed: 1,
-    lazy: true,
-    lowTier: false,
-    mediumTier: false,
-  },
-  {
-    id: 'hold-16',
-    src: '/motion/16.mp4',
-    role: 'hold',
-    depth: 'haze',
-    zIndex: 0,
-    baseOpacity: 0,
-    blendMode: 'screen',
-    sections: null,
-    velocityInfluence: 0,
-    parallaxSpeed: 1,
-    lazy: true,
-    lowTier: false,
-    mediumTier: false,
-  },
 ];
 
 /** Only assets that are actually loaded and rendered. */
 export const ACTIVE_ASSETS = ASSETS.filter((a) => a.role !== 'hold');
 
-/** Section IDs as they appear in the DOM. */
-export const SECTIONS = ['hero', 'work', 'voice', 'process', 'about'] as const;
+/** Section IDs as they appear in the DOM (`data-section`). */
+export const SECTIONS = ['hero', 'about', 'work', 'services', 'contact'] as const;
 export type SectionId = (typeof SECTIONS)[number];

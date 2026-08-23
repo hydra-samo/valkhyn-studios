@@ -2,6 +2,8 @@ import React, { Suspense, useState, useEffect, useCallback } from 'react';
 import { motion, MotionConfig, AnimatePresence } from 'framer-motion';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { ScrollProvider } from './contexts/ScrollContext';
+import { MotionStoreProvider, HydraMotionEngine } from './lib/motionEngine';
+import { useDeviceTier } from './hooks/useDeviceTier';
 import { PreSplashSelector } from './components/PreSplash';
 import { LoadingSplash } from './components/LoadingSplash';
 import { Navigation } from './components/Navigation';
@@ -35,6 +37,7 @@ type SplashPhase = 'presplash' | 'loading' | 'done';
 
 function AppInner() {
   const lenisRef = useLenis();
+  const deviceTier = useDeviceTier();
 
   const [splashPhase, setSplashPhase] = useState<SplashPhase>(() => {
     if (typeof window === 'undefined') return 'presplash';
@@ -84,20 +87,24 @@ function AppInner() {
       {/* Main content — continuous cinematic flow */}
       {splashPhase === 'done' && (
         <ScrollProvider>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          >
-            {/* Film grain overlay — subtle texture across the entire canvas */}
-            <div className="film-grain" aria-hidden="true" />
+          <MotionStoreProvider lenisRef={lenisRef}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              {/* Film grain overlay — subtle texture across the entire canvas */}
+              <div className="film-grain" aria-hidden="true" />
 
-            {/* Fixed atmospheric background */}
-            <div
-              className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: 'url(/background/background.jpeg)' }}
-              aria-hidden="true"
-            />
+              {/* Fixed atmospheric background */}
+              <div
+                className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: 'url(/background/background.jpeg)' }}
+                aria-hidden="true"
+              />
+
+              {/* HYDRA Motion Engine — video atmosphere layers */}
+              <HydraMotionEngine deviceTier={deviceTier} />
 
             {/* Scroll-synced persistent portrait — full viewport canvas */}
             <PersistentPortrait />
@@ -145,7 +152,8 @@ function AppInner() {
                 <Footer />
               </Suspense>
             </main>
-          </motion.div>
+            </motion.div>
+          </MotionStoreProvider>
         </ScrollProvider>
       )}
     </MotionConfig>
