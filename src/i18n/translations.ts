@@ -72,6 +72,10 @@ export const UI: Record<Lang, Dict> = {
     'work.emptyTitle': 'Real Projects Loading',
     'work.emptyDesc':
       'Selected case studies are being prepared for release and will appear here as they ship.',
+    'work.case.brief': 'The Brief',
+    'work.case.stack': 'Toolchain',
+    'work.case.deliverables': 'Deliverables',
+    'work.case.close': 'Close',
     'voice.headingProf': 'PROFESSIONAL',
     'voice.headingOver': 'VOICE-OVER',
     'voice.comingSoon': 'COMING SOON',
@@ -198,6 +202,10 @@ export const UI: Record<Lang, Dict> = {
     'work.emptyTitle': 'Études de cas en préparation',
     'work.emptyDesc':
       'Les études de cas sélectionnées sont en préparation et apparaîtront ici dès leur publication.',
+    'work.case.brief': 'Le brief',
+    'work.case.stack': 'Outillage',
+    'work.case.deliverables': 'Livrables',
+    'work.case.close': 'Fermer',
     'voice.headingProf': 'VOIX',
     'voice.headingOver': 'PROFESSIONNELLE',
     'voice.comingSoon': 'BIENTÔT DISPONIBLE',
@@ -323,6 +331,10 @@ export const UI: Record<Lang, Dict> = {
     'work.emptyTitle': 'دراسات الحالة قيد التجهيز',
     'work.emptyDesc':
       'يتم الآن تجهيز دراسات الحالة المختارة وستظهر هنا فور نشرها.',
+    'work.case.brief': 'الملخص',
+    'work.case.stack': 'الأدوات',
+    'work.case.deliverables': 'التسليمات',
+    'work.case.close': 'إغلاق',
     'voice.headingProf': 'تعليق',
     'voice.headingOver': 'صوتي احترافي',
     'voice.comingSoon': 'قريباً',

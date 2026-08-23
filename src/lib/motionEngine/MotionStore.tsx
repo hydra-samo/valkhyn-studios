@@ -40,6 +40,9 @@ export interface MotionStore {
 
   /** Subscribe to scroll updates. Returns unsubscribe function. */
   onUpdate: (callback: () => void) => () => void;
+
+  /** Lock/unlock page scroll (overlays). No-op without Lenis (low tier/mobile). */
+  lenisControl: (stop: boolean) => void;
 }
 
 const MotionStoreContext = createContext<MotionStore | null>(null);
@@ -107,6 +110,8 @@ interface MotionStoreProviderProps {
 }
 
 export function MotionStoreProvider({ lenisRef, children }: MotionStoreProviderProps) {
+  const providerLenisRef = lenisRef;
+
   // Create MotionValues once
   const store = useMemo<MotionStore>(() => {
     const mv = <T extends number | string>(initial: T) => motionValue(initial) as MotionValue<any>;
@@ -133,6 +138,12 @@ export function MotionStoreProvider({ lenisRef, children }: MotionStoreProviderP
       rawScrollY: mv(0),
       docHeight: mv(0),
       onUpdate,
+      lenisControl: (stop: boolean) => {
+        const lenis = providerLenisRef.current;
+        if (!lenis) return;
+        if (stop) lenis.stop();
+        else lenis.start();
+      },
     };
 
     // Attach notify to the store for internal use
