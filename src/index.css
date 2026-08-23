@@ -412,3 +412,8 @@ select option {
   background-color: #060c09;
   color: #f3f4f6;
 }
+
+/* Native form-control accent (selects, ranges, checkboxes) — brand emerald */
+:root {
+  accent-color: #10b981;
+}
