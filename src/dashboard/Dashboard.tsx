@@ -167,9 +167,9 @@ export default function Dashboard() {
       </header>
 
       {/* Body: rail · panel · agent drawer */}
-      <div className="relative z-10 flex flex-1 min-h-0 pb-[calc(3.5rem+env(safe-area-inset-bottom))] lg:pb-0">
+      <div className="relative z-10 flex flex-1 min-h-0 pl-[calc(4.75rem+env(safe-area-inset-left))] sm:pl-[5rem] lg:pl-0">
         {/* Activity rail */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 min-h-14 shrink-0 flex flex-row items-center justify-center gap-2 border-t border-white/[0.1] bg-[#060c09]/95 backdrop-blur-xl pb-[env(safe-area-inset-bottom)] lg:sticky lg:top-0 lg:h-auto lg:w-14 lg:flex-col lg:justify-start lg:gap-1 lg:border-t-0 lg:border-r lg:bg-white/[0.035]" aria-label="Console panels">
+        <nav className="fixed left-3 top-1/2 z-40 w-14 -translate-y-1/2 flex-col items-center gap-1 rounded-3xl border border-white/[0.12] bg-white/[0.06] py-3 shadow-[0_10px_36px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:sticky lg:top-0 lg:left-auto lg:w-14 lg:translate-y-0 lg:rounded-none lg:border-x-0 lg:border-y-0 lg:border-r lg:border-white/[0.08] lg:bg-white/[0.035] lg:py-3 lg:shadow-none" aria-label="Console panels">
           {(
             [
               ['content', FolderOpen, 'Content & Imports'],
