@@ -167,9 +167,9 @@ export default function Dashboard() {
       </header>
 
       {/* Body: rail · panel · agent drawer */}
-      <div className="relative z-10 flex flex-1 min-h-0 pl-[calc(4.75rem+env(safe-area-inset-left))] sm:pl-[5rem] lg:pl-0">
+      <div className="relative z-10 flex flex-1 min-h-0 pl-[calc(3.75rem+env(safe-area-inset-left))] sm:pl-[4.25rem] lg:pl-0">
         {/* Activity rail */}
-        <nav className="fixed left-3 top-1/2 z-40 w-14 -translate-y-1/2 flex-col items-center gap-1 rounded-3xl border border-white/[0.12] bg-white/[0.06] py-3 shadow-[0_10px_36px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:sticky lg:top-0 lg:left-auto lg:w-14 lg:translate-y-0 lg:rounded-none lg:border-x-0 lg:border-y-0 lg:border-r lg:border-white/[0.08] lg:bg-white/[0.035] lg:py-3 lg:shadow-none" aria-label="Console panels">
+        <nav className="fixed left-2 top-1/2 z-40 w-12 -translate-y-1/2 flex-col items-center gap-0.5 rounded-2xl border border-white/[0.12] bg-white/[0.06] py-2 shadow-[0_10px_36px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:sticky lg:top-0 lg:left-auto lg:w-12 lg:translate-y-0 lg:rounded-none lg:border-x-0 lg:border-y-0 lg:border-r lg:border-white/[0.08] lg:bg-white/[0.035] lg:py-2 lg:shadow-none" aria-label="Console panels">
           {(
             [
               ['content', FolderOpen, 'Content & Imports'],
@@ -182,12 +182,16 @@ export default function Dashboard() {
               onClick={() => setPanel(id)}
               title={title}
               aria-pressed={panel === id}
-              className={`relative h-10 w-10 rounded-xl flex items-center justify-center transition-colors ${
-                panel === id ? 'bg-white/[0.06] text-accent' : 'text-white/58 hover:text-white hover:bg-white/[0.055]'
+              className={`relative h-11 w-11 rounded-xl flex flex-col items-center justify-center gap-[3px] transition-colors ${
+                panel === id ? 'bg-white/[0.07] text-accent' : 'text-white/58 hover:text-white hover:bg-white/[0.055]'
               }`}
             >
-              {panel === id && <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[2px] rounded-full bg-accent max-lg:left-1/2 max-lg:top-auto max-lg:-translate-x-1/2 max-lg:translate-y-0 max-lg:h-[2px] max-lg:w-6" />}
-              <Icon size={17} />
+              <Icon size={16} />
+              <span
+                className={`h-[3px] w-[3px] rounded-full transition-all duration-200 ${
+                  panel === id ? 'bg-accent shadow-[0_0_6px_rgba(16,185,129,0.9)]' : 'bg-white/15'
+                }`}
+              />
             </button>
           ))}
         </nav>
@@ -737,6 +741,7 @@ function AgentDrawer() {
   const [plusOpen, setPlusOpen] = useState(false);
   const [ocu, setOcu] = useState<'on' | 'off' | 'block'>('off');
   const [skills, setSkills] = useState<{ name: string; src: string }[]>([]);
+  const [agentUp, setAgentUp] = useState<boolean | null>(null);
   const [envInfo, setEnvInfo] = useState<{ mcps: { name: string; type: string; enabled: boolean }[]; plugins: string[] } | null>(null);
   const attachRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -780,6 +785,21 @@ function AgentDrawer() {
       else if (r.output.includes('DISABLED')) setOcu('block');
       else setOcu('off');
     }).catch(() => {});
+  }, []);
+
+  // Agent liveness watchdog
+  useEffect(() => {
+    let alive = true;
+    const ping = () =>
+      api<{ up: boolean }>('/agent-health')
+        .then((r) => alive && setAgentUp(r.up))
+        .catch(() => alive && setAgentUp(false));
+    ping();
+    const iv = setInterval(ping, 15000);
+    return () => {
+      alive = false;
+      clearInterval(iv);
+    };
   }, []);
 
   const toggleOcu = () => {
@@ -870,6 +890,12 @@ function AgentDrawer() {
           <div className="flex items-center gap-2 min-w-0">
             <HydraLogo className="h-5 w-5 text-accent shrink-0" />
             <span className="text-[10px] font-medium uppercase tracking-widest text-white/65 truncate">HYDRA AGENT</span>
+            <span
+              className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                agentUp === null ? 'bg-white/20' : agentUp ? 'bg-accent shadow-[0_0_8px_rgba(16,185,129,0.9)]' : 'bg-red-500'
+              }`}
+              title={agentUp ? 'Agent server reachable' : 'Agent offline — is the studio PC awake?'}
+            />
           </div>
           <div className="flex items-center gap-1 shrink-0">
             {sessionId && (
@@ -985,6 +1011,17 @@ function AgentDrawer() {
 
       {/* Transcript */}
       <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-2.5">
+        {agentUp === false && (
+          <div className="rounded-xl border border-red-500/25 bg-red-500/[0.06] px-4 py-3 text-xs text-white/70 flex items-center justify-between gap-3">
+            <span>Agent unreachable — the studio PC or its agent service is asleep.</span>
+            <button
+              onClick={() => api<{ up: boolean }>('/agent-health').then((r) => setAgentUp(r.up)).catch(() => setAgentUp(false))}
+              className="shrink-0 h-7 px-3 rounded-lg border border-emerald-500/30 bg-emerald-950/30 text-[9px] font-bold uppercase tracking-widest text-accent hover:border-emerald-500/50"
+            >
+              Retry
+            </button>
+          </div>
+        )}
         {messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center text-center gap-2 opacity-60 px-4">
             <HydraLogo className="h-7 w-7 text-accent/70" />
@@ -1116,7 +1153,7 @@ function AgentDrawer() {
             />
             <button
               onClick={() => void send()}
-              disabled={busy || (!input.trim() && staged.length === 0)}
+              disabled={busy || agentUp === false || (!input.trim() && staged.length === 0)}
               aria-label={t('console.agent.send')}
               className="h-8 w-8 mr-2 mb-2 shrink-0 self-end rounded-xl border border-emerald-500/30 bg-emerald-950/30 text-accent hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
             >

@@ -56,6 +56,16 @@ export function hydraStudio() {
         const url = new URL(req.url, 'http://local');
         const p = url.pathname;
 
+        // ── Agent liveness (for the drawer status dot) ──────────────
+        if (p === '/agent-health') {
+          try {
+            const r = await fetch('http://127.0.0.1:17171/project', { method: 'GET' });
+            return send(res, 200, { up: r.ok });
+          } catch {
+            return send(res, 200, { up: false });
+          }
+        }
+
         // ── Agent proxy → self-hosted opencode (127.0.0.1:17171) ────
         // Same-origin for the dashboard: no CORS, no token handling here.
         if (p.startsWith('/agent')) {
