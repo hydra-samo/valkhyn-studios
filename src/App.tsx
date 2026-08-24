@@ -4,6 +4,7 @@ import { LanguageProvider } from './i18n/LanguageContext';
 import { MotionStoreProvider, HydraMotionEngine } from './lib/motionEngine';
 import { useDeviceTier } from './hooks/useDeviceTier';
 import ATMOSPHERE from './data/atmosphere.json';
+import { assetUrl } from './lib/utils';
 
 const Dashboard = React.lazy(() => import('./dashboard/Dashboard'));
 import { PreSplashSelector } from './components/PreSplash';
@@ -102,7 +103,7 @@ function AppInner() {
               {/* Fixed atmospheric background */}
               <div
                 className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: 'url(/background/background.jpeg)' }}
+                style={{ backgroundImage: `url(${assetUrl('background/background.jpeg')})` }}
                 aria-hidden="true"
               />
 
