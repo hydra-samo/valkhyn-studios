@@ -14,12 +14,9 @@ export default defineConfig(() => {
       },
     },
     server: {
-      // Tailnet access (phone / remote devices via tailscale serve)
+      // Tailnet access (phone / remote devices via tailscale serve).
+      // HMR stays auto: live-reload is desktop-only; phone reloads manually.
       allowedHosts: ['.ts.net'],
-      hmr: {
-        host: 'hydra-studio.tail189f98.ts.net',
-        protocol: 'wss',
-      },
     },
   };
 });

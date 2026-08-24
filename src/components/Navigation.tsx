@@ -64,8 +64,8 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenBrief }) => {
     >
       <div
         className={cn(
-          'flex items-center justify-between gap-4 rounded-full border transition-all duration-500 px-4 sm:px-6',
-          compact ? 'h-11' : 'h-12 sm:h-13',
+          'flex max-w-[94vw] flex-wrap items-center justify-center gap-x-4 gap-y-0.5 rounded-2xl border transition-all duration-500 px-4 py-2 sm:flex-nowrap sm:justify-between sm:gap-4 sm:rounded-full sm:py-0 sm:px-6',
+          compact ? 'sm:h-11' : 'sm:h-12 sm:h-13',
           scrolled
             ? 'bg-black/50 backdrop-blur-2xl border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.4)]'
             : 'bg-white/[0.03] backdrop-blur-xl border-white/[0.04]'
@@ -80,7 +80,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenBrief }) => {
         </a>
 
         {/* Links */}
-        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
+        <div className="order-last -mb-0.5 flex w-full items-center justify-center gap-5 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/45 md:order-none md:mb-0 md:w-auto md:gap-6 md:text-[10px] lg:gap-8 lg:text-[11px]">
           {NAV_LINKS.map((link) => (
             <a
               key={link.key}
