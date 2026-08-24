@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import type { AssetConfig } from './assetRegistry';
+import { assetUrl } from '../utils';
 import type { MotionStore } from './MotionStore';
 
 interface VideoLayerProps {
@@ -178,7 +179,7 @@ export function VideoLayer({ asset, motionStore, affordable, layerCfg }: VideoLa
           objectFit: 'cover',
         }}
       >
-        {shouldShow && <source src={asset.src} type="video/mp4" />}
+        {shouldShow && <source src={assetUrl(asset.src)} type="video/mp4" />}
       </video>
     </div>
   );

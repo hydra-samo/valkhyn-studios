@@ -1,13 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { useMotionStore } from '../lib/motionEngine';
 import { PORTRAIT_SLOTS, type PortraitSlot } from '../lib/portrait/slots';
+import { assetUrl } from '../lib/utils';
 
 const TOTAL_FRAMES = 300;
 const BATCH_SIZE = 20;
 const LERP = 0.08;
 
 function frameUrl(index: number): string {
-  return `/portrait-cutout/frame-${String(index + 1).padStart(3, '0')}.png`;
+  return assetUrl(`portrait-cutout/frame-${String(index + 1).padStart(3, '0')}.png`);
 }
 
 function lerp(a: number, b: number, t: number): number {
