@@ -417,3 +417,10 @@ select option {
 :root {
   accent-color: #10b981;
 }
+
+/* Stop iOS Safari from zoom-jumping into small inputs (touch devices only) */
+@media (pointer: coarse) {
+  input, textarea, select {
+    font-size: max(16px, 1em) !important;
+  }
+}
