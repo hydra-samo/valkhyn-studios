@@ -167,9 +167,9 @@ export default function Dashboard() {
       </header>
 
       {/* Body: rail · panel · agent drawer */}
-      <div className="relative z-10 flex flex-1 min-h-0">
+      <div className="relative z-10 flex flex-1 min-h-0 pb-14 lg:pb-0">
         {/* Activity rail */}
-        <nav className="w-14 shrink-0 flex flex-col items-center gap-1 py-3 border-r border-white/[0.08] bg-white/[0.035]" aria-label="Console panels">
+        <nav className="fixed bottom-0 left-0 right-0 z-40 h-14 shrink-0 flex-row items-center justify-center gap-2 border-t border-white/[0.1] bg-[#060c09]/95 backdrop-blur-xl lg:sticky lg:top-0 lg:h-auto lg:w-14 lg:flex-col lg:justify-start lg:gap-1 lg:border-t-0 lg:border-r lg:bg-white/[0.035]" aria-label="Console panels">
           {(
             [
               ['content', FolderOpen, 'Content & Imports'],
@@ -186,14 +186,14 @@ export default function Dashboard() {
                 panel === id ? 'bg-white/[0.06] text-accent' : 'text-white/58 hover:text-white hover:bg-white/[0.055]'
               }`}
             >
-              {panel === id && <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[2px] rounded-full bg-accent" />}
+              {panel === id && <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[2px] rounded-full bg-accent max-lg:left-1/2 max-lg:top-auto max-lg:-translate-x-1/2 max-lg:translate-y-0 max-lg:h-[2px] max-lg:w-6" />}
               <Icon size={17} />
             </button>
           ))}
         </nav>
 
         {/* Active panel */}
-        <main className="flex-1 min-w-0 overflow-y-auto p-5 sm:p-7">
+        <main className="flex-1 min-w-0 overflow-y-auto px-4 py-5 pb-8 sm:px-7 sm:py-7 lg:pb-7">
           <div className="max-w-3xl mx-auto space-y-6">
             {panel === 'content' && <ContentPanel />}
             {panel === 'files' && <FilesPanel />}
@@ -203,9 +203,16 @@ export default function Dashboard() {
 
         {/* Persistent agent drawer — mounts once, survives panel switches */}
         {agentOpen && (
-          <aside className="w-[24rem] xl:w-[26rem] shrink-0 border-l border-white/[0.08] bg-white/[0.04] backdrop-blur-md flex flex-col min-h-0">
-            <AgentDrawer />
-          </aside>
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px] lg:hidden"
+              onClick={() => setAgentOpen(false)}
+              aria-hidden="true"
+            />
+            <aside className="fixed inset-y-0 right-0 z-50 w-[92vw] max-w-[26rem] border-l border-white/[0.1] bg-[#060c09]/98 shadow-[0_0_60px_rgba(0,0,0,0.6)] backdrop-blur-xl flex flex-col min-h-0 lg:static lg:z-auto lg:w-[24rem] xl:w-[26rem] lg:max-w-none lg:shrink-0 lg:border-l lg:bg-white/[0.04] lg:shadow-none">
+              <AgentDrawer />
+            </aside>
+          </>
         )}
       </div>
     </div>
