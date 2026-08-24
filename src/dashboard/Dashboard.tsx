@@ -718,7 +718,10 @@ function AgentDrawer() {
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [agents, setAgents] = useState<string[]>(UI_AGENTS);
-  const [agent, setAgent] = useState<string>(() => localStorage.getItem('hydra-agent-agent') || 'plan');
+  const [agent, setAgent] = useState<string>(() => {
+    const saved = localStorage.getItem('hydra-agent-agent') || 'plan';
+    return UI_AGENTS.includes(saved) ? saved : 'plan';
+  });
   const [models, setModels] = useState<{ id: string; ctx: number; variants: string[] }[]>([]);
   const [model, setModel] = useState<string>(() => localStorage.getItem('hydra-agent-model') || 'x-preview-f-free');
   const [variant, setVariant] = useState<string>(() => localStorage.getItem('hydra-agent-variant') || '');
