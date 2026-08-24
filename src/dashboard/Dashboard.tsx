@@ -130,7 +130,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-[#060c09] text-[#f3f4f6] overflow-hidden relative" style={{ colorScheme: 'dark' }}>
+    <div className="h-[100dvh] flex flex-col bg-[#060c09] text-[#f3f4f6] overflow-hidden relative" style={{ colorScheme: 'dark' }}>
       {/* Translucent aurora under-layer — panels float on this */}
       <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute -top-1/4 left-1/3 -translate-x-1/2 w-[52rem] h-[40rem] rounded-full bg-[#10b981]/[0.08] blur-[130px]" />
@@ -167,9 +167,9 @@ export default function Dashboard() {
       </header>
 
       {/* Body: rail · panel · agent drawer */}
-      <div className="relative z-10 flex flex-1 min-h-0 pb-14 lg:pb-0">
+      <div className="relative z-10 flex flex-1 min-h-0 pb-[calc(3.5rem+env(safe-area-inset-bottom))] lg:pb-0">
         {/* Activity rail */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 h-14 shrink-0 flex-row items-center justify-center gap-2 border-t border-white/[0.1] bg-[#060c09]/95 backdrop-blur-xl lg:sticky lg:top-0 lg:h-auto lg:w-14 lg:flex-col lg:justify-start lg:gap-1 lg:border-t-0 lg:border-r lg:bg-white/[0.035]" aria-label="Console panels">
+        <nav className="fixed bottom-0 left-0 right-0 z-40 min-h-14 shrink-0 flex flex-row items-center justify-center gap-2 border-t border-white/[0.1] bg-[#060c09]/95 backdrop-blur-xl pb-[env(safe-area-inset-bottom)] lg:sticky lg:top-0 lg:h-auto lg:w-14 lg:flex-col lg:justify-start lg:gap-1 lg:border-t-0 lg:border-r lg:bg-white/[0.035]" aria-label="Console panels">
           {(
             [
               ['content', FolderOpen, 'Content & Imports'],
@@ -666,7 +666,7 @@ function AtmospherePanel() {
             return (
               <li
                 key={id}
-                className="px-5 py-4 border-b border-white/[0.08] last:border-0 grid grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_130px_120px] items-center gap-x-4 gap-y-2"
+                className="px-5 py-4 border-b border-white/[0.08] last:border-0 grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_130px_120px] items-center gap-x-4 gap-y-2"
               >
                 <Toggle checked={l.enabled !== false} onChange={(v) => patchLayer(id, { enabled: v })} small />
                 <div className="min-w-0">
@@ -675,7 +675,7 @@ function AtmospherePanel() {
                   </span>
                   <code className="block text-[10px] font-mono text-white/42">{id}</code>
                 </div>
-                <label className="flex items-center gap-2 col-start-2 sm:col-start-auto">
+                <label className="col-span-2 col-start-1 flex items-center gap-2 sm:col-span-1 sm:col-start-auto">
                   <input
                     type="range"
                     min={0}
