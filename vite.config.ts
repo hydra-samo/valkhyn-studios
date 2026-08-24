@@ -13,5 +13,13 @@ export default defineConfig(() => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    server: {
+      // Tailnet access (phone / remote devices via tailscale serve)
+      allowedHosts: ['.ts.net'],
+      hmr: {
+        host: 'hydra-studio.tail189f98.ts.net',
+        protocol: 'wss',
+      },
+    },
   };
 });
