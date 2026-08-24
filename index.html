@@ -22,6 +22,13 @@
     <link rel="icon" type="image/png" sizes="16x16" href="%BASE_URL%favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png" />
     <link rel="manifest" href="%BASE_URL%site.webmanifest" />
+    <script>
+      // Dashboard installs as its own app ("HYDRA Console") with start_url /dashboard
+      if (location.pathname.replace(/\/+$/, '').endsWith('/dashboard')) {
+        document.querySelector('link[rel="manifest"]').href =
+          '%BASE_URL%dashboard.webmanifest';
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
