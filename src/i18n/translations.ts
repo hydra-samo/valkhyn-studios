@@ -2,834 +2,332 @@ export type Lang = 'en' | 'fr' | 'ar';
 export type Dict = Record<string, string>;
 
 /**
- * UI chrome strings. `en` must stay byte-identical to the copy currently
- * rendered on the site — it is the source of truth. `t(key, vars?)` resolves
- * {placeholder} tokens against `vars`.
+ * Every string the site renders. `en` is the source of truth — the other two
+ * are real translations, not placeholders. Keys never change shape between
+ * languages, so the UI cannot half-translate.
  */
 export const UI: Record<Lang, Dict> = {
   en: {
     'nav.home': 'Home',
+    'nav.about': 'About',
+    'nav.services': 'Services',
     'nav.work': 'Work',
-    'nav.workShort': 'VE & MD',
-    'nav.voice': 'Voice',
     'nav.process': 'Process',
-    'nav.origin': 'Origin',
     'nav.contact': 'Contact',
-    'nav.dockAria': 'Primary',
-    'btn.startProject': 'Start Project',
-    'btn.startProjectShort': 'Start a Project',
-    'btn.submitAnotherBrief': 'Submit Another Brief',
-    'btn.sendBrief': 'Send Project Brief',
-    'btn.transmitting': 'Transmitting Brief...',
-    'btn.formNotConfigured': 'Contact Form Not Configured',
-    'console.subtitle': 'Studio Console',
-    'console.openSite': 'Open Site',
-    'console.content.title': 'Content & Imports',
-    'console.content.desc': 'Import section files, publish projects — every change lands live.',
-    'console.files.title': 'Repo Files',
-    'console.files.desc': 'Every file behind the site. The agent can edit any of them on request.',
-    'console.atm.title': 'Atmosphere',
-    'console.atm.desc': 'The living layer behind every section — tuned in real time.',
-    'console.import.title': 'Import Section Files',
-    'console.import.target': 'Target',
-    'console.import.files': 'Files',
-    'console.import.live': '{n} file(s) live',
-    'console.import.bgHint': 'background.jpeg replacement lives here',
-    'console.import.workHint': 'posters & videos for case studies',
-    'console.import.motionHint': 'name files NN.mp4 (e.g. 06.mp4)',
-    'console.import.brandHint': 'logos, favicons, social cards',
-    'console.import.audioHint': 'voice-over tracks for future playback',
-    'console.bulk.title': 'Bulk Import',
-    'console.bulk.desc': 'Replace the project list from a projects.json export',
-    'console.published': 'Published Work',
-    'console.noneYet': 'No published work yet.',
-    'console.newCase': 'New Case Study',
-    'console.fTitle': 'Title *', 'console.fClient': 'Client', 'console.fYear': 'Year', 'console.fTag': 'Tag',
-    'console.fCategory': 'Category', 'console.fPoster': 'Poster image', 'console.fVideo': 'Video (optional)',
-    'console.fDesc': 'Description', 'console.fStack': 'Toolchain (comma-separated)', 'console.fDeliv': 'Deliverables (comma-separated)', 'console.fBrief': 'Client brief',
-    'console.publish': 'Publish to Site', 'console.liveNow': 'Live now',
-    'console.realNote': 'Real work only — files land in public/work/<id>/ and publish immediately.',
-    'console.atm.engine': 'Atmosphere Engine', 'console.atm.engineHint': 'All video layers behind the content',
-    'console.atm.grain': 'Film Grain', 'console.atm.grainHint': 'Full-screen texture overlay',
-    'console.atm.layers': 'Layers', 'console.atm.synced': 'Synced live',
-    'console.layer.haze': 'Haze', 'console.layer.env-secondary': 'Blue Wash', 'console.layer.env-primary': 'Volumetric Green',
-    'console.layer.dust': 'Dust Field', 'console.layer.wisp': 'Atmospheric Wisp', 'console.layer.geometry-primary': 'Geometry (Work)', 'console.layer.env-fragment': 'Signature Fragment (Work)',
-    'console.agent.selfHosted': 'self-hosted',
-    'console.agent.freeModels': 'Zen free models',
-    'console.agent.newSession': 'New session',
-    'console.agent.empty': 'Ask for changes while browsing any panel — edits land on the site live.',
-    'console.agent.phPlan': 'Ask about the codebase…',
-    'console.agent.phBuild': 'Describe a change…',
-    'console.agent.send': 'Send message',
-    'console.agent.planHint': 'plan · read-only',
-    'console.agent.attach': 'Attach files…',
-    'console.agent.skills': 'Skills',
-    'console.agent.mcps': 'MCP Servers',
-    'console.agent.plugins': 'Plugins',
-    'console.agent.computerUse': 'Computer Use',
-    'console.agent.agent': 'Agent',
-    'contact.errRequired': 'Name and email are required.',
-    'contact.errConfigured': 'Form endpoint not configured. Set VITE_FORM_ENDPOINT in your .env file.',
-    'contact.errFailed': 'Failed to send. Please try again.',
-    'btn.requestSimilar': 'Request Similar Production',
-    'lang.label': 'Language',
-    'lang.selectAria': 'Select display language',
-    'hero.headingVideo': 'Video.',
-    'hero.headingMotion': 'Motion.',
-    'hero.headingVoice': 'Voice.',
-    'hero.description':
-      'is Hydra Samo. A unified creative force providing high-end video editing, 3D motion, and vocal narration without the friction of a traditional agency.',
-    'hero.scrollHint': 'Explore',
-    'process.how': 'HOW THE',
-    'process.operates': 'HYDRA OPERATES',
-    'process.intro':
-      'Eliminating the friction of multiple agency departments. A single master creative engine managing footage pacing, graphic animations, and voice narration in tight synergy.',
-    'process.deliverable': 'DELIVERABLE',
-    'process.narrativeTitle': 'MANY HEADS.',
-    'process.narrativeTitleGrad': 'ONE UNIFIED VISION.',
-    'process.fragmentedTitle': 'THE FRAGMENTED WORKFLOW',
-    'process.unifiedTitle': 'THE UNIFIED VISION',
-    'process.fragmentedDesc':
-      'An agency splits your project across siloed departments — account managers, email chains, and slow internal handoffs that dilute intent.',
-    'process.unifiedDesc':
-      'One creator directs the video head, the motion head, and the voice head under a single will. Zero handoffs. No lost narrative intent.',
-    'about.eyebrow': 'ORIGIN & CREATIVE PHILOSOPHY',
-    'about.headingOne': 'MANY HEADS.',
-    'about.headingTwo': 'ONE ORIGIN.',
-    'about.badgeName': 'BENDALI ISSAM EDDINE',
-    'about.p1a': 'My name is',
-    'about.p1b': ', known in the visual and broadcast industry as',
-    'about.p1c': '.',
-    'about.p2':
-      'In ancient mythology, the Hydra was feared for its relentless multi-headed versatility. I channel that same intensity into my workflow. I am not a bloated agency with endless account managers; I am a single, highly specialized creative engine.',
-    'about.p3':
-      'I handle high-end video editing, kinetic motion graphics, and professional voice-over narration as a single unified discipline. This means zero hand-offs, no lost narrative intent, and agency-level speed with the direct clarity of a dedicated partner.',
-    'about.adv1': 'No Agency Overhead',
-    'about.adv2': 'Direct Founder Communication',
-    'about.adv3': 'Precision Delivery Deadlines',
-    'about.adv4': 'Integrated Video + Voice + Motion',
-    'work.selected': 'SELECTED',
-    'work.works': 'WORKS',
-    'work.cat.all': 'All Works',
-    'work.cat.video': 'Video Editing',
-    'work.cat.motion': 'Motion & 3D',
-    'work.cat.direction': 'Full Direction',
-    'work.client': 'CLIENT:',
-    'work.caseStudy': 'CASE STUDY AVAILABLE',
-    'work.inspect': 'Inspect',
-    'work.streaming': 'STREAMING ASSETS...',
-    'work.emptyTitle': 'Real Projects Loading',
-    'work.emptyDesc':
-      'Selected case studies are being prepared for release and will appear here as they ship.',
-    'work.case.brief': 'The Brief',
-    'work.case.stack': 'Toolchain',
-    'work.case.deliverables': 'Deliverables',
-    'work.case.close': 'Close',
-    'voice.headingProf': 'PROFESSIONAL',
-    'voice.headingOver': 'VOICE-OVER',
-    'voice.comingSoon': 'COMING SOON',
-    'modal.video': 'Video',
-    'modal.grading': 'Color Grade',
-    'modal.raw': 'RAW FOOTAGE',
-    'modal.grade': 'HYDRA COLOR GRADE',
-    'modal.brief': 'CLIENT BRIEF & PRODUCTION DIRECTION',
-    'modal.software': 'SOFTWARE STACK',
-    'modal.deliverables': 'DELIVERABLES',
-    'modal.play': 'Play',
-    'modal.pause': 'Pause',
-    'modal.mute': 'Mute',
-    'modal.unmute': 'Unmute',
-    'modal.close': 'Close',
-    'contact.headingLet': 'LET\'S BUILD',
-    'contact.headingTogether': 'TOGETHER',
-    'contact.successTitle': 'BRIEF RECEIVED // HYDRA DISPATCHED',
-    'contact.successPrefix': 'Thanks,',
-    'contact.successBody':
-      '— your brief has been dispatched. Expect a direct reply with a proposal, turnaround, and pricing within 24 hours.',
-    'contact.labelServices': 'SELECT REQUIRED SERVICES',
-    'contact.labelService': 'Required Service',
-    'contact.labelNameCompany': 'Name / Company',
-    'contact.phNameCompany': 'e.g. Alex Mercer — Acme Studio',
-    'contact.service.video': 'High-End Video Editing',
-    'contact.service.motion': 'Motion & 3D VFX',
-    'contact.service.voice': 'Voice-Over Narration',
-    'contact.service.full': 'Full Hydra Package',
-    'contact.labelName': 'Your Name *',
-    'contact.labelEmail': 'Your Email *',
-    'contact.labelCompany': 'Company / Brand',
-    'contact.labelBudget': 'Estimated Budget Range',
-    'contact.labelTimeline': 'Target Timeline',
-    'contact.labelProject': 'Project Brief / Goals',
-    'contact.budget.under1k': 'Under $1,000',
-    'contact.budget.1to3': '$1,000 - $3,000',
-    'contact.budget.3to7': '$3,000 - $7,000',
-    'contact.budget.7plus': '$7,000+ (Extended Engagement)',
-    'contact.timeline.asap': 'ASAP (< 7 Days)',
-    'contact.timeline.1to2': '1 - 2 Weeks',
-    'contact.timeline.3to4': '3 - 4 Weeks',
-    'contact.timeline.flexible': 'Flexible / Planning Phase',
-    'contact.phName': 'e.g. Alex Mercer',
-    'contact.phEmail': 'alex@brand.com',
-    'contact.phCompany': 'Optional',
-    'contact.phProject':
-      'Tell me about your footage, visual style goals, voice requirements, or target launch date...',
-    'contact.errorRequired': 'Please fill in your name and email so I know who to reply to.',
-    'contact.errorNotConfigured': 'The contact form endpoint is not configured yet. Please try again soon.',
-    'contact.errorFailed': 'Something went wrong sending your brief. Please try again.',
-    'contact.noticePre':
-      'Brief submissions are not configured yet — set',
-    'contact.noticePost': 'in your .env (see .env.example) to start receiving briefs.',
-    'splash.skip': 'Tap anywhere to skip',
-    'app.redirecting': 'REDIRECTING // HYDRA SAMO',
-    'pre.eyebrow': 'WELCOME TO HYDRA SAMO',
-    'pre.hint': 'SELECT YOUR LANGUAGE TO CONTINUE',
-    'pre.enter': 'ENTER HYDRA SAMO',
+    'nav.available': 'Available',
+    'nav.cta': "Let's talk",
+    'nav.menu': 'Toggle menu',
+
+    'hero.roleA': 'Video Editor',
+    'hero.roleB': 'Motion Designer',
+    'hero.open': 'Commissions open',
+    'hero.hello': "Hello, I'm",
+    'hero.modeA': 'Video Editing & Motion',
+    'hero.modeB': 'Voice-Over',
+    'hero.blurb':
+      'One creator directing the cut, the motion and the voice — from first brief to final master.',
+    'hero.ctaWork': 'Explore the work',
+    'hero.ctaContact': 'Start a project',
+    'hero.statA': 'One',
+    'hero.statALabel': 'Studio',
+    'hero.statB': 'Three',
+    'hero.statBLabel': 'Disciplines',
+    'hero.statC': 'Zero',
+    'hero.statCLabel': 'Handoffs',
+
+    'about.lead': 'I blend creativity with technology to build visual',
+    'about.accent': 'experiences',
+    'about.tail': 'that connect.',
+    'about.body':
+      'Every frame, every motion, every sound is designed to tell a story and evoke emotion. One creator directs the video head, the motion head and the voice head under a single will — so narrative intent survives from brief to master.',
+
+    'services.lead': 'One body.',
+    'services.accent': 'Three heads.',
+
+    'disc.video.title': 'Video Editing',
+    'disc.video.subtitle': 'Rhythm & Cut',
+    'disc.video.desc':
+      'Cinematic storytelling, frame-perfect pacing, match cuts and colour grade. The cut is where intent becomes momentum.',
+    'disc.motion.title': 'Motion Design',
+    'disc.motion.subtitle': 'Motion & Visual',
+    'disc.motion.desc':
+      'Kinetic typography, 3D renders, HUD interfaces and VFX compositing. Graphics that carry the idea, not decorate it.',
+    'disc.voice.title': 'Voice-Over',
+    'disc.voice.subtitle': 'Vocal & Sound',
+    'disc.voice.desc':
+      'Broadcast narration in EN, FR and AR. A 24-bit studio chain and a voice that holds the room.',
+
+    'work.title': 'The work',
+    'work.status': 'Commissions open · 2026',
+    'work.empty.title': 'First case studies landing',
+    'work.empty.body':
+      'The studio is taking on a small number of commissions. Real client work will be published here as it ships — nothing invented, nothing borrowed.',
+    'work.empty.cta': 'Start a project',
+    'work.cut.title': 'Rhythm & Cut',
+    'work.cut.note': 'Editing · Pacing · Grade',
+    'work.motion.title': 'Motion & Visual',
+    'work.motion.note': '3D · Kinetic type · VFX',
+    'work.sound.title': 'Vocal & Sound',
+    'work.sound.note': 'Narration · EN FR AR',
+
+    'process.lead': 'One engine.',
+    'process.accent': 'Five moves.',
+    'process.1.title': 'Direct Briefing',
+    'process.1.desc':
+      'You speak directly with the editor, motion designer and voice artist. Tone, pace and sound are set in one session. Zero middlemen.',
+    'process.2.title': 'Rhythm & Cut',
+    'process.2.desc':
+      'Footage trimmed to frame-perfect cuts. Beat matching and narrative pacing locked into a strong rough cut.',
+    'process.3.title': 'Motion & Visual',
+    'process.3.desc':
+      'Kinetic titles, custom VFX and 3D elements integrated into the timeline with a single colour grade.',
+    'process.4.title': 'Vocal & Sound',
+    'process.4.desc':
+      'Voice-over recorded in-house on the studio chain, paired with sound design and a master mix.',
+    'process.5.title': 'Final Delivery',
+    'process.5.desc':
+      'Mastered for broadcast, cinema, web and social. Multi-aspect cutdowns included in one asset pack.',
+
+    'contact.lead': "Let's work",
+    'contact.accent': 'together.',
+    'contact.body':
+      "Have a project in mind? Tell me what you're building and we'll shape the tone, pace and sound in one direct session. No middlemen, no handoffs.",
+    'contact.status': 'Commissions open · 2026',
+    'form.name': 'Your name',
+    'form.namePh': 'Name',
+    'form.email': 'Email',
+    'form.discipline': 'Discipline',
+    'form.message': 'The project',
+    'form.messagePh': 'Tell me about it',
+    'form.submit': 'Send brief',
+    'form.sentTitle': 'Brief ready',
+    'form.sentBody': 'Your mail app should be open. If it did not, write to',
+    'form.disc.video': 'Video Editing',
+    'form.disc.motion': 'Motion Design',
+    'form.disc.voice': 'Voice-Over',
+    'form.disc.full': 'Full production',
+
+    'footer.tagline': 'Video · Motion · Voice',
+    'footer.top': 'Top',
+    'footer.motto': 'One body, three heads',
+
+    'splash.title': 'Hydra Samo',
+    'splash.skip': 'Click to skip',
   },
 
   fr: {
     'nav.home': 'Accueil',
-    'nav.work': 'Travaux',
-    'nav.workShort': 'VE & MD',
-    'nav.voice': 'Voix',
-    'nav.process': 'Processus',
-    'nav.origin': 'Origine',
+    'nav.about': 'À propos',
+    'nav.services': 'Services',
+    'nav.work': 'Projets',
+    'nav.process': 'Méthode',
     'nav.contact': 'Contact',
-    'nav.dockAria': 'Navigation principale',
-    'btn.startProject': 'Lancer un Projet',
-    'btn.startProjectShort': 'Lancer un Projet',
-    'btn.submitAnotherBrief': 'Envoyer un Autre Brief',
-    'btn.sendBrief': 'Envoyer le Brief',
-    'btn.transmitting': 'Transmission du brief...',
-    'btn.formNotConfigured': 'Formulaire non configuré',
-    'console.subtitle': 'Console Studio',
-    'console.openSite': 'Voir le site',
-    'console.content.title': 'Contenu & Imports',
-    'console.content.desc': 'Importez les fichiers de section, publiez des projets — chaque changement est live.',
-    'console.files.title': 'Fichiers du dépôt',
-    'console.files.desc': 'Tous les fichiers derrière le site. L’agent peut les modifier sur demande.',
-    'console.atm.title': 'Atmosphère',
-    'console.atm.desc': 'La couche vivante derrière chaque section — ajustée en temps réel.',
-    'console.import.title': 'Importer des fichiers de section',
-    'console.import.target': 'Cible',
-    'console.import.files': 'Fichiers',
-    'console.import.live': '{n} fichier(s) en ligne',
-    'console.import.bgHint': 'le remplacement de background.jpeg vit ici',
-    'console.import.workHint': 'affiches & vidéos des études de cas',
-    'console.import.motionHint': 'nommez les fichiers NN.mp4 (ex. 06.mp4)',
-    'console.import.brandHint': 'logos, favicons, cartes sociales',
-    'console.import.audioHint': 'pistes voix-off pour lecture future',
-    'console.bulk.title': 'Import en masse',
-    'console.bulk.desc': 'Remplacer la liste de projets depuis un export projects.json',
-    'console.published': 'Travaux publiés',
-    'console.noneYet': 'Aucun travail publié pour le moment.',
-    'console.newCase': 'Nouvelle étude de cas',
-    'console.fTitle': 'Titre *', 'console.fClient': 'Client', 'console.fYear': 'Année', 'console.fTag': 'Tag',
-    'console.fCategory': 'Catégorie', 'console.fPoster': 'Image d’affiche', 'console.fVideo': 'Vidéo (optionnel)',
-    'console.fDesc': 'Description', 'console.fStack': 'Outillage (séparé par virgules)', 'console.fDeliv': 'Livrables (séparés par virgules)', 'console.fBrief': 'Brief client',
-    'console.publish': 'Publier sur le site', 'console.liveNow': 'En ligne',
-    'console.realNote': 'Travaux réels uniquement — les fichiers arrivent dans public/work/<id>/ et publient immédiatement.',
-    'console.atm.engine': 'Moteur d’atmosphère', 'console.atm.engineHint': 'Toutes les couches vidéo derrière le contenu',
-    'console.atm.grain': 'Grain de film', 'console.atm.grainHint': 'Superposition texture plein écran',
-    'console.atm.layers': 'Couches', 'console.atm.synced': 'Synchronisé en direct',
-    'console.layer.haze': 'Brume', 'console.layer.env-secondary': 'Voile bleu', 'console.layer.env-primary': 'Vert volumétrique',
-    'console.layer.dust': 'Champ de poussière', 'console.layer.wisp': 'Volutes atmosphériques', 'console.layer.geometry-primary': 'Géométrie (Work)', 'console.layer.env-fragment': 'Fragment signature (Work)',
-    'console.agent.selfHosted': 'auto-hébergé',
-    'console.agent.freeModels': 'Modèles Zen gratuits',
-    'console.agent.newSession': 'Nouvelle session',
-    'console.agent.empty': 'Demandez des changements en naviguant dans chaque panneau — les edits arrivent en direct.',
-    'console.agent.phPlan': 'Interrogez le code…',
-    'console.agent.phBuild': 'Décrivez un changement…',
-    'console.agent.send': 'Envoyer',
-    'console.agent.planHint': 'plan · lecture seule',
-    'console.agent.attach': 'Joindre des fichiers…',
-    'console.agent.skills': 'Compétences',
-    'console.agent.mcps': 'Serveurs MCP',
-    'console.agent.plugins': 'Plugins',
-    'console.agent.computerUse': 'Usage ordinateur',
-    'console.agent.agent': 'Agent',
-    'contact.errRequired': 'Le nom et l’e-mail sont requis.',
-    'contact.errConfigured': 'Point de terminaison non configuré. Définissez VITE_FORM_ENDPOINT dans votre fichier .env.',
-    'contact.errFailed': "Échec de l’envoi. Veuillez réessayer.",
-    'btn.requestSimilar': 'Demander une Production Similaire',
-    'lang.label': 'Langue',
-    'lang.selectAria': 'Choisir la langue d\'affichage',
-    'hero.headingVideo': 'Vidéo.',
-    'hero.headingMotion': 'Motion.',
-    'hero.headingVoice': 'Voix.',
-    'hero.description':
-      'est Hydra Samo. Une force créative unifiée offrant montage vidéo haut de gamme, motion 3D et narration vocale, sans les frictions d\'une agence traditionnelle.',
-    'hero.scrollHint': 'Découvrir',
-    'process.how': 'COMMENT',
-    'process.operates': 'HYDRA OPÈRE',
-    'process.intro':
-      'Éliminer la friction des multiples départements d\'agence. Un seul moteur créatif maître qui gère le rythme des rushes, les animations graphiques et la narration vocale en synergie complète.',
-    'process.deliverable': 'LIVRABLE',
-    'process.narrativeTitle': 'PLUSIEURS TÊTES.',
-    'process.narrativeTitleGrad': 'UNE SEULE VISION.',
-    'process.fragmentedTitle': 'LE FLUX DE TRAVAIL FRAGMENTÉ',
-    'process.unifiedTitle': 'LA VISION UNIFIÉE',
-    'process.fragmentedDesc':
-      'Une agence éclate votre projet entre des services cloisonnés — chefs de compte, chaînes d\'emails et transferts internes lents qui diluent votre intention.',
-    'process.unifiedDesc':
-      'Un seul créateur orchestre la tête vidéo, la tête motion et la tête vocale sous une même volonté. Zéro transfert. Aucune perte de sens.',
-    'about.eyebrow': 'ORIGINE & PHILOSOPHIE CRÉATIVE',
-    'about.headingOne': 'PLUSIEURS TÊTES.',
-    'about.headingTwo': 'UNE SEULE ORIGINE.',
-    'about.badgeName': 'BENDALI ISSAM EDDINE',
-    'about.p1a': 'Je suis',
-    'about.p1b': ', connu dans l\'industrie de l\'image et de la diffusion sous le nom de',
-    'about.p1c': '.',
-    'about.p2':
-      'Dans la mythologie, l\'Hydre inspirait la crainte par sa polyvalence à plusieurs têtes, infatigable. Je canalise cette même intensité dans mon travail. Je ne suis pas une agence gonflée par des chefs de compte à l\'infini : je suis un moteur créatif unique, hautement spécialisé.',
-    'about.p3':
-      'Je maîtrise le montage vidéo haut de gamme, le motion design cinétique et la narration vocale professionnelle comme une seule discipline unifiée. Cela signifie zéro perte de main, aucun fil narratif perdu, et une vitesse d\'agence avec la clarté directe d\'un partenaire dédié.',
-    'about.adv1': 'Sans Frais d\'Agence',
-    'about.adv2': 'Communication Directe avec le Fondateur',
-    'about.adv3': 'Délais de Livraison Précis',
-    'about.adv4': 'Vidéo + Voix + Motion Intégrés',
-    'work.selected': 'TRAVAUX',
-    'work.works': 'SÉLECTIONNÉS',
-    'work.cat.all': 'Tous les Travaux',
-    'work.cat.video': 'Montage Vidéo',
-    'work.cat.motion': 'Motion & 3D',
-    'work.cat.direction': 'Direction Complète',
-    'work.client': 'CLIENT :',
-    'work.caseStudy': 'ÉTUDE DE CAS DISPONIBLE',
-    'work.inspect': 'Inspecter',
-    'work.streaming': 'CHARGEMENT DES CONTENUS...',
-    'work.emptyTitle': 'Études de cas en préparation',
-    'work.emptyDesc':
-      'Les études de cas sélectionnées sont en préparation et apparaîtront ici dès leur publication.',
-    'work.case.brief': 'Le brief',
-    'work.case.stack': 'Outillage',
-    'work.case.deliverables': 'Livrables',
-    'work.case.close': 'Fermer',
-    'voice.headingProf': 'VOIX',
-    'voice.headingOver': 'PROFESSIONNELLE',
-    'voice.comingSoon': 'BIENTÔT DISPONIBLE',
-    'modal.video': 'Vidéo',
-    'modal.grading': 'Étalonnage',
-    'modal.raw': 'RUSH ORIGINAL',
-    'modal.grade': 'ÉTALONNAGE HYDRA',
-    'modal.brief': 'BRIEF CLIENT & DIRECTION DE PRODUCTION',
-    'modal.software': 'LOGICIELS',
-    'modal.deliverables': 'LIVRABLES',
-    'modal.play': 'Lecture',
-    'modal.pause': 'Pause',
-    'modal.mute': 'Muet',
-    'modal.unmute': 'Réactiver le son',
-    'modal.close': 'Fermer',
-    'contact.headingLet': 'CRÉONS',
-    'contact.headingTogether': 'ENSEMBLE',
-    'contact.successTitle': 'BRIEF REÇU // HYDRA ENVOYÉ',
-    'contact.successPrefix': 'Merci,',
-    'contact.successBody':
-      '— votre brief a bien été envoyé. Attendez-vous à une réponse directe avec proposition, délais et tarifs sous 24 heures.',
-    'contact.labelServices': 'SÉLECTIONNEZ LES SERVICES',
-    'contact.labelService': 'Service Requis',
-    'contact.labelNameCompany': 'Nom / Entreprise',
-    'contact.phNameCompany': 'ex. Alex Mercer — Studio Acme',
-    'contact.service.video': 'Montage Vidéo Haut de Gamme',
-    'contact.service.motion': 'Motion & 3D VFX',
-    'contact.service.voice': 'Narration Vocale',
-    'contact.service.full': 'Pack Hydra Complet',
-    'contact.labelName': 'Votre Nom *',
-    'contact.labelEmail': 'Votre Email *',
-    'contact.labelCompany': 'Entreprise / Marque',
-    'contact.labelBudget': 'Fourchette de Budget Estimée',
-    'contact.labelTimeline': 'Délai Visé',
-    'contact.labelProject': 'Brief / Objectifs du Projet',
-    'contact.budget.under1k': 'Moins de 1 000 $',
-    'contact.budget.1to3': '1 000 $ - 3 000 $',
-    'contact.budget.3to7': '3 000 $ - 7 000 $',
-    'contact.budget.7plus': '7 000 $+ (Mission étendue)',
-    'contact.timeline.asap': 'Rapide (< 7 jours)',
-    'contact.timeline.1to2': '1 - 2 semaines',
-    'contact.timeline.3to4': '3 - 4 semaines',
-    'contact.timeline.flexible': 'Flexible / Phase de planification',
-    'contact.phName': 'ex. Alex Mercer',
-    'contact.phEmail': 'alex@brand.com',
-    'contact.phCompany': 'Optionnel',
-    'contact.phProject':
-      'Parlez-moi de vos rushes, de vos objectifs de style visuel, de vos besoins vocaux ou de votre date de lancement...',
-    'contact.errorRequired': 'Veuillez renseigner votre nom et votre email pour que je sache à qui répondre.',
-    'contact.errorNotConfigured': 'Le point d\'envoi du formulaire n\'est pas encore configuré. Veuillez réessayer bientôt.',
-    'contact.errorFailed': 'Une erreur est survenue lors de l\'envoi de votre brief. Veuillez réessayer.',
-    'contact.noticePre': 'L\'envoi des briefs n\'est pas encore configuré — définissez',
-    'contact.noticePost': 'dans votre .env (voir .env.example) pour commencer à recevoir des briefs.',
-    'splash.skip': 'Touchez n\'importe où pour passer',
-    'app.redirecting': 'REDIRECTION // HYDRA SAMO',
-    'pre.eyebrow': 'BIENVENUE DANS HYDRA SAMO',
-    'pre.hint': 'CHOISISSEZ VOTRE LANGUE POUR CONTINUER',
-    'pre.enter': 'ENTRER DANS HYDRA SAMO',
+    'nav.available': 'Disponible',
+    'nav.cta': 'Parlons-en',
+    'nav.menu': 'Ouvrir le menu',
+
+    'hero.roleA': 'Monteur Vidéo',
+    'hero.roleB': 'Motion Designer',
+    'hero.open': 'Ouvert aux projets',
+    'hero.hello': 'Bonjour, je suis',
+    'hero.modeA': 'Montage & Motion',
+    'hero.modeB': 'Voix-Off',
+    'hero.blurb':
+      'Un seul créateur dirige le montage, le mouvement et la voix — du premier brief au master final.',
+    'hero.ctaWork': 'Voir les projets',
+    'hero.ctaContact': 'Démarrer un projet',
+    'hero.statA': 'Un',
+    'hero.statALabel': 'Studio',
+    'hero.statB': 'Trois',
+    'hero.statBLabel': 'Disciplines',
+    'hero.statC': 'Zéro',
+    'hero.statCLabel': 'Intermédiaire',
+
+    'about.lead': "Je fusionne création et technologie pour bâtir des",
+    'about.accent': 'expériences',
+    'about.tail': 'visuelles qui connectent.',
+    'about.body':
+      "Chaque image, chaque mouvement, chaque son est pensé pour raconter une histoire et provoquer une émotion. Un seul créateur dirige la tête vidéo, la tête motion et la tête voix sous une volonté unique — l'intention narrative survit du brief au master.",
+
+    'services.lead': 'Un corps.',
+    'services.accent': 'Trois têtes.',
+
+    'disc.video.title': 'Montage Vidéo',
+    'disc.video.subtitle': 'Rythme & Coupe',
+    'disc.video.desc':
+      "Narration cinématographique, rythme au frame près, match cuts et étalonnage. La coupe est le point où l'intention devient élan.",
+    'disc.motion.title': 'Motion Design',
+    'disc.motion.subtitle': 'Mouvement & Image',
+    'disc.motion.desc':
+      "Typographie cinétique, rendus 3D, interfaces HUD et compositing VFX. Des graphismes qui portent l'idée au lieu de la décorer.",
+    'disc.voice.title': 'Voix-Off',
+    'disc.voice.subtitle': 'Voix & Son',
+    'disc.voice.desc':
+      'Narration broadcast en FR, EN et AR. Une chaîne studio 24 bits et une voix qui tient la pièce.',
+
+    'work.title': 'Les projets',
+    'work.status': 'Ouvert aux projets · 2026',
+    'work.empty.title': 'Premières études de cas à venir',
+    'work.empty.body':
+      "Le studio accepte un nombre limité de projets. Les vrais travaux clients seront publiés ici dès leur livraison — rien d'inventé, rien d'emprunté.",
+    'work.empty.cta': 'Démarrer un projet',
+    'work.cut.title': 'Rythme & Coupe',
+    'work.cut.note': 'Montage · Rythme · Étalonnage',
+    'work.motion.title': 'Mouvement & Image',
+    'work.motion.note': '3D · Type cinétique · VFX',
+    'work.sound.title': 'Voix & Son',
+    'work.sound.note': 'Narration · FR EN AR',
+
+    'process.lead': 'Un moteur.',
+    'process.accent': 'Cinq mouvements.',
+    'process.1.title': 'Brief Direct',
+    'process.1.desc':
+      "Vous parlez directement au monteur, au motion designer et à la voix. Le ton, le rythme et le son se fixent en une session. Zéro intermédiaire.",
+    'process.2.title': 'Rythme & Coupe',
+    'process.2.desc':
+      'Des images taillées au frame près. Calage sur la musique et rythme narratif verrouillés dans un rough cut solide.',
+    'process.3.title': 'Mouvement & Image',
+    'process.3.desc':
+      'Titres cinétiques, VFX sur mesure et éléments 3D intégrés à la timeline avec un étalonnage unique.',
+    'process.4.title': 'Voix & Son',
+    'process.4.desc':
+      'Voix-off enregistrée en interne sur la chaîne studio, accompagnée de sound design et d’un mix master.',
+    'process.5.title': 'Livraison Finale',
+    'process.5.desc':
+      'Masterisé pour le broadcast, le cinéma, le web et les réseaux. Déclinaisons multi-formats incluses dans un seul pack.',
+
+    'contact.lead': 'Travaillons',
+    'contact.accent': 'ensemble.',
+    'contact.body':
+      "Un projet en tête ? Dites-moi ce que vous construisez et nous fixerons le ton, le rythme et le son en une session directe. Sans intermédiaire, sans décalage.",
+    'contact.status': 'Ouvert aux projets · 2026',
+    'form.name': 'Votre nom',
+    'form.namePh': 'Nom',
+    'form.email': 'E-mail',
+    'form.discipline': 'Discipline',
+    'form.message': 'Le projet',
+    'form.messagePh': 'Parlez-moi du projet',
+    'form.submit': 'Envoyer le brief',
+    'form.sentTitle': 'Brief prêt',
+    'form.sentBody': "Votre application mail devrait s'ouvrir. Sinon, écrivez à",
+    'form.disc.video': 'Montage Vidéo',
+    'form.disc.motion': 'Motion Design',
+    'form.disc.voice': 'Voix-Off',
+    'form.disc.full': 'Production complète',
+
+    'footer.tagline': 'Vidéo · Motion · Voix',
+    'footer.top': 'Haut',
+    'footer.motto': 'Un corps, trois têtes',
+
+    'splash.title': 'Hydra Samo',
+    'splash.skip': 'Cliquer pour passer',
   },
 
   ar: {
     'nav.home': 'الرئيسية',
+    'nav.about': 'من أنا',
+    'nav.services': 'الخدمات',
     'nav.work': 'الأعمال',
-    'nav.workShort': 'مونتاج & موشن',
-    'nav.voice': 'الصوت',
     'nav.process': 'المنهجية',
-    'nav.origin': 'البداية',
-    'nav.contact': 'تواصل',
-    'nav.dockAria': 'التنقل الرئيسي',
-    'btn.startProject': 'ابدأ مشروعك',
-    'btn.startProjectShort': 'ابدأ مشروعك',
-    'btn.submitAnotherBrief': 'إرسال موجز آخر',
-    'btn.sendBrief': 'إرسال الموجز',
-    'btn.transmitting': 'جارٍ إرسال الموجز...',
-    'btn.formNotConfigured': 'النموذج غير مُهيأ',
-    'console.subtitle': 'لوحة الاستوديو',
-    'console.openSite': 'فتح الموقع',
-    'console.content.title': 'المحتوى والاستيراد',
-    'console.content.desc': 'استورد ملفات الأقسام وانشر المشاريع — كل تغيير يظهر فوراً.',
-    'console.files.title': 'ملفات المستودع',
-    'console.files.desc': 'كل ملفات الموقع. يمكن للوكيل تعديل أي منها بطلبك.',
-    'console.atm.title': 'الأجواء',
-    'console.atm.desc': 'الطبقة الحية خلف كل قسم — تُضبط في الوقت الفعلي.',
-    'console.import.title': 'استيراد ملفات الأقسام',
-    'console.import.target': 'الوجهة',
-    'console.import.files': 'الملفات',
-    'console.import.live': '{n} ملف(ات) مباشرة',
-    'console.import.bgHint': 'بديل background.jpeg يوضع هنا',
-    'console.import.workHint': 'الملصقات وفيديوهات دراسات الحالة',
-    'console.import.motionHint': 'سمِّ الملفات NN.mp4 (مثل 06.mp4)',
-    'console.import.brandHint': 'الشعارات والأيقونات وبطاقات التواصل',
-    'console.import.audioHint': 'مقاطع صوتية للتعليق الصوتي مستقبلاً',
-    'console.bulk.title': 'استيراد جماعي',
-    'console.bulk.desc': 'استبدال قائمة المشاريع من ملف projects.json',
-    'console.published': 'الأعمال المنشورة',
-    'console.noneYet': 'لا أعمال منشورة بعد.',
-    'console.newCase': 'دراسة حالة جديدة',
-    'console.fTitle': 'العنوان *', 'console.fClient': 'العميل', 'console.fYear': 'السنة', 'console.fTag': 'الوسم',
-    'console.fCategory': 'الفئة', 'console.fPoster': 'صورة الملصق', 'console.fVideo': 'فيديو (اختياري)',
-    'console.fDesc': 'الوصف', 'console.fStack': 'الأدوات (مفصولة بفواصل)', 'console.fDeliv': 'التسليمات (مفصولة بفواصل)', 'console.fBrief': 'طلب العميل',
-    'console.publish': 'انشر على الموقع', 'console.liveNow': 'مباشر الآن',
-    'console.realNote': 'أعمال حقيقية فقط — الملفات تُحفظ في public/work/<id>/ وتُنشر فوراً.',
-    'console.atm.engine': 'محرك الأجواء', 'console.atm.engineHint': 'كل طبقات الفيديو خلف المحتوى',
-    'console.atm.grain': 'حبيبات الفيلم', 'console.atm.grainHint': 'طبقة نسيج على كامل الشاشة',
-    'console.atm.layers': 'الطبقات', 'console.atm.synced': 'تمت المزامنة',
-    'console.layer.haze': 'ضباب', 'console.layer.env-secondary': 'غسلة زرقاء', 'console.layer.env-primary': 'أخضر حجمي',
-    'console.layer.dust': 'حقل غبار', 'console.layer.wisp': 'تموجات جوية', 'console.layer.geometry-primary': 'هندسة (Work)', 'console.layer.env-fragment': 'شظية مميزة (Work)',
-    'console.agent.selfHosted': 'مستضاف ذاتياً',
-    'console.agent.freeModels': 'نماذج Zen المجانية',
-    'console.agent.newSession': 'جلسة جديدة',
-    'console.agent.empty': 'اطلب تغييرات أثناء تصفح أي لوحة — التعديلات تصل مباشرة.',
-    'console.agent.phPlan': 'اسأل عن الكود…',
-    'console.agent.phBuild': 'صف التغيير المطلوب…',
-    'console.agent.send': 'إرسال',
-    'console.agent.planHint': 'خطة · قراءة فقط',
-    'console.agent.attach': 'إرفاق ملفات…',
-    'console.agent.skills': 'المهارات',
-    'console.agent.mcps': 'خوادم MCP',
-    'console.agent.plugins': 'الإضافات',
-    'console.agent.computerUse': 'استخدام الحاسوب',
-    'console.agent.agent': 'الوكيل',
-    'contact.errRequired': 'الاسم والبريد الإلكتروني مطلوبان.',
-    'contact.errConfigured': 'لم يتم إعداد نقطة إرسال النموذج. عيّن VITE_FORM_ENDPOINT في ملف .env.',
-    'contact.errFailed': 'فشل الإرسال. حاول مرة أخرى.',
-    'btn.requestSimilar': 'اطلب إنتاجاً مشابهاً',
-    'lang.label': 'اللغة',
-    'lang.selectAria': 'اختر لغة العرض',
-    'hero.headingVideo': 'فيديو.',
-    'hero.headingMotion': 'موشن.',
-    'hero.headingVoice': 'صوت.',
-    'hero.description':
-      'هو هيدرا سامو. قوة إبداعية موحّدة تقدم مونتاج فيديو راقياً، وموشن ثلاثي الأبعاد، وسرداً صوتياً احترافياً دون تعقيدات الوكالات التقليدية.',
-    'hero.scrollHint': 'استكشف',
-    'process.how': 'كيف',
-    'process.operates': 'يعمل هيدرا',
-    'process.intro':
-      'إزالة تعقيد أقسام الوكالات المتعددة. محرّك إبداعي رئيسي واحد يدير إيقاع اللقطات والرسوم المتحركة والسرد الصوتي بتناغم تام.',
-    'process.deliverable': 'التسليم',
-    'process.narrativeTitle': 'رؤوس متعددة.',
-    'process.narrativeTitleGrad': 'رؤية موحّدة.',
-    'process.fragmentedTitle': 'مسار العمل المجزّأ',
-    'process.unifiedTitle': 'الرؤية الموحّدة',
-    'process.fragmentedDesc':
-      'الوكالة توزّع مشروعك بين أقسام منعزلة — مديرو حسابات وسلاسل بريد ومراحل نقل بطيئة تضعف نيّتك.',
-    'process.unifiedDesc':
-      'مبدع واحد يدير الرأس الفيديو والرأس الحركي والرأس الصوتي تحت إرادة واحدة. صفر انتقالات. بلا فقدان للمعنى.',
-    'about.eyebrow': 'الأصل والفلسفة الإبداعية',
-    'about.headingOne': 'رؤوس متعددة.',
-    'about.headingTwo': 'أصل واحد.',
-    'about.badgeName': 'بن دالي عصام الدين',
-    'about.p1a': 'اسمي',
-    'about.p1b': '، المعروف في صناعة البصر والإذاعة باسم',
-    'about.p1c': '.',
-    'about.p2':
-      'في الأساطير القديمة، كان الهيدرا يُخشى بسبب تعدد رؤوسه وقدرته اللا محدودة. أوظّف تلك الكثافة نفسها في أسلوب عملي. لستُ وكالة متضخمة بالمديرين؛ أنا محرّك إبداعي واحد شديد التخصص.',
-    'about.p3':
-      'أتولى المونتاج الفيديو الراقي، والموشن جرافيك الحركي، والسرد الصوتي الاحترافي كتخصص واحد موحّد. يعني ذلك صفر تسليمات متكررة، ولا ضياع للرؤية الإبداعية، وسرعة الوكالات مع وضوح الشريك المباشر.',
-    'about.adv1': 'بدون أعباء الوكالات',
-    'about.adv2': 'تواصل مباشر مع المؤسس',
-    'about.adv3': 'التزام دقيق بالمواعيد',
-    'about.adv4': 'فيديو + صوت + موشن متكامل',
-    'work.selected': 'أعمال',
-    'work.works': 'مختارة',
-    'work.cat.all': 'كل الأعمال',
-    'work.cat.video': 'مونتاج فيديو',
-    'work.cat.motion': 'موشن و3D',
-    'work.cat.direction': 'إخراج كامل',
-    'work.client': 'العميل:',
-    'work.caseStudy': 'دراسة حالة متاحة',
-    'work.inspect': 'استكشف',
-    'work.streaming': 'جارٍ تحميل المحتوى...',
-    'work.emptyTitle': 'دراسات الحالة قيد التجهيز',
-    'work.emptyDesc':
-      'يتم الآن تجهيز دراسات الحالة المختارة وستظهر هنا فور نشرها.',
-    'work.case.brief': 'الملخص',
-    'work.case.stack': 'الأدوات',
-    'work.case.deliverables': 'التسليمات',
-    'work.case.close': 'إغلاق',
-    'voice.headingProf': 'تعليق',
-    'voice.headingOver': 'صوتي احترافي',
-    'voice.comingSoon': 'قريباً',
-    'modal.video': 'فيديو',
-    'modal.grading': 'معالجة لونية',
-    'modal.raw': 'لقطات خام',
-    'modal.grade': 'معالجة هيدرا اللونية',
-    'modal.brief': 'موجز العميل وتوجيه الإنتاج',
-    'modal.software': 'البرامج المستخدمة',
-    'modal.deliverables': 'التسليمات',
-    'modal.play': 'تشغيل',
-    'modal.pause': 'إيقاف مؤقت',
-    'modal.mute': 'كتم الصوت',
-    'modal.unmute': 'إلغاء كتم الصوت',
-    'modal.close': 'إغلاق',
-    'contact.headingLet': 'لنصنع',
-    'contact.headingTogether': 'معاً',
-    'contact.successTitle': 'تم استلام الموجز // هيدرا في الطريق',
-    'contact.successPrefix': 'شكراً،',
-    'contact.successBody':
-      '— تم إرسال موجزك. توقع رداً مباشراً يتضمن المقترح والمدة والتسعير خلال 24 ساعة.',
-    'contact.labelServices': 'اختر الخدمات المطلوبة',
-    'contact.labelService': 'الخدمة المطلوبة',
-    'contact.labelNameCompany': 'الاسم / الشركة',
-    'contact.phNameCompany': 'مثال: أحمد — استوديو أكمه',
-    'contact.service.video': 'مونتاج فيديو راقٍ',
-    'contact.service.motion': 'موشن ومؤثرات 3D',
-    'contact.service.voice': 'تعليق صوتي',
-    'contact.service.full': 'باقة هيدرا الكاملة',
-    'contact.labelName': 'اسمك *',
-    'contact.labelEmail': 'بريدك الإلكتروني *',
-    'contact.labelCompany': 'الشركة / العلامة',
-    'contact.labelBudget': 'الميزانية التقديرية',
-    'contact.labelTimeline': 'المدة المستهدفة',
-    'contact.labelProject': 'موجز / أهداف المشروع',
-    'contact.budget.under1k': 'أقل من 1,000 $',
-    'contact.budget.1to3': '1,000 $ - 3,000 $',
-    'contact.budget.3to7': '3,000 $ - 7,000 $',
-    'contact.budget.7plus': '7,000 $+ (مشروع ممتد)',
-    'contact.timeline.asap': 'عاجل (أقل من 7 أيام)',
-    'contact.timeline.1to2': 'أسبوع - أسبوعان',
-    'contact.timeline.3to4': '3 - 4 أسابيع',
-    'contact.timeline.flexible': 'مرن / مرحلة التخطيط',
-    'contact.phName': 'مثال: أحمد',
-    'contact.phEmail': 'alex@brand.com',
-    'contact.phCompany': 'اختياري',
-    'contact.phProject':
-      'حدثني عن لقطاتك، أهدافك في الأسلوب البصري، متطلباتك الصوتية، أو تاريخ الإطلاق المستهدف...',
-    'contact.errorRequired': 'يرجى إدخال اسمك وبريدك حتى أعرف من أرد عليه.',
-    'contact.errorNotConfigured': 'نقطة إرسال النموذج غير مُهيأة بعد. يرجى المحاولة قريباً.',
-    'contact.errorFailed': 'حدث خطأ أثناء إرسال موجزك. يرجى المحاولة مجدداً.',
-    'contact.noticePre': 'إرسال الموجز غير مُهيأ بعد — عرّف',
-    'contact.noticePost': 'في ملف .env (راجع .env.example) لبدء استلام الموجزات.',
-    'splash.skip': 'اضغط في أي مكان للتخطي',
-    'app.redirecting': 'جارٍ التحويل // هيدرا سامو',
-    'pre.eyebrow': 'مرحباً بك في هيدرا سامو',
-    'pre.hint': 'اختر لغتك للمتابعة',
-    'pre.enter': 'ادخل إلى هيدرا سامو',
+    'nav.contact': 'التواصل',
+    'nav.available': 'متاح',
+    'nav.cta': 'لنتحدث',
+    'nav.menu': 'القائمة',
+
+    'hero.roleA': 'مونتير فيديو',
+    'hero.roleB': 'مصمم موشن',
+    'hero.open': 'الباب مفتوح للمشاريع',
+    'hero.hello': 'مرحباً، أنا',
+    'hero.modeA': 'مونتاج وموشن',
+    'hero.modeB': 'تعليق صوتي',
+    'hero.blurb':
+      'مبدع واحد يقود المونتاج والحركة والصوت — من أول موجز إلى النسخة النهائية.',
+    'hero.ctaWork': 'استكشف الأعمال',
+    'hero.ctaContact': 'ابدأ مشروعاً',
+    'hero.statA': 'واحد',
+    'hero.statALabel': 'استوديو',
+    'hero.statB': 'ثلاثة',
+    'hero.statBLabel': 'تخصصات',
+    'hero.statC': 'صفر',
+    'hero.statCLabel': 'وسطاء',
+
+    'about.lead': 'أدمج الإبداع بالتقنية لبناء',
+    'about.accent': 'تجارب',
+    'about.tail': 'بصرية تصنع اتصالاً.',
+    'about.body':
+      'كل إطار وكل حركة وكل صوت مصمم ليحكي قصة ويصنع إحساساً. مبدع واحد يقود رأس الفيديو ورأس الموشن ورأس الصوت تحت إرادة واحدة — لتبقى نية الحكاية من الموجز حتى النسخة النهائية.',
+
+    'services.lead': 'جسد واحد.',
+    'services.accent': 'ثلاثة رؤوس.',
+
+    'disc.video.title': 'مونتاج الفيديو',
+    'disc.video.subtitle': 'إيقاع وقطع',
+    'disc.video.desc':
+      'سرد سينمائي وإيقاع مضبوط على الإطار ومطابقة القطعات وتصحيح الألوان. القطع هو اللحظة التي تتحول فيها النية إلى دفع.',
+    'disc.motion.title': 'تصميم الموشن',
+    'disc.motion.subtitle': 'حركة وصورة',
+    'disc.motion.desc':
+      'تايبوغرافي حركي ومشاهد ثلاثية الأبعاد وواجهات HUD وتركيب مؤثرات. جرافيك يحمل الفكرة لا يزيّنها.',
+    'disc.voice.title': 'التعليق الصوتي',
+    'disc.voice.subtitle': 'صوت وأداء',
+    'disc.voice.desc':
+      'تعليق إذاعي بالعربية والفرنسية والإنجليزية. سلسلة استوديو 24 بت وصوت يملأ الغرفة.',
+
+    'work.title': 'الأعمال',
+    'work.status': 'الباب مفتوح للمشاريع · 2026',
+    'work.empty.title': 'أول دراسات الحالة قادمة',
+    'work.empty.body':
+      'الاستوديو يستقبل عدداً محدوداً من المشاريع. الأعمال الحقيقية للعملاء ستُنشر هنا فور تسليمها — لا شيء مُختلق ولا شيء مُستعار.',
+    'work.empty.cta': 'ابدأ مشروعاً',
+    'work.cut.title': 'إيقاع وقطع',
+    'work.cut.note': 'مونتاج · إيقاع · تلوين',
+    'work.motion.title': 'حركة وصورة',
+    'work.motion.note': 'ثلاثي الأبعاد · تايبو حركي · مؤثرات',
+    'work.sound.title': 'صوت وأداء',
+    'work.sound.note': 'تعليق · عربي فرنسي إنجليزي',
+
+    'process.lead': 'محرك واحد.',
+    'process.accent': 'خمس حركات.',
+    'process.1.title': 'موجز مباشر',
+    'process.1.desc':
+      'تتحدث مباشرة مع المونتير ومصمم الموشن وصاحب الصوت. النبرة والإيقاع والصوت تُحدد في جلسة واحدة. بلا وسطاء.',
+    'process.2.title': 'إيقاع وقطع',
+    'process.2.desc':
+      'لقطات مقصوصة على الإطار بدقة. مطابقة الإيقاع الموسيقي والسرد مُثبّتة في نسخة أولى صلبة.',
+    'process.3.title': 'حركة وصورة',
+    'process.3.desc':
+      'عناوين حركية ومؤثرات مخصصة وعناصر ثلاثية الأبعاد مدموجة في التايم لاين بتلوين واحد موحّد.',
+    'process.4.title': 'صوت وأداء',
+    'process.4.desc':
+      'تعليق صوتي يُسجّل داخلياً على سلسلة الاستوديو، مع تصميم صوتي وميكس نهائي.',
+    'process.5.title': 'التسليم النهائي',
+    'process.5.desc':
+      'ماسترد للبث والسينما والويب والسوشال. نسخ متعددة المقاسات في حزمة واحدة.',
+
+    'contact.lead': 'لنعمل',
+    'contact.accent': 'معاً.',
+    'contact.body':
+      'لديك مشروع في بالك؟ أخبرني بما تبنيه وسنضبط النبرة والإيقاع والصوت في جلسة مباشرة. بلا وسطاء وبلا تسليمات متقطعة.',
+    'contact.status': 'الباب مفتوح للمشاريع · 2026',
+    'form.name': 'اسمك',
+    'form.namePh': 'الاسم',
+    'form.email': 'البريد',
+    'form.discipline': 'التخصص',
+    'form.message': 'المشروع',
+    'form.messagePh': 'أخبرني عنه',
+    'form.submit': 'أرسل الموجز',
+    'form.sentTitle': 'الموجز جاهز',
+    'form.sentBody': 'سيُفتح تطبيق البريد لديك. إن لم يحدث، اكتب إلى',
+    'form.disc.video': 'مونتاج الفيديو',
+    'form.disc.motion': 'تصميم الموشن',
+    'form.disc.voice': 'التعليق الصوتي',
+    'form.disc.full': 'إنتاج كامل',
+
+    'footer.tagline': 'فيديو · موشن · صوت',
+    'footer.top': 'الأعلى',
+    'footer.motto': 'جسد واحد، ثلاثة رؤوس',
+
+    'splash.title': 'هيدرا سامو',
+    'splash.skip': 'انقر للتخطي',
   },
 };
-
-/**
- * Data-driven content overlay. `en` is intentionally empty — the English copy
- * lives in `src/data/portfolioData.ts` and is the fallback for every language.
- * Translations keyed by stable ids are applied on top, never in the data file.
- */
-export interface ContentDict {
-  disciplines: Record<
-    string,
-    { title?: string; subtitle?: string; desc?: string; longDesc?: string; stats?: string }
-  >;
-  voiceTracks: Record<string, { title?: string; description?: string; script?: string }>;
-  processSteps: Record<
-    string,
-    { title?: string; subtitle?: string; description?: string; deliverable?: string }
-  >;
-  comparison: Record<string, { feature?: string; agency?: string; hydra?: string }>;
-}
-
-export const content: Record<Lang, ContentDict> = {
-  en: { disciplines: {}, voiceTracks: {}, processSteps: {}, comparison: {} },
-
-  fr: {
-    disciplines: {
-      video: {
-        title: 'Montage Vidéo Haut de Gamme',
-        subtitle: 'Rythme, Montage & Cadence',
-        desc: 'Montage rythmé et cadence cinématographique pour des marques de classe mondiale.',
-        longDesc:
-          'Je taille les rushes multi-caméras bruts en récits visuels percutants, portés par l\'émotion. Maîtrise du timing, des match cuts, du design sonore et de l\'étalonnage sur DaVinci Resolve & Premiere Pro.',
-        stats: 'Coupes précises à la frame, pensées pour la rétention, pas seulement pour le polish',
-      },
-      motion: {
-        title: 'Motion & Design Graphique',
-        subtitle: '3D, VFX & Identité de Marque',
-        desc: 'Effets visuels sur-mesure et identité de marque qui captent l\'attention.',
-        longDesc:
-          'Transformer des éléments statiques en expériences visuelles dynamiques. Typographie cinétique percutante, rendus 3D de produits, interfaces HUD et compositing VFX sans couture.',
-        stats: 'Rendus 3D sur-mesure et systèmes visuels cinétiques',
-      },
-      voice: {
-        title: 'Comédien de Doublage',
-        subtitle: 'Résonance, Cadence & Âme',
-        desc: 'Prestation audio professionnelle avec ampleur, précision et âme.',
-        longDesc:
-          'Présence vocale résonante et polyvalente, formée pour les bandes-annonces cinématographiques, les lancements tech soignés et les narrations de personnages intenses, avec une clarté acoustique de studio.',
-        stats: 'Studio 24 bits / 96 kHz qualité diffusion',
-      },
-    },
-    voiceTracks: {
-      'voice-1': {
-        title: 'Le Gardien des Ténèbres',
-        description:
-          'Narration profonde, rocailleuse et grave pour bandes-annonces, dark fantasy et récits cinématographiques à fort enjeu.',
-        script:
-          'Quand la dernière lumière s\'éteint sous les cendres, les hommes ne se tournent pas vers les rois pour le salut. Ils plongent dans le noir... et attendent le sentinelle.',
-      },
-      'voice-2': {
-        title: 'Lancement Aura X1',
-        description:
-          'Délivery tech commerciale, élégante et confiante, avec une cadence percutante et une autorité premium.',
-        script:
-          'La précision n\'est pas une option. C\'est la ligne de base. Voici Aura X1 : conçue sans compromis, bâtie pour ceux qui façonnent demain.',
-      },
-      'voice-3': {
-        title: 'Nœud Neural Quantique',
-        description:
-          'Narrateur fluide et articulé pour documentaires sur l\'IA, keynotes corporate et immersions produit.',
-        script:
-          'Des milliards de milliards de calculs par microseconde. Une matrice synthétique qui apprend à la vitesse de la lumière. Bienvenue dans l\'ère de l\'informatique cognitive.',
-      },
-      'voice-4': {
-        title: 'Le Seigneur de Guerre Kazimir',
-        description:
-          'Voix de personnage graveleuse et menaçante, avec une résonance thoracique tonitruante et un grain rocailleux.',
-        script:
-          'Vous apportez des cure-dents à un siège, général ? Enfoncez leurs portes ! Qu\'il ne reste pas une seule pierre debout !',
-      },
-    },
-    processSteps: {
-      '01': {
-        title: 'Brief Direct',
-        subtitle: 'Zéro intermédiaire',
-        description:
-          'Vous parlez directement avec moi — le monteur, le motion designer et l\'artiste vocal. Nous définissons le ton visuel, la cadence et les objectifs sonores en une seule session.',
-        deliverable: 'Outline créatif & styleboard',
-      },
-      '02': {
-        title: 'Rythme & Assemblage',
-        subtitle: 'La tête vidéo',
-        description:
-          'Les rushes sont taillés au cadre près. Synchronisation sur le beat, fluidité du mouvement et rythme narratif verrouillés dans un montage solide.',
-        deliverable: 'Draft vidéo verrouillé',
-      },
-      '03': {
-        title: 'Motion & Polish Visuel',
-        subtitle: 'La tête graphique',
-        description:
-          'Titres cinétiques, overlays VFX sur-mesure, éléments 3D et étalonnage élégant intégrés sans couture dans la timeline.',
-        deliverable: 'Passage FX & motion',
-      },
-      '04': {
-        title: 'Résonance Vocale & Son',
-        subtitle: 'La tête audio',
-        description:
-          'La voix-off est enregistrée en interne avec une précision micro de studio, accompagnée d\'effets sonores sur-mesure et d\'un mix audio maître.',
-        deliverable: 'Audio maître 24 bits & mix',
-      },
-      '05': {
-        title: 'Livraison Finale Hydra',
-        subtitle: 'Master de production',
-        description:
-          'Export en très haute résolution pour Diffusion, Cinéma, Web et Réseaux sociaux. Découpes multi-ratios incluses.',
-        deliverable: 'Pack master complet',
-      },
-    },
-    comparison: {
-      Communication: {
-        feature: 'Communication',
-        agency: 'Chefs de compte, chaînes d\'emails, délais',
-        hydra: '1-à-1 direct avec Issam Eddine (Hydra Samo)',
-      },
-      'Turnaround Speed': {
-        feature: 'Délai de livraison',
-        agency: '2 à 4 semaines avec transferts internes',
-        hydra: '3 à 7 jours avec un flux unifié intégré',
-      },
-      'Creative Cohesion': {
-        feature: 'Cohésion créative',
-        agency: 'Fragmenteé (Monteur vs Motion vs Audio)',
-        hydra: '100 % unifiée (Vidéo + Motion + Voix en synergie)',
-      },
-      'Cost Efficiency': {
-        feature: 'Rentabilité',
-        agency: 'Frais élevés de studio et de management',
-        hydra: 'Tarification directe et légère pour un rendu d\'agence',
-      },
-    },
-  },
-
-  ar: {
-    disciplines: {
-      video: {
-        title: 'مونتاج فيديو راقٍ',
-        subtitle: 'إيقاع، تركيب ووتيرة',
-        desc: 'مونتاج بإيقاع محكم وتوقيت سينمائي للعلامات العالمية.',
-        longDesc:
-          'قصّ اللقطات الخام متعددة الكاميرات إلى حكايات بصرية مؤثرة ومليئة بالإحساس. إتقان التوقيت، والمطابقات اللحظية، وتصميم الصوت، ومعالجة الألوان في DaVinci Resolve وPremiere Pro.',
-        stats: 'قصّ دقيق للإطار مصمم للاحتفاظ بالمشاهد، لا للتلميع فقط',
-      },
-      motion: {
-        title: 'موشن وغرافيك ديزاين',
-        subtitle: '3D، مؤثرات وهوية بصرية',
-        desc: 'مؤثرات بصرية مخصصة وهوية علامة تجارية تلفت الانتباه.',
-        longDesc:
-          'تحويل العناصر الثابتة إلى تجارب بصرية ديناميكية. كتابة حركية عالية التأثير، وعروض منتجات ثلاثية الأبعاد، وواجهات HUD، ودمج مؤثرات بصرية سلس.',
-        stats: 'عروض 3D مخصصة وأنظمة بصرية حركية',
-      },
-      voice: {
-        title: 'فنان تعليق صوتي',
-        subtitle: 'صدى، إيقاع وروح',
-        desc: 'أداء صوتي احترافي بمدى ودقة وإحساس.',
-        longDesc:
-          'حضور صوتي رنان ومتعدد المواهب، مُدرب على الترايلرات السينمائية وإعلانات إطلاق التقنية الأنيقة وسرد الشخصيات المكثف، بوضوح أكوستيكي بجودة الاستوديو.',
-        stats: 'استوديو بجودة البث 24-bit / 96kHz',
-      },
-    },
-    voiceTracks: {
-      'voice-1': {
-        title: 'الحارس المظلم',
-        description:
-          'سرد صوتي عميق وخفيف وجهوري للترايلرات والفانتازيا المظلمة والقصص السينمائية عالية الرهانات.',
-        script:
-          'عندما تخفت آخر شعلة تحت الرماد، لا يلتفت الناس إلى الملوك طلباً للنجاة. بل يتحدّقون في الظلام... وينتظرون الحارس.',
-      },
-      'voice-2': {
-        title: 'إطلاق أورا X1',
-        description:
-          'أداء إعلاني تقني أنيق وواثق، بإيقاع حاد وحضور مميز.',
-        script:
-          'الدقة ليست خياراً، إنها الخط الأساس. إليكم أورا X1: مصممة بلا مساومة، لأولئك الذين يشكلون الغد.',
-      },
-      'voice-3': {
-        title: 'عقدة نيوترال الكمية',
-        description:
-          'راوٍ انسيابي وفصيح لأفلام وثائقية عن الذكاء الاصطناعي والخطابات المؤسسية والغوص في المنتجات.',
-        script:
-          'تريليونات الحسابات في كل جزء من الثانية. مصفوفة اصطناعية تتعلم بسرعة الضوء. أهلاً بكم في عصر الحوسبة الإدراكية.',
-      },
-      'voice-4': {
-        title: 'السيد الحربي كازيمير',
-        description:
-          'صوت شخصية خشن ومهدد، برنين صدري مدوٍ وخشونة جرئية.',
-        script:
-          'تأتون بعيدان أسنان إلى حصار يا جنرال؟ اكسروا أبوابهم! لا تتركوا حجراً فوق حجر!',
-      },
-    },
-    processSteps: {
-      '01': {
-        title: 'الموجز المباشر',
-        subtitle: 'صفر وسطاء',
-        description:
-          'تتحدث مباشرة معي — المحرر، ومصمم الموشن، والفنان الصوتي. نحدد النبرة البصرية والإيقاع وأهداف تصميم الصوت في جلسة واحدة.',
-        deliverable: 'خطة إبداعية ولوحة أسلوب',
-      },
-      '02': {
-        title: 'الإيقاع وقصّ المونتاج',
-        subtitle: 'الرأس الفيديو',
-        description:
-          'يتم قصّ اللقطات الخام بدقة الإطار. مطابقة النبض، وسلاسة الحركة، والإيقاع السردي تُثبَّت في مونتاج قوي.',
-        deliverable: 'مسودة مونتاج نهائية',
-      },
-      '03': {
-        title: 'الموشن والصقل البصري',
-        subtitle: 'الرأس الجرافيكي',
-        description:
-          'عناوين حركية، وتأثيرات بصرية مخصصة، وعناصر ثلاثية الأبعاد، ومعالجة ألوان أنيقة تُدمج بسلاسة في المخطط الزمني.',
-        deliverable: 'تمريرة مؤثرات وموشن',
-      },
-      '04': {
-        title: 'الصدى الصوتي والصوت',
-        subtitle: 'الرأس الصوتي',
-        description:
-          'يُسجَّل التعليق الصوتي داخلياً بدقة ميكروفون الاستوديو، مصحوباً بمؤثرات صوتية مخصصة ومكساج رئيسي.',
-        deliverable: 'صوت رئيسي 24-bit ومكساج',
-      },
-      '05': {
-        title: 'التسليم النهائي هيدرا',
-        subtitle: 'الماستر الإنتاجي',
-        description:
-          'تصدير بجودة فائقة الوضوح للبث والسينما والويب والسوشيال ميديا. مع مقاطع متعددة الأبعاد.',
-        deliverable: 'حزمة الماستر الكاملة',
-      },
-    },
-    comparison: {
-      Communication: {
-        feature: 'التواصل',
-        agency: 'مديرو حسابات وسلاسل بريد وتأخير',
-        hydra: 'تواصل مباشر 1-1 مع عصام الدين (هيدرا سامو)',
-      },
-      'Turnaround Speed': {
-        feature: 'سرعة التسليم',
-        agency: 'من 2 إلى 4 أسابيع مع تحويلات داخلية',
-        hydra: 'من 3 إلى 7 أيام بعملية موحّدة متكاملة',
-      },
-      'Creative Cohesion': {
-        feature: 'الترابط الإبداعي',
-        agency: 'مقسّم (مونتاج مقابل موشن مقابل صوت)',
-        hydra: 'موحّد 100% (فيديو + موشن + صوت بتناغم)',
-      },
-      'Cost Efficiency': {
-        feature: 'كفاءة التكلفة',
-        agency: 'تكاليف استوديو وإدارة مرتفعة',
-        hydra: 'تسعير مباشر ومرن بإنتاج بجودة الوكالات',
-      },
-    },
-  },
-};
-
-/** Apply the translated process-step fields, falling back to the source data. */
-export function localizeProcessSteps<
-  T extends { number: string; title: string; subtitle: string; description: string; deliverable: string }
->(list: T[], lang: Lang): T[] {
-  return list.map((item) => {
-    const o = content[lang].processSteps[item.number];
-    if (!o) return item;
-    return {
-      ...item,
-      title: o.title ?? item.title,
-      subtitle: o.subtitle ?? item.subtitle,
-      description: o.description ?? item.description,
-      deliverable: o.deliverable ?? item.deliverable,
-    };
-  });
-}
-
-/** Apply the translated comparison-matrix rows, falling back to the source data. */
-export function localizeComparison<
-  T extends { feature: string; agency: string; hydra: string }
->(list: T[], lang: Lang): T[] {
-  return list.map((item) => {
-    const o = content[lang].comparison[item.feature];
-    if (!o) return item;
-    return {
-      ...item,
-      feature: o.feature ?? item.feature,
-      agency: o.agency ?? item.agency,
-      hydra: o.hydra ?? item.hydra,
-    };
-  });
-}

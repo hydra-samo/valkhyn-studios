@@ -1,72 +1,85 @@
-import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import React, { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
 import { cn } from '../lib/utils';
-import { useCoarsePointer } from '../hooks/useCoarsePointer';
-import { useDeviceTier } from '../hooks/useDeviceTier';
 
 interface MagneticButtonProps {
   children: React.ReactNode;
   className?: string;
   strength?: number;
+  href?: string;
   onClick?: () => void;
-  type?: 'button' | 'submit';
-  disabled?: boolean;
-  title?: string;
   'aria-label'?: string;
 }
 
 /**
- * A button that gently pulls toward the cursor while hovered (and springs back
- * on leave). Used on primary CTAs to make the interface feel tactile.
- *
- * On touch devices (coarse pointer) the pull is disabled — there is no cursor
- * to track — and the button behaves as a plain tap target. Low-tier devices
- * skip the spring physics the same way, so the button is always static there.
+ * Magnetic CTA: the button (and its inner label) pull toward the cursor with
+ * GSAP quickTo, then spring back. Reduced-motion and coarse pointers get a
+ * plain button. Glass surface only — brand rule: no flat bright CTA fills.
  */
 export const MagneticButton: React.FC<MagneticButtonProps> = ({
   children,
   className,
-  strength = 0.35,
+  strength = 0.3,
+  href,
   onClick,
-  type = 'button',
-  disabled = false,
-  title,
   'aria-label': ariaLabel,
 }) => {
-  const ref = useRef<HTMLButtonElement>(null);
-  const isCoarse = useCoarsePointer();
-  const isLowTier = useDeviceTier() === 'low';
-  const x = useSpring(useMotionValue(0), { stiffness: 150, damping: 15, mass: 0.7 });
-  const y = useSpring(useMotionValue(0), { stiffness: 150, damping: 15, mass: 0.7 });
+  const ref = useRef<HTMLDivElement>(null);
+  const inner = useRef<HTMLSpanElement>(null);
 
-  const onMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (isCoarse || isLowTier) return;
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return;
-    x.set((e.clientX - (rect.left + rect.width / 2)) * strength);
-    y.set((e.clientY - (rect.top + rect.height / 2)) * strength);
-  };
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
 
-  const reset = () => {
-    if (isCoarse || isLowTier) return;
-    x.set(0);
-    y.set(0);
-  };
+    const xTo = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'power3.out' });
+    const yTo = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'power3.out' });
+    const ixTo = gsap.quickTo(inner.current, 'x', { duration: 0.8, ease: 'power3.out' });
+    const iyTo = gsap.quickTo(inner.current, 'y', { duration: 0.8, ease: 'power3.out' });
+
+    const onMove = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) * strength;
+      const dy = (e.clientY - (r.top + r.height / 2)) * strength;
+      xTo(dx);
+      yTo(dy);
+      ixTo(dx * 0.4);
+      iyTo(dy * 0.4);
+    };
+    const onLeave = () => {
+      xTo(0);
+      yTo(0);
+      ixTo(0);
+      iyTo(0);
+    };
+
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerleave', onLeave);
+    return () => {
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerleave', onLeave);
+    };
+  }, [strength]);
+
+  const Tag = href ? 'a' : 'button';
 
   return (
-    <motion.button
-      ref={ref}
-      type={type}
-      disabled={disabled}
-      onClick={onClick}
-      onMouseMove={onMouseMove}
-      onMouseLeave={reset}
-      title={title}
-      aria-label={ariaLabel}
-      style={isLowTier ? undefined : { x, y }}
-      className={cn(isLowTier ? undefined : 'transform-gpu will-change-transform', className)}
-    >
-      {children}
-    </motion.button>
+    <div ref={ref} className="inline-block will-change-transform">
+      <Tag
+        href={href}
+        onClick={onClick}
+        aria-label={ariaLabel}
+        className={cn(
+          'cta-glass group relative inline-flex items-center gap-3 rounded-full px-6 py-3',
+          'text-[11px] font-semibold uppercase tracking-[0.18em]',
+          className
+        )}
+      >
+        <span ref={inner} className="inline-flex items-center gap-2.5 will-change-transform">
+          {children}
+        </span>
+      </Tag>
+    </div>
   );
 };
