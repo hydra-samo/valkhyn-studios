@@ -1,146 +1,193 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowUpRight } from 'lucide-react';
+import { MagneticButton } from './MagneticButton';
+import { assetUrl } from '../lib/utils';
 import { useLanguage } from '../i18n/LanguageContext';
-import { ease, duration, stagger } from '../lib/motionTokens';
-import { HydraField } from '../lib/three/HydraField';
-import { useDeviceTier } from '../hooks/useDeviceTier';
 
-export const Hero = React.memo(function Hero() {
+gsap.registerPlugin(ScrollTrigger);
+
+const STATS = [
+  { key: 'A' },
+  { key: 'B' },
+  { key: 'C' },
+] as const;
+
+/**
+ * Hero — poster composition.
+ *
+ * The HYDRA wordmark is set enormous behind the figure and bleeds off both
+ * edges, the portrait stands in front of it, and the name sits over the left
+ * shoulder with the counts stacked on the right. Nothing floats above it.
+ */
+export const Hero: React.FC = () => {
   const { t } = useLanguage();
-  const ref = useRef<HTMLElement>(null);
-  const tier = useDeviceTier();
+  const root = useRef<HTMLElement>(null);
+  const figure = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start start', 'end start'],
-  });
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+    const ctx = gsap.context(() => {
+      gsap.from('.hero-mark', {
+        opacity: 0,
+        scale: 1.06,
+        duration: 1.8,
+        ease: 'expo.out',
+      });
+      gsap.from(figure.current, {
+        opacity: 0,
+        y: 34,
+        scale: 1.03,
+        duration: 1.5,
+        ease: 'expo.out',
+        delay: 0.1,
+      });
+      gsap.from('.hero-in', {
+        opacity: 0,
+        y: 16,
+        duration: 1,
+        stagger: 0.07,
+        ease: 'power3.out',
+        delay: 0.35,
+      });
 
-  const HEADING_LINES = ['hero.headingVideo', 'hero.headingMotion', 'hero.headingVoice'] as const;
+      // The figure settles slower than the page scrolls.
+      gsap.to(figure.current, {
+        yPercent: 8,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }, el);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
-      ref={ref}
-      data-section="hero"
-      className="relative w-full h-screen overflow-hidden"
+      id="home"
+      ref={root}
+      className="relative flex min-h-[100dvh] w-full flex-col overflow-hidden"
     >
-      {/* ── WebGL particle field — high tier only ── */}
-      {tier === 'high' && <HydraField />}
-
-      {/* ── Atmospheric Glow ── */}
-      <motion.div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{ opacity: glowOpacity }}
+      {/* The wordmark, set as the poster ground */}
+      <span
+        className="hero-mark heading-display pointer-events-none absolute left-1/2 top-[7%] z-0 w-full -translate-x-1/2 select-none whitespace-nowrap text-center text-[clamp(6rem,29vw,26rem)] leading-[0.8]"
         aria-hidden="true"
+        style={{
+          backgroundImage:
+            'linear-gradient(180deg, rgba(16,185,129,0.55) 0%, rgba(16,185,129,0.24) 55%, rgba(16,185,129,0.05) 100%)',
+          WebkitBackgroundClip: 'text',
+          backgroundClip: 'text',
+          color: 'transparent',
+        }}
       >
-        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full bg-accent/[0.06] blur-[120px]" />
-        <div className="absolute bottom-1/3 left-1/3 w-[400px] h-[400px] rounded-full bg-accent/[0.03] blur-[100px]" />
-      </motion.div>
+        HYDRA
+      </span>
 
-      {/* ── Brand Typography — overlays portrait bottom ── */}
-      <motion.div
-        className="absolute inset-0 z-[1] pointer-events-none"
-        style={{ opacity: contentOpacity, y: contentY }}
-      >
-        {/* ── SAMO — ghost tagline, stretches across viewport ── */}
-        <motion.div
-          className="absolute left-0 right-0 w-full overflow-hidden"
-          style={{ top: '52%' }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: duration.hero, delay: 0.4, ease: ease.cinematic }}
-        >
-          <span
-            className="heading-cinematic block w-full text-center text-[12vw] sm:text-[13vw] md:text-[14vw] lg:text-[15vw] xl:text-[16vw] text-white/[0.05] select-none leading-none"
-            aria-hidden="true"
-          >
-            SAMO
+      {/* Top strip: role on the left, availability on the right */}
+      <div className="hero-in relative z-20 flex items-start justify-between gap-6 px-5 pt-16 sm:px-8 md:pt-20">
+        <div className="flex flex-col gap-0.5">
+          <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.26em] text-accent">
+            {t('hero.roleA')}
           </span>
-        </motion.div>
+          <span className="font-sans text-[9px] font-medium uppercase tracking-[0.26em] text-white/45">
+            {t('hero.roleB')}
+          </span>
+        </div>
+        <span className="flex items-center gap-2">
+          <span className="font-sans text-[9px] font-medium uppercase tracking-[0.22em] text-white/55">
+            {t('hero.open')}
+          </span>
+          <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
+        </span>
+      </div>
 
-        {/* ── HYDRA — stretches across viewport ── */}
-        <motion.div
-          className="absolute left-0 right-0 w-full overflow-hidden"
-          style={{ top: '55%' }}
-          initial={{ opacity: 0, y: 40, filter: 'blur(16px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: duration.hero, delay: 0.6, ease: ease.cinematic }}
-        >
-          <h1
-            className="heading-cinematic block w-full text-center text-[11vw] sm:text-[12vw] md:text-[13vw] lg:text-[14vw] xl:text-[15vw] text-white leading-[0.85]"
-            style={{ textShadow: '0 4px 60px rgba(0,0,0,0.9), 0 0 120px rgba(0,0,0,0.5)' }}
-          >
-            HYDRA
-          </h1>
-        </motion.div>
-      </motion.div>
-
-      {/* ── Heading + Description Grid — bottom of viewport ── */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 z-[1] px-5 sm:px-8 lg:px-12 pb-16 sm:pb-20"
-        style={{ opacity: contentOpacity, y: contentY }}
+      {/* The figure: in flow on phones, poster ground from md up */}
+      <div
+        ref={figure}
+        className="portrait-lock relative z-10 mt-2 flex w-full justify-center md:pointer-events-none md:absolute md:inset-0 md:mt-0 md:items-end"
       >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 lg:gap-20 items-end">
-          {/* Left — Heading lines */}
-          <div className="flex flex-col">
-            {HEADING_LINES.map((key, i) => {
-              const isAccent = key === 'hero.headingVoice';
-              return (
-                <motion.span
-                  key={key}
-                  className={`block text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-display font-bold uppercase tracking-tight leading-[1.1] ${
-                    isAccent ? 'text-accent' : 'text-white/80'
-                  }`}
-                  initial={{ opacity: 0, x: -20, filter: 'blur(6px)' }}
-                  animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                  transition={{
-                    duration: duration.hero,
-                    delay: 1.0 + i * stagger.line,
-                    ease: ease.cinematic,
-                  }}
-                  style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
-                >
-                  {t(key)}
-                </motion.span>
-              );
-            })}
+        <div className="relative flex items-end justify-center md:ml-[8%]">
+          <div
+            className="pointer-events-none absolute bottom-[6%] left-1/2 h-[60%] w-[80%] -translate-x-1/2 rounded-full blur-[120px]"
+            style={{ background: 'rgba(16,185,129,0.09)' }}
+            aria-hidden="true"
+          />
+          <img
+            src={assetUrl('portrait/hero-figure.png')}
+            alt="Bendali Issam Eddine — Hydra Samo"
+            className="relative h-auto w-auto max-h-[38vh] object-contain md:max-h-[78vh] md:w-[48vw] md:max-w-[700px]"
+            style={{
+              maskImage:
+                'linear-gradient(to bottom, #000 62%, rgba(0,0,0,0.7) 86%, transparent 100%)',
+              WebkitMaskImage:
+                'linear-gradient(to bottom, #000 62%, rgba(0,0,0,0.7) 86%, transparent 100%)',
+              filter: 'drop-shadow(0 30px 80px rgba(0,0,0,0.65))',
+            }}
+            draggable={false}
+          />
+        </div>
+      </div>
+
+      {/* Name block and counts */}
+      <div className="relative z-20 mt-auto px-5 pb-5 sm:px-8 sm:pb-7">
+        <div className="grid grid-cols-1 items-end gap-8 pb-2 sm:grid-cols-12 sm:gap-6">
+          {/* Name block */}
+          <div className="sm:col-span-7 lg:col-span-5">
+            <p className="hero-in mb-2 font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-white/55">
+              {t('hero.hello')}
+            </p>
+            <h1 className="hero-in heading-display text-[clamp(2.6rem,6vw,5.2rem)] leading-[0.82] text-white md:whitespace-nowrap">
+              Bendali
+              <br />
+              Issam Eddine
+            </h1>
+            <p className="hero-in mt-4 font-sans text-[11px] font-semibold uppercase leading-relaxed tracking-[0.16em] text-accent">
+              {t('hero.modeA')}
+              <br />
+              {t('hero.modeB')}
+            </p>
+            <p className="hero-in mt-3 max-w-[32ch] font-sans text-[12px] leading-relaxed text-white/60 sm:text-[13px]">
+              {t('hero.blurb')}
+            </p>
+            <div className="hero-in mt-5 flex flex-wrap items-center gap-4">
+              <MagneticButton href="#work">
+                {t('hero.ctaWork')}
+                <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
+              </MagneticButton>
+              <a
+                href="#contact"
+                className="group flex items-center gap-2 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60 transition-colors duration-300 hover:text-accent"
+              >
+                {t('hero.ctaContact')}
+                <span className="h-px w-6 bg-current transition-all duration-500 group-hover:w-9" />
+              </a>
+            </div>
           </div>
 
-          {/* Right — Description */}
-          <motion.div
-            className="flex flex-col justify-end"
-            initial={{ opacity: 0, x: 20, filter: 'blur(6px)' }}
-            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-            transition={{ duration: duration.section, delay: 1.3, ease: ease.cinematic }}
-          >
-            <p className="text-sm sm:text-base md:text-lg text-white/40 font-normal leading-relaxed max-w-md lg:max-w-lg md:ml-auto">
-              <strong className="text-white/70 font-medium">{t('about.badgeName')}</strong>{' '}
-              {t('hero.description')}
-            </p>
-          </motion.div>
+          {/* Counts */}
+          <div className="hero-in flex gap-8 sm:col-span-4 sm:col-start-9 sm:flex-col sm:gap-5 sm:justify-self-end sm:text-right lg:col-span-3 lg:col-start-10">
+            {STATS.map((s) => (
+              <div key={s.key} className="flex flex-col">
+                <span className="font-display text-xl font-bold leading-none text-accent sm:text-2xl">
+                  {t(`hero.stat${s.key}`)}
+                </span>
+                <span className="mt-1 font-sans text-[9px] font-medium uppercase tracking-[0.2em] text-white/50">
+                  {t(`hero.stat${s.key}Label`)}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </motion.div>
-
-      {/* ── Scroll Indicator ── */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-[3]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.4, duration: 1.2 }}
-        style={{ opacity: contentOpacity }}
-      >
-        <span className="text-[9px] tracking-[0.3em] uppercase text-white/20 font-semibold">
-          Scroll
-        </span>
-        <motion.div
-          className="w-px h-10 bg-gradient-to-b from-accent/40 to-transparent origin-top"
-          animate={{ scaleY: [0.6, 1, 0.6] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </motion.div>
+      </div>
     </section>
   );
-});
+};

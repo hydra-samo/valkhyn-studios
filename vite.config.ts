@@ -1,22 +1,8 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
-import {defineConfig} from 'vite';
-import { hydraStudio } from './studio.plugin.mjs';
+import { defineConfig } from 'vite';
 
-export default defineConfig(() => {
-  return {
-    base: './',
-    plugins: [react(), tailwindcss(), hydraStudio()],
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-      },
-    },
-    server: {
-      // Tailnet access (phone / remote devices via tailscale serve).
-      // HMR stays auto: live-reload is desktop-only; phone reloads manually.
-      allowedHosts: ['.ts.net'],
-    },
-  };
+export default defineConfig({
+  base: './',
+  plugins: [react(), tailwindcss()],
 });

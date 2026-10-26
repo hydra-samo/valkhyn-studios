@@ -12,42 +12,26 @@ const HEAD_PATH =
 const CORE_PATH =
   'M 50.00 33.00 L 64.72 41.50 L 64.72 58.50 L 50.00 67.00 L 35.28 58.50 L 35.28 41.50 Z';
 
-export const HydraLogo: React.FC<HydraLogoProps> = ({
-  className,
-  variant = 'fill',
-}) => {
+export const HydraLogo: React.FC<HydraLogoProps> = ({ className, variant = 'fill' }) => {
   const isOutline = variant === 'outline';
-
   return (
     <svg
       viewBox="11 2.94 78 78"
-      data-hydra-mark
       aria-hidden="true"
       focusable="false"
-      className={cn('hydra-mark block text-current', className)}
+      className={cn('block text-current', className)}
     >
       <g
-        className="hydra-heads"
         fill={isOutline ? 'none' : 'currentColor'}
         stroke={isOutline ? 'currentColor' : 'none'}
         strokeWidth={isOutline ? 3 : undefined}
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path className="hydra-head hydra-head-0" d={HEAD_PATH} pathLength={1} />
-        <path
-          className="hydra-head hydra-head-1"
-          d={HEAD_PATH}
-          transform="rotate(120 50 50)"
-          pathLength={1}
-        />
-        <path
-          className="hydra-head hydra-head-2"
-          d={HEAD_PATH}
-          transform="rotate(240 50 50)"
-          pathLength={1}
-        />
-        <path className="hydra-core" d={CORE_PATH} pathLength={1} />
+        <path d={HEAD_PATH} transform="rotate(0 50 50)" />
+        <path d={HEAD_PATH} transform="rotate(120 50 50)" />
+        <path d={HEAD_PATH} transform="rotate(240 50 50)" />
+        <path d={CORE_PATH} />
       </g>
     </svg>
   );

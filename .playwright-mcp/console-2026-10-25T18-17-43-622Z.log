@@ -1,0 +1,21 @@
+[      83ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:22164
+[  941229ms] [ERROR] [vite] SyntaxError: The requested module '/src/data/content.ts?t=1792953204809' does not provide an export named 'SOCIALS' @ http://localhost:3100/@vite/client:881
+[  941229ms] [ERROR] [vite] Failed to reload /src/components/Contact.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:3100/@vite/client:881
+[  941230ms] [ERROR] [vite] SyntaxError: The requested module '/src/data/content.ts?t=1792953204809' does not provide an export named 'SOCIALS' @ http://localhost:3100/@vite/client:881
+[  941230ms] [ERROR] [vite] Failed to reload /src/components/Footer.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:3100/@vite/client:881
+[ 1033225ms] ReferenceError: SOCIALS is not defined
+    at Contact (http://localhost:3100/src/components/Contact.tsx?t=1792953296707:107:104)
+    at Object.react_stack_bottom_frame (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:20259:20)
+    at renderWithHooks (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:5918:24)
+    at updateFunctionComponent (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:7763:21)
+    at beginWork (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:8843:20)
+    at runWithFiberInDEV (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:1133:72)
+    at performUnitOfWork (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:13598:98)
+    at workLoopSync (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:13461:43)
+    at renderRootSync (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:13445:13)
+    at performWorkOnRoot (http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:12861:37)
+[ 1033225ms] [WARNING] %s
+
+%s
+ An error occurred in the <Contact> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. @ http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=9acea066:7240

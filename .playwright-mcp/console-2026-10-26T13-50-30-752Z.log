@@ -1,0 +1,3 @@
+[     176ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3100/node_modules/.vite/deps/react-dom_client.js?v=3c69ae7d:22164
+[  149891ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3100/src/components/VerticalRail.tsx?t=1793022780559:0
+[  149973ms] [ERROR] [vite] Failed to reload /src/components/VerticalRail.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:3100/@vite/client:881

@@ -1,0 +1,196 @@
+- generic [ref=f10e3]:
+  - banner [ref=f10e4]:
+    - generic [ref=f10e5]:
+      - link "Hydra Samo" [ref=f10e6] [cursor=pointer]:
+        - /url: "#home"
+      - generic [ref=f10e21]:
+        - generic [ref=f10e22]: Available
+        - link "Let's talk" [ref=f10e25] [cursor=pointer]:
+          - /url: "#contact"
+        - button "Toggle menu" [ref=f10e314]
+  - generic:
+    - link "Home":
+      - /url: "#home"
+    - link "About":
+      - /url: "#about"
+    - link "Services":
+      - /url: "#services"
+    - link "Work":
+      - /url: "#work"
+    - link "Process":
+      - /url: "#process"
+    - link "Contact":
+      - /url: "#contact"
+  - main [ref=f10e26]:
+    - generic [ref=f10e27]:
+      - generic [aria-hidden]:
+        - generic: HYDRA
+      - generic [ref=f10e29]:
+        - generic [ref=f10e30]:
+          - generic [ref=f10e31]: Video · Motion · Voice
+          - generic [ref=f10e33]: Solo Creative Studio
+        - generic [ref=f10e34]:
+          - paragraph [ref=f10e35]: Hello, I'm Bendali Issam Eddine
+          - heading "Video Editing Motion Design Voice Over" [level=1] [ref=f10e36]:
+            - generic [ref=f10e37]: Video Editing
+            - generic [ref=f10e39]: Motion Design
+            - generic [ref=f10e41]: Voice Over
+          - generic [ref=f10e43]:
+            - paragraph [ref=f10e44]: I craft immersive visual experiences that connect, inspire and leave a lasting impact — under one unified will, with zero handoffs.
+            - link "Explore the work" [ref=f10e46] [cursor=pointer]:
+              - /url: "#work"
+        - generic [ref=f10e51]:
+          - generic [ref=f10e52]:
+            - generic [ref=f10e53]:
+              - generic [ref=f10e54]: One
+              - generic [ref=f10e55]: Studio
+            - generic [ref=f10e56]:
+              - generic [ref=f10e57]: Three
+              - generic [ref=f10e58]: Disciplines
+            - generic [ref=f10e59]:
+              - generic [ref=f10e60]: Zero
+              - generic [ref=f10e61]: Handoffs
+          - generic [ref=f10e62]:
+            - generic [ref=f10e63]: Commissions open
+            - link [ref=f10e64] [cursor=pointer]:
+              - /url: "#about"
+    - generic [ref=f10e69]:
+      - generic [ref=f10e72]:
+        - img "Hydra Samo portrait" [ref=f10e73]
+        - generic [ref=f10e75]: Bendali Issam Eddine
+      - generic [ref=f10e76]:
+        - generic [ref=f10e77]: About the studio
+        - heading "I blend creativity with technology to build visual experiences that connect." [level=2] [ref=f10e80]
+        - paragraph [ref=f10e82]: Every frame, every motion, every sound is designed to tell a story and evoke emotion. One creator directs the video head, the motion head and the voice head under a single will — so narrative intent survives from brief to master.
+    - generic [ref=f10e84]:
+      - generic [ref=f10e85]:
+        - generic [ref=f10e86]: What I do
+        - heading "One body. Three heads." [level=2] [ref=f10e87]
+      - generic [ref=f10e88]:
+        - generic [ref=f10e90]:
+          - generic [ref=f10e96]:
+            - text: Rhythm & Cut
+            - heading "Video Editing" [level=3] [ref=f10e97]
+          - generic [ref=f10e98]:
+            - paragraph [ref=f10e99]: Cinematic storytelling, frame-perfect pacing, match cuts and colour grade. The cut is where intent becomes momentum.
+            - generic [ref=f10e100]:
+              - generic [ref=f10e101]: Premiere Pro
+              - generic [ref=f10e102]: DaVinci Resolve
+              - generic [ref=f10e103]: Final Cut Pro
+        - generic [ref=f10e105]:
+          - generic [ref=f10e111]:
+            - text: Motion & Visual
+            - heading "Motion Design" [level=3] [ref=f10e112]
+          - generic [ref=f10e113]:
+            - paragraph [ref=f10e114]: Kinetic typography, 3D renders, HUD interfaces and VFX compositing. Graphics that carry the idea, not decorate it.
+            - generic [ref=f10e115]:
+              - generic [ref=f10e116]: After Effects
+              - generic [ref=f10e117]: Cinema 4D
+              - generic [ref=f10e118]: Blender
+        - generic [ref=f10e120]:
+          - generic [ref=f10e125]:
+            - text: Vocal & Sound
+            - heading "Voice-Over" [level=3] [ref=f10e126]
+          - generic [ref=f10e127]:
+            - paragraph [ref=f10e128]: Broadcast narration in EN, FR and AR. A 24-bit studio chain and a voice that holds the room.
+            - generic [ref=f10e129]:
+              - generic [ref=f10e130]: Shure SM7B
+              - generic [ref=f10e131]: Neumann U87
+              - generic [ref=f10e132]: Pro Tools
+    - generic [ref=f10e134]:
+      - generic [ref=f10e136]:
+        - generic [ref=f10e137]:
+          - generic [ref=f10e138]: Selected work
+          - heading "The work" [level=2] [ref=f10e139]
+        - generic [ref=f10e140]: Commissions open · 2026
+      - generic [ref=f10e144]:
+        - heading "First case studies landing" [level=3] [ref=f10e147]
+        - paragraph [ref=f10e148]: The studio is taking on a small number of commissions. Real client work will be published here as it ships — nothing invented, nothing borrowed.
+        - link "Start a project" [ref=f10e151] [cursor=pointer]:
+          - /url: "#contact"
+      - generic [ref=f10e156]:
+        - generic [ref=f10e159]:
+          - heading "Rhythm & Cut" [level=4] [ref=f10e174]
+          - paragraph [ref=f10e175]: Editing · Pacing · Grade
+        - generic [ref=f10e178]:
+          - heading "Motion & Visual" [level=4] [ref=f10e186]
+          - paragraph [ref=f10e187]: 3D · Kinetic type · VFX
+        - generic [ref=f10e190]:
+          - heading "Vocal & Sound" [level=4] [ref=f10e199]
+          - paragraph [ref=f10e200]: Narration · EN FR AR
+    - generic [ref=f10e202]:
+      - generic [ref=f10e203]:
+        - generic [ref=f10e204]: How the Hydra works
+        - heading "One engine. Five moves." [level=2] [ref=f10e205]
+      - generic [ref=f10e208]:
+        - generic [ref=f10e214]:
+          - generic [ref=f10e215]:
+            - generic [ref=f10e216]: "01"
+            - heading "Direct Briefing" [level=3] [ref=f10e217]
+          - paragraph [ref=f10e218]: You speak directly with the editor, motion designer and voice artist. Tone, pace and sound are set in one session. Zero middlemen.
+        - generic [ref=f10e224]:
+          - generic [ref=f10e225]:
+            - generic [ref=f10e226]: "02"
+            - heading "Rhythm & Cut" [level=3] [ref=f10e227]
+          - paragraph [ref=f10e228]: Footage trimmed to frame-perfect cuts. Beat matching and narrative pacing locked into a strong rough cut.
+        - generic [ref=f10e234]:
+          - generic [ref=f10e235]:
+            - generic [ref=f10e236]: "03"
+            - heading "Motion & Visual" [level=3] [ref=f10e237]
+          - paragraph [ref=f10e238]: Kinetic titles, custom VFX and 3D elements integrated into the timeline with a single colour grade.
+        - generic [ref=f10e244]:
+          - generic [ref=f10e245]:
+            - generic [ref=f10e246]: "04"
+            - heading "Vocal & Sound" [level=3] [ref=f10e247]
+          - paragraph [ref=f10e248]: Voice-over recorded in-house on the studio chain, paired with sound design and a master mix.
+        - generic [ref=f10e254]:
+          - generic [ref=f10e255]:
+            - generic [ref=f10e256]: "05"
+            - heading "Final Delivery" [level=3] [ref=f10e257]
+          - paragraph [ref=f10e258]: Mastered for broadcast, cinema, web and social. Multi-aspect cutdowns included in one asset pack.
+    - generic [ref=f10e261]:
+      - generic [ref=f10e262]:
+        - generic [ref=f10e263]:
+          - generic [ref=f10e264]: Start a project
+          - heading "Let's work together." [level=2] [ref=f10e265]
+        - paragraph [ref=f10e267]: Have a project in mind? Tell me what you're building and we'll shape the tone, pace and sound in one direct session. No middlemen, no handoffs.
+        - link [ref=f10e269] [cursor=pointer]:
+          - /url: mailto:hello@hydrasamo.com
+        - paragraph [ref=f10e274]: Commissions open · 2026
+      - generic [ref=f10e278]:
+        - generic [ref=f10e279]:
+          - generic [ref=f10e280]: Your name
+          - textbox "Your name" [ref=f10e281]:
+            - /placeholder: Name
+        - generic [ref=f10e282]:
+          - generic [ref=f10e283]: Email
+          - textbox "Email" [ref=f10e284]:
+            - /placeholder: you@studio.com
+        - generic [ref=f10e285]:
+          - generic [ref=f10e286]: Discipline
+          - combobox "Discipline" [ref=f10e287]:
+            - option "Video Editing" [selected]
+            - option "Motion Design"
+            - option "Voice-Over"
+            - option "Full production"
+        - generic [ref=f10e288]:
+          - generic [ref=f10e289]: The project
+          - textbox "The project" [ref=f10e290]:
+            - /placeholder: Tell me about it
+        - button [ref=f10e291]
+  - contentinfo [ref=f10e295]:
+    - generic [ref=f10e296]:
+      - generic [ref=f10e297]:
+        - link "Hydra Samo Video · Motion · Voice" [ref=f10e298] [cursor=pointer]:
+          - /url: "#home"
+          - generic [ref=f10e305]:
+            - generic [ref=f10e306]: Hydra Samo
+            - generic [ref=f10e307]: Video · Motion · Voice
+        - generic [ref=f10e308]:
+          - link "hello@hydrasamo.com" [ref=f10e309] [cursor=pointer]:
+            - /url: mailto:hello@hydrasamo.com
+          - link "Top" [ref=f10e310] [cursor=pointer]:
+            - /url: "#home"
+      - generic [ref=f10e311]:
+        - paragraph [ref=f10e312]: © 2026 Bendali Issam Eddine · All rights reserved
+        - paragraph [ref=f10e313]: One body, three heads

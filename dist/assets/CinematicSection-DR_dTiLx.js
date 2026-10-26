@@ -1,0 +1,1 @@
+import{j as t}from"./index-DvEp8n7b.js";function o({children:i,className:s,id:e,"data-section":n}){return t.jsx("section",{id:e,"data-section":n,className:s,children:t.jsx("div",{className:"h-full",children:i})})}export{o as C};

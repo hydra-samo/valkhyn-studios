@@ -1,63 +1,53 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Reveal } from './motion/Reveal';
+import { HydraLogo } from './HydraLogo';
+import { EMAIL } from '../data/content';
 import { useLanguage } from '../i18n/LanguageContext';
 
-const SOCIAL_LINKS = [
-  { name: 'YouTube', href: '#' },
-  { name: 'Instagram', href: '#' },
-  { name: 'Vimeo', href: '#' },
-  { name: 'LinkedIn', href: '#' },
-];
-
-export const Footer = React.memo(function Footer() {
-  const year = new Date().getFullYear();
+export const Footer: React.FC = () => {
   const { t } = useLanguage();
+  const year = new Date().getFullYear();
 
   return (
-    <footer
-      data-section="footer"
-      className="relative py-16 sm:py-20 px-5 sm:px-8 lg:px-12 overflow-hidden"
-    >
-      <div className="mx-auto max-w-7xl relative z-10">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
-          <Reveal cinematic>
-            <span className="font-display font-bold tracking-[-0.02em] text-sm uppercase text-white">
-              HYDRA SAMO
-            </span>
-            <p className="text-xs text-white/40 mt-0.5">
-              {t('hero.headingVideo').replace('.', '')} &middot; {t('hero.headingMotion').replace('.', '')} &middot; {t('hero.headingVoice').replace('.', '')}
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.1} cinematic>
-            <div className="flex items-center gap-6 text-[11px] uppercase tracking-[0.18em] font-semibold text-white/40">
-              {SOCIAL_LINKS.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="hover:text-white transition-colors duration-300"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {link.name}
-                </a>
-              ))}
+    <footer className="relative overflow-hidden border-t border-white/[0.07] px-6 py-12 sm:px-10 md:px-14 lg:px-20">
+      <div className="mx-auto flex max-w-6xl flex-col gap-10">
+        <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-center">
+          <a href="#home" className="flex items-center gap-3">
+            <HydraLogo className="h-7 w-7 text-accent glow-accent" />
+            <div>
+              <span className="block font-display text-sm font-bold uppercase tracking-[0.12em] text-white">
+                Hydra Samo
+              </span>
+              <span className="mt-0.5 block font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/55">
+                {t('footer.tagline')}
+              </span>
             </div>
-          </Reveal>
+          </a>
+
+          <div className="flex items-center gap-6">
+            <a
+              href={`mailto:${EMAIL}`}
+              className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/55 transition-colors duration-300 hover:text-accent"
+            >
+              {EMAIL}
+            </a>
+            <a
+              href="#home"
+              className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/55 transition-colors duration-300 hover:text-accent"
+            >
+              {t('footer.top')}
+            </a>
+          </div>
         </div>
 
-        <Reveal delay={0.2} cinematic>
-          <div className="mt-10 pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-white/30">
-              &copy; {year} {t('about.badgeName')} — Hydra Samo. All rights reserved.
-            </p>
-            <p className="text-[10px] text-white/20 uppercase tracking-[0.2em] font-semibold">
-              Crafted with precision
-            </p>
-          </div>
-        </Reveal>
+        <div className="flex flex-col justify-between gap-3 border-t border-white/[0.06] pt-6 sm:flex-row sm:items-center">
+          <p className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/50">
+            © {year} Bendali Issam Eddine · All rights reserved
+          </p>
+          <p className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/50">
+            {t('footer.motto')}
+          </p>
+        </div>
       </div>
     </footer>
   );
-});
+};
