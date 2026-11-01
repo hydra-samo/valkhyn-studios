@@ -1,0 +1,333 @@
+export type Lang = 'en' | 'fr' | 'ar';
+export type Dict = Record<string, string>;
+
+/**
+ * Every string the site renders. `en` is the source of truth — the other two
+ * are real translations, not placeholders. Keys never change shape between
+ * languages, so the UI cannot half-translate.
+ */
+export const UI: Record<Lang, Dict> = {
+  en: {
+    'nav.home': 'Home',
+    'nav.about': 'About',
+    'nav.services': 'Services',
+    'nav.work': 'Work',
+    'nav.process': 'Process',
+    'nav.contact': 'Contact',
+    'nav.available': 'Available',
+    'nav.cta': "Let's talk",
+    'nav.menu': 'Toggle menu',
+
+    'hero.roleA': 'Video Editor',
+    'hero.roleB': 'Motion Designer',
+    'hero.open': 'Commissions open',
+    'hero.hello': "Hello, I'm",
+    'hero.modeA': 'Video Editing & Motion',
+    'hero.modeB': 'Voice-Over',
+    'hero.blurb':
+      'One creator directing the cut, the motion and the voice — from first brief to final master.',
+    'hero.ctaWork': 'Explore the work',
+    'hero.ctaContact': 'Start a project',
+    'hero.statA': 'One',
+    'hero.statALabel': 'Studio',
+    'hero.statB': 'Three',
+    'hero.statBLabel': 'Disciplines',
+    'hero.statC': 'Zero',
+    'hero.statCLabel': 'Handoffs',
+
+    'about.lead': 'I blend creativity with technology to build visual',
+    'about.accent': 'experiences',
+    'about.tail': 'that connect.',
+    'about.body':
+      'Every frame, every motion, every sound is designed to tell a story and evoke emotion. One creator directs the video head, the motion head and the voice head under a single will — so narrative intent survives from brief to master.',
+
+    'services.lead': 'One body.',
+    'services.accent': 'Three heads.',
+
+    'disc.video.title': 'Video Editing',
+    'disc.video.subtitle': 'Rhythm & Cut',
+    'disc.video.desc':
+      'Cinematic storytelling, frame-perfect pacing, match cuts and colour grade. The cut is where intent becomes momentum.',
+    'disc.motion.title': 'Motion Design',
+    'disc.motion.subtitle': 'Motion & Visual',
+    'disc.motion.desc':
+      'Kinetic typography, 3D renders, HUD interfaces and VFX compositing. Graphics that carry the idea, not decorate it.',
+    'disc.voice.title': 'Voice-Over',
+    'disc.voice.subtitle': 'Vocal & Sound',
+    'disc.voice.desc':
+      'Broadcast narration in EN, FR and AR. A 24-bit studio chain and a voice that holds the room.',
+
+    'work.title': 'The work',
+    'work.status': 'Commissions open · 2026',
+    'work.empty.title': 'First case studies landing',
+    'work.empty.body':
+      'The studio is taking on a small number of commissions. Real client work will be published here as it ships — nothing invented, nothing borrowed.',
+    'work.empty.cta': 'Start a project',
+    'work.cut.title': 'Rhythm & Cut',
+    'work.cut.note': 'Editing · Pacing · Grade',
+    'work.motion.title': 'Motion & Visual',
+    'work.motion.note': '3D · Kinetic type · VFX',
+    'work.sound.title': 'Vocal & Sound',
+    'work.sound.note': 'Narration · EN FR AR',
+
+    'process.lead': 'One engine.',
+    'process.accent': 'Five moves.',
+    'process.1.title': 'Direct Briefing',
+    'process.1.desc':
+      'You speak directly with the editor, motion designer and voice artist. Tone, pace and sound are set in one session. Zero middlemen.',
+    'process.2.title': 'Rhythm & Cut',
+    'process.2.desc':
+      'Footage trimmed to frame-perfect cuts. Beat matching and narrative pacing locked into a strong rough cut.',
+    'process.3.title': 'Motion & Visual',
+    'process.3.desc':
+      'Kinetic titles, custom VFX and 3D elements integrated into the timeline with a single colour grade.',
+    'process.4.title': 'Vocal & Sound',
+    'process.4.desc':
+      'Voice-over recorded in-house on the studio chain, paired with sound design and a master mix.',
+    'process.5.title': 'Final Delivery',
+    'process.5.desc':
+      'Mastered for broadcast, cinema, web and social. Multi-aspect cutdowns included in one asset pack.',
+
+    'contact.lead': "Let's work",
+    'contact.accent': 'together.',
+    'contact.body':
+      "Have a project in mind? Tell me what you're building and we'll shape the tone, pace and sound in one direct session. No middlemen, no handoffs.",
+    'contact.status': 'Commissions open · 2026',
+    'form.name': 'Your name',
+    'form.namePh': 'Name',
+    'form.email': 'Email',
+    'form.discipline': 'Discipline',
+    'form.message': 'The project',
+    'form.messagePh': 'Tell me about it',
+    'form.submit': 'Send brief',
+    'form.sentTitle': 'Brief ready',
+    'form.sentBody': 'Your mail app should be open. If it did not, write to',
+    'form.disc.video': 'Video Editing',
+    'form.disc.motion': 'Motion Design',
+    'form.disc.voice': 'Voice-Over',
+    'form.disc.full': 'Full production',
+
+    'footer.tagline': 'Video · Motion · Voice',
+    'footer.top': 'Top',
+    'footer.motto': 'One body, three heads',
+
+    'splash.title': 'Hydra Samo',
+    'splash.skip': 'Click to skip',
+  },
+
+  fr: {
+    'nav.home': 'Accueil',
+    'nav.about': 'À propos',
+    'nav.services': 'Services',
+    'nav.work': 'Projets',
+    'nav.process': 'Méthode',
+    'nav.contact': 'Contact',
+    'nav.available': 'Disponible',
+    'nav.cta': 'Parlons-en',
+    'nav.menu': 'Ouvrir le menu',
+
+    'hero.roleA': 'Monteur Vidéo',
+    'hero.roleB': 'Motion Designer',
+    'hero.open': 'Ouvert aux projets',
+    'hero.hello': 'Bonjour, je suis',
+    'hero.modeA': 'Montage & Motion',
+    'hero.modeB': 'Voix-Off',
+    'hero.blurb':
+      'Un seul créateur dirige le montage, le mouvement et la voix — du premier brief au master final.',
+    'hero.ctaWork': 'Voir les projets',
+    'hero.ctaContact': 'Démarrer un projet',
+    'hero.statA': 'Un',
+    'hero.statALabel': 'Studio',
+    'hero.statB': 'Trois',
+    'hero.statBLabel': 'Disciplines',
+    'hero.statC': 'Zéro',
+    'hero.statCLabel': 'Intermédiaire',
+
+    'about.lead': "Je fusionne création et technologie pour bâtir des",
+    'about.accent': 'expériences',
+    'about.tail': 'visuelles qui connectent.',
+    'about.body':
+      "Chaque image, chaque mouvement, chaque son est pensé pour raconter une histoire et provoquer une émotion. Un seul créateur dirige la tête vidéo, la tête motion et la tête voix sous une volonté unique — l'intention narrative survit du brief au master.",
+
+    'services.lead': 'Un corps.',
+    'services.accent': 'Trois têtes.',
+
+    'disc.video.title': 'Montage Vidéo',
+    'disc.video.subtitle': 'Rythme & Coupe',
+    'disc.video.desc':
+      "Narration cinématographique, rythme au frame près, match cuts et étalonnage. La coupe est le point où l'intention devient élan.",
+    'disc.motion.title': 'Motion Design',
+    'disc.motion.subtitle': 'Mouvement & Image',
+    'disc.motion.desc':
+      "Typographie cinétique, rendus 3D, interfaces HUD et compositing VFX. Des graphismes qui portent l'idée au lieu de la décorer.",
+    'disc.voice.title': 'Voix-Off',
+    'disc.voice.subtitle': 'Voix & Son',
+    'disc.voice.desc':
+      'Narration broadcast en FR, EN et AR. Une chaîne studio 24 bits et une voix qui tient la pièce.',
+
+    'work.title': 'Les projets',
+    'work.status': 'Ouvert aux projets · 2026',
+    'work.empty.title': 'Premières études de cas à venir',
+    'work.empty.body':
+      "Le studio accepte un nombre limité de projets. Les vrais travaux clients seront publiés ici dès leur livraison — rien d'inventé, rien d'emprunté.",
+    'work.empty.cta': 'Démarrer un projet',
+    'work.cut.title': 'Rythme & Coupe',
+    'work.cut.note': 'Montage · Rythme · Étalonnage',
+    'work.motion.title': 'Mouvement & Image',
+    'work.motion.note': '3D · Type cinétique · VFX',
+    'work.sound.title': 'Voix & Son',
+    'work.sound.note': 'Narration · FR EN AR',
+
+    'process.lead': 'Un moteur.',
+    'process.accent': 'Cinq mouvements.',
+    'process.1.title': 'Brief Direct',
+    'process.1.desc':
+      "Vous parlez directement au monteur, au motion designer et à la voix. Le ton, le rythme et le son se fixent en une session. Zéro intermédiaire.",
+    'process.2.title': 'Rythme & Coupe',
+    'process.2.desc':
+      'Des images taillées au frame près. Calage sur la musique et rythme narratif verrouillés dans un rough cut solide.',
+    'process.3.title': 'Mouvement & Image',
+    'process.3.desc':
+      'Titres cinétiques, VFX sur mesure et éléments 3D intégrés à la timeline avec un étalonnage unique.',
+    'process.4.title': 'Voix & Son',
+    'process.4.desc':
+      'Voix-off enregistrée en interne sur la chaîne studio, accompagnée de sound design et d’un mix master.',
+    'process.5.title': 'Livraison Finale',
+    'process.5.desc':
+      'Masterisé pour le broadcast, le cinéma, le web et les réseaux. Déclinaisons multi-formats incluses dans un seul pack.',
+
+    'contact.lead': 'Travaillons',
+    'contact.accent': 'ensemble.',
+    'contact.body':
+      "Un projet en tête ? Dites-moi ce que vous construisez et nous fixerons le ton, le rythme et le son en une session directe. Sans intermédiaire, sans décalage.",
+    'contact.status': 'Ouvert aux projets · 2026',
+    'form.name': 'Votre nom',
+    'form.namePh': 'Nom',
+    'form.email': 'E-mail',
+    'form.discipline': 'Discipline',
+    'form.message': 'Le projet',
+    'form.messagePh': 'Parlez-moi du projet',
+    'form.submit': 'Envoyer le brief',
+    'form.sentTitle': 'Brief prêt',
+    'form.sentBody': "Votre application mail devrait s'ouvrir. Sinon, écrivez à",
+    'form.disc.video': 'Montage Vidéo',
+    'form.disc.motion': 'Motion Design',
+    'form.disc.voice': 'Voix-Off',
+    'form.disc.full': 'Production complète',
+
+    'footer.tagline': 'Vidéo · Motion · Voix',
+    'footer.top': 'Haut',
+    'footer.motto': 'Un corps, trois têtes',
+
+    'splash.title': 'Hydra Samo',
+    'splash.skip': 'Cliquer pour passer',
+  },
+
+  ar: {
+    'nav.home': 'الرئيسية',
+    'nav.about': 'من أنا',
+    'nav.services': 'الخدمات',
+    'nav.work': 'الأعمال',
+    'nav.process': 'المنهجية',
+    'nav.contact': 'التواصل',
+    'nav.available': 'متاح',
+    'nav.cta': 'لنتحدث',
+    'nav.menu': 'القائمة',
+
+    'hero.roleA': 'مونتير فيديو',
+    'hero.roleB': 'مصمم موشن',
+    'hero.open': 'الباب مفتوح للمشاريع',
+    'hero.hello': 'مرحباً، أنا',
+    'hero.modeA': 'مونتاج وموشن',
+    'hero.modeB': 'تعليق صوتي',
+    'hero.blurb':
+      'مبدع واحد يقود المونتاج والحركة والصوت — من أول موجز إلى النسخة النهائية.',
+    'hero.ctaWork': 'استكشف الأعمال',
+    'hero.ctaContact': 'ابدأ مشروعاً',
+    'hero.statA': 'واحد',
+    'hero.statALabel': 'استوديو',
+    'hero.statB': 'ثلاثة',
+    'hero.statBLabel': 'تخصصات',
+    'hero.statC': 'صفر',
+    'hero.statCLabel': 'وسطاء',
+
+    'about.lead': 'أدمج الإبداع بالتقنية لبناء',
+    'about.accent': 'تجارب',
+    'about.tail': 'بصرية تصنع اتصالاً.',
+    'about.body':
+      'كل إطار وكل حركة وكل صوت مصمم ليحكي قصة ويصنع إحساساً. مبدع واحد يقود رأس الفيديو ورأس الموشن ورأس الصوت تحت إرادة واحدة — لتبقى نية الحكاية من الموجز حتى النسخة النهائية.',
+
+    'services.lead': 'جسد واحد.',
+    'services.accent': 'ثلاثة رؤوس.',
+
+    'disc.video.title': 'مونتاج الفيديو',
+    'disc.video.subtitle': 'إيقاع وقطع',
+    'disc.video.desc':
+      'سرد سينمائي وإيقاع مضبوط على الإطار ومطابقة القطعات وتصحيح الألوان. القطع هو اللحظة التي تتحول فيها النية إلى دفع.',
+    'disc.motion.title': 'تصميم الموشن',
+    'disc.motion.subtitle': 'حركة وصورة',
+    'disc.motion.desc':
+      'تايبوغرافي حركي ومشاهد ثلاثية الأبعاد وواجهات HUD وتركيب مؤثرات. جرافيك يحمل الفكرة لا يزيّنها.',
+    'disc.voice.title': 'التعليق الصوتي',
+    'disc.voice.subtitle': 'صوت وأداء',
+    'disc.voice.desc':
+      'تعليق إذاعي بالعربية والفرنسية والإنجليزية. سلسلة استوديو 24 بت وصوت يملأ الغرفة.',
+
+    'work.title': 'الأعمال',
+    'work.status': 'الباب مفتوح للمشاريع · 2026',
+    'work.empty.title': 'أول دراسات الحالة قادمة',
+    'work.empty.body':
+      'الاستوديو يستقبل عدداً محدوداً من المشاريع. الأعمال الحقيقية للعملاء ستُنشر هنا فور تسليمها — لا شيء مُختلق ولا شيء مُستعار.',
+    'work.empty.cta': 'ابدأ مشروعاً',
+    'work.cut.title': 'إيقاع وقطع',
+    'work.cut.note': 'مونتاج · إيقاع · تلوين',
+    'work.motion.title': 'حركة وصورة',
+    'work.motion.note': 'ثلاثي الأبعاد · تايبو حركي · مؤثرات',
+    'work.sound.title': 'صوت وأداء',
+    'work.sound.note': 'تعليق · عربي فرنسي إنجليزي',
+
+    'process.lead': 'محرك واحد.',
+    'process.accent': 'خمس حركات.',
+    'process.1.title': 'موجز مباشر',
+    'process.1.desc':
+      'تتحدث مباشرة مع المونتير ومصمم الموشن وصاحب الصوت. النبرة والإيقاع والصوت تُحدد في جلسة واحدة. بلا وسطاء.',
+    'process.2.title': 'إيقاع وقطع',
+    'process.2.desc':
+      'لقطات مقصوصة على الإطار بدقة. مطابقة الإيقاع الموسيقي والسرد مُثبّتة في نسخة أولى صلبة.',
+    'process.3.title': 'حركة وصورة',
+    'process.3.desc':
+      'عناوين حركية ومؤثرات مخصصة وعناصر ثلاثية الأبعاد مدموجة في التايم لاين بتلوين واحد موحّد.',
+    'process.4.title': 'صوت وأداء',
+    'process.4.desc':
+      'تعليق صوتي يُسجّل داخلياً على سلسلة الاستوديو، مع تصميم صوتي وميكس نهائي.',
+    'process.5.title': 'التسليم النهائي',
+    'process.5.desc':
+      'ماسترد للبث والسينما والويب والسوشال. نسخ متعددة المقاسات في حزمة واحدة.',
+
+    'contact.lead': 'لنعمل',
+    'contact.accent': 'معاً.',
+    'contact.body':
+      'لديك مشروع في بالك؟ أخبرني بما تبنيه وسنضبط النبرة والإيقاع والصوت في جلسة مباشرة. بلا وسطاء وبلا تسليمات متقطعة.',
+    'contact.status': 'الباب مفتوح للمشاريع · 2026',
+    'form.name': 'اسمك',
+    'form.namePh': 'الاسم',
+    'form.email': 'البريد',
+    'form.discipline': 'التخصص',
+    'form.message': 'المشروع',
+    'form.messagePh': 'أخبرني عنه',
+    'form.submit': 'أرسل الموجز',
+    'form.sentTitle': 'الموجز جاهز',
+    'form.sentBody': 'سيُفتح تطبيق البريد لديك. إن لم يحدث، اكتب إلى',
+    'form.disc.video': 'مونتاج الفيديو',
+    'form.disc.motion': 'تصميم الموشن',
+    'form.disc.voice': 'التعليق الصوتي',
+    'form.disc.full': 'إنتاج كامل',
+
+    'footer.tagline': 'فيديو · موشن · صوت',
+    'footer.top': 'الأعلى',
+    'footer.motto': 'جسد واحد، ثلاثة رؤوس',
+
+    'splash.title': 'هيدرا سامو',
+    'splash.skip': 'انقر للتخطي',
+  },
+};
