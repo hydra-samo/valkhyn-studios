@@ -9,7 +9,7 @@ voice-over as one discipline. Dark bio-organic editorial: Mythic Emerald on Abys
 
 React 19 · TypeScript · Vite 6 · Tailwind v4 · GSAP · Lenis
 
-No backend, no router — one page, five chapters (hero → about → services → work → process → contact),
+No backend, no router — one page: hero → about → services → work → process → contact,
 trilingual **EN / FR / AR** with full RTL.
 
 ## Run
