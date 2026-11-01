@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CodedBackground } from './components/CodedBackground';
+import { useLenis } from './hooks/useLenis';
 import { Nav } from './components/Nav';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -12,6 +13,7 @@ import { Splash } from './components/Splash';
 
 export default function App() {
   const [booted, setBooted] = useState(false);
+  useLenis();
 
   return (
     <div className="grain relative min-h-[100dvh] bg-canvas text-text">
