@@ -2,7 +2,7 @@ export type Lang = 'en' | 'fr' | 'ar';
 export type Dict = Record<string, string>;
 
 /**
- * Every string the site renders. `en` is the source of truth — the other two
+ * Every string the site renders. `en` is the source of truth, the other two
  * are real translations, not placeholders. Keys never change shape between
  * languages, so the UI cannot half-translate.
  */
@@ -25,7 +25,7 @@ export const UI: Record<Lang, Dict> = {
     'hero.modeA': 'Video Editing & Motion',
     'hero.modeB': 'Voice-Over',
     'hero.blurb':
-      'One creator directing the cut, the motion and the voice — from first brief to final master.',
+      'One creator directing the cut, the motion and the voice, from first brief to final master.',
     'hero.ctaWork': 'Explore the work',
     'hero.ctaContact': 'Start a project',
     'hero.statA': 'One',
@@ -39,7 +39,7 @@ export const UI: Record<Lang, Dict> = {
     'about.accent': 'experiences',
     'about.tail': 'that connect.',
     'about.body':
-      'Every frame, every motion, every sound is designed to tell a story and evoke emotion. One creator directs the video head, the motion head and the voice head under a single will — so narrative intent survives from brief to master.',
+      'Every frame, every motion, every sound is designed to tell a story and evoke emotion. One creator directs the video head, the motion head and the voice head under a single will, so narrative intent survives from brief to master.',
 
     'services.lead': 'One body.',
     'services.accent': 'Three heads.',
@@ -61,7 +61,7 @@ export const UI: Record<Lang, Dict> = {
     'work.status': 'Commissions open · 2026',
     'work.empty.title': 'First case studies landing',
     'work.empty.body':
-      'The studio is taking on a small number of commissions. Real client work will be published here as it ships — nothing invented, nothing borrowed.',
+      'The studio is taking on a small number of commissions. Real client work will be published here as it ships. Nothing invented, nothing borrowed.',
     'work.empty.cta': 'Start a project',
     'work.cut.title': 'Rhythm & Cut',
     'work.cut.note': 'Editing · Pacing · Grade',
@@ -133,7 +133,7 @@ export const UI: Record<Lang, Dict> = {
     'hero.modeA': 'Montage & Motion',
     'hero.modeB': 'Voix-Off',
     'hero.blurb':
-      'Un seul créateur dirige le montage, le mouvement et la voix — du premier brief au master final.',
+      'Un seul créateur dirige le montage, le mouvement et la voix, du premier brief au master final.',
     'hero.ctaWork': 'Voir les projets',
     'hero.ctaContact': 'Démarrer un projet',
     'hero.statA': 'Un',
@@ -147,7 +147,7 @@ export const UI: Record<Lang, Dict> = {
     'about.accent': 'expériences',
     'about.tail': 'visuelles qui connectent.',
     'about.body':
-      "Chaque image, chaque mouvement, chaque son est pensé pour raconter une histoire et provoquer une émotion. Un seul créateur dirige la tête vidéo, la tête motion et la tête voix sous une volonté unique — l'intention narrative survit du brief au master.",
+      "Chaque image, chaque mouvement, chaque son est pensé pour raconter une histoire et provoquer une émotion. Un seul créateur dirige la tête vidéo, la tête motion et la tête voix sous une volonté unique. L'intention narrative survit du brief au master.",
 
     'services.lead': 'Un corps.',
     'services.accent': 'Trois têtes.',
@@ -169,7 +169,7 @@ export const UI: Record<Lang, Dict> = {
     'work.status': 'Ouvert aux projets · 2026',
     'work.empty.title': 'Premières études de cas à venir',
     'work.empty.body':
-      "Le studio accepte un nombre limité de projets. Les vrais travaux clients seront publiés ici dès leur livraison — rien d'inventé, rien d'emprunté.",
+      "Le studio accepte un nombre limité de projets. Les vrais travaux clients seront publiés ici dès leur livraison. Rien d'inventé, rien d'emprunté.",
     'work.empty.cta': 'Démarrer un projet',
     'work.cut.title': 'Rythme & Coupe',
     'work.cut.note': 'Montage · Rythme · Étalonnage',
@@ -241,7 +241,7 @@ export const UI: Record<Lang, Dict> = {
     'hero.modeA': 'مونتاج وموشن',
     'hero.modeB': 'تعليق صوتي',
     'hero.blurb':
-      'مبدع واحد يقود المونتاج والحركة والصوت — من أول موجز إلى النسخة النهائية.',
+      'مبدع واحد يقود المونتاج والحركة والصوت، من أول موجز إلى النسخة النهائية.',
     'hero.ctaWork': 'استكشف الأعمال',
     'hero.ctaContact': 'ابدأ مشروعاً',
     'hero.statA': 'واحد',
@@ -255,7 +255,7 @@ export const UI: Record<Lang, Dict> = {
     'about.accent': 'تجارب',
     'about.tail': 'بصرية تصنع اتصالاً.',
     'about.body':
-      'كل إطار وكل حركة وكل صوت مصمم ليحكي قصة ويصنع إحساساً. مبدع واحد يقود رأس الفيديو ورأس الموشن ورأس الصوت تحت إرادة واحدة — لتبقى نية الحكاية من الموجز حتى النسخة النهائية.',
+      'كل إطار وكل حركة وكل صوت مصمم ليحكي قصة ويصنع إحساساً. مبدع واحد يقود رأس الفيديو ورأس الموشن ورأس الصوت تحت إرادة واحدة، لتبقى نية الحكاية من الموجز حتى النسخة النهائية.',
 
     'services.lead': 'جسد واحد.',
     'services.accent': 'ثلاثة رؤوس.',
@@ -277,7 +277,7 @@ export const UI: Record<Lang, Dict> = {
     'work.status': 'الباب مفتوح للمشاريع · 2026',
     'work.empty.title': 'أول دراسات الحالة قادمة',
     'work.empty.body':
-      'الاستوديو يستقبل عدداً محدوداً من المشاريع. الأعمال الحقيقية للعملاء ستُنشر هنا فور تسليمها — لا شيء مُختلق ولا شيء مُستعار.',
+      'الاستوديو يستقبل عدداً محدوداً من المشاريع. الأعمال الحقيقية للعملاء ستُنشر هنا فور تسليمها. لا شيء مُختلق ولا شيء مُستعار.',
     'work.empty.cta': 'ابدأ مشروعاً',
     'work.cut.title': 'إيقاع وقطع',
     'work.cut.note': 'مونتاج · إيقاع · تلوين',
@@ -341,7 +341,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.agent.attach': "Attach files…",
     'console.agent.buildHint': "Describe the change you want built.",
     'console.agent.computerUse': "Computer Use",
-    'console.agent.empty': "Ask for changes while browsing any panel — edits land on the site live.",
+    'console.agent.empty': "Ask for changes while browsing any panel, edits land on the site live.",
     'console.agent.freeModels': "Zen free models",
     'console.agent.mcps': "MCP Servers",
     'console.agent.newSession': "New session",
@@ -351,7 +351,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.agent.plugins': "Plugins",
     'console.agent.send': "Send message",
     'console.agent.skills': "Skills",
-    'console.atm.desc': "The living layer behind every section — tuned in real time.",
+    'console.atm.desc': "The living layer behind every section, tuned in real time.",
     'console.atm.engine': "Atmosphere Engine",
     'console.atm.engineHint': "All video layers behind the content",
     'console.atm.grain': "Film Grain",
@@ -361,7 +361,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.atm.title': "Atmosphere",
     'console.bulk.desc': "Replace the project list from a projects.json export",
     'console.bulk.title': "Bulk Import",
-    'console.content.desc': "Import section files, publish projects — every change lands live.",
+    'console.content.desc': "Import section files, publish projects, every change lands live.",
     'console.content.title': "Content & Imports",
     'console.fBrief': "Client brief",
     'console.fCategory': "Category",
@@ -398,7 +398,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.openSite': "Open Site",
     'console.publish': "Publish to Site",
     'console.published': "Published Work",
-    'console.realNote': "Real work only — files land in public/work/<id>/ and publish immediately.",
+    'console.realNote': "Real work only, files land in public/work/<id>/ and publish immediately.",
     'console.subtitle': "Studio Console",
   },
   fr: {
@@ -406,7 +406,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.agent.attach': "Joindre des fichiers…",
     'console.agent.buildHint': "Décrivez le changement à construire.",
     'console.agent.computerUse': "Usage ordinateur",
-    'console.agent.empty': "Demandez des changements en naviguant dans chaque panneau — les edits arrivent en direct.",
+    'console.agent.empty': "Demandez des changements en naviguant dans chaque panneau, les edits arrivent en direct.",
     'console.agent.freeModels': "Modèles Zen gratuits",
     'console.agent.mcps': "Serveurs MCP",
     'console.agent.newSession': "Nouvelle session",
@@ -416,7 +416,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.agent.plugins': "Plugins",
     'console.agent.send': "Envoyer",
     'console.agent.skills': "Compétences",
-    'console.atm.desc': "La couche vivante derrière chaque section — ajustée en temps réel.",
+    'console.atm.desc': "La couche vivante derrière chaque section, ajustée en temps réel.",
     'console.atm.engine': "Moteur d’atmosphère",
     'console.atm.engineHint': "Toutes les couches vidéo derrière le contenu",
     'console.atm.grain': "Grain de film",
@@ -426,7 +426,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.atm.title': "Atmosphère",
     'console.bulk.desc': "Remplacer la liste de projets depuis un export projects.json",
     'console.bulk.title': "Import en masse",
-    'console.content.desc': "Importez les fichiers de section, publiez des projets — chaque changement est live.",
+    'console.content.desc': "Importez les fichiers de section, publiez des projets, chaque changement est live.",
     'console.content.title': "Contenu & Imports",
     'console.fBrief': "Brief client",
     'console.fCategory': "Catégorie",
@@ -463,7 +463,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.openSite': "Voir le site",
     'console.publish': "Publier sur le site",
     'console.published': "Travaux publiés",
-    'console.realNote': "Travaux réels uniquement — les fichiers arrivent dans public/work/<id>/ et publient immédiatement.",
+    'console.realNote': "Travaux réels uniquement, les fichiers arrivent dans public/work/<id>/ et publient immédiatement.",
     'console.subtitle': "Console Studio",
   },
   ar: {
@@ -471,7 +471,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.agent.attach': "إرفاق ملفات…",
     'console.agent.buildHint': "صف التغيير الذي تريد تنفيذه.",
     'console.agent.computerUse': "استخدام الحاسوب",
-    'console.agent.empty': "اطلب تغييرات أثناء تصفح أي لوحة — التعديلات تصل مباشرة.",
+    'console.agent.empty': "اطلب تغييرات أثناء تصفح أي لوحة, التعديلات تصل مباشرة.",
     'console.agent.freeModels': "نماذج Zen المجانية",
     'console.agent.mcps': "خوادم MCP",
     'console.agent.newSession': "جلسة جديدة",
@@ -481,7 +481,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.agent.plugins': "الإضافات",
     'console.agent.send': "إرسال",
     'console.agent.skills': "المهارات",
-    'console.atm.desc': "الطبقة الحية خلف كل قسم — تُضبط في الوقت الفعلي.",
+    'console.atm.desc': "الطبقة الحية خلف كل قسم, تُضبط في الوقت الفعلي.",
     'console.atm.engine': "محرك الأجواء",
     'console.atm.engineHint': "كل طبقات الفيديو خلف المحتوى",
     'console.atm.grain': "حبيبات الفيلم",
@@ -491,7 +491,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.atm.title': "الأجواء",
     'console.bulk.desc': "استبدال قائمة المشاريع من ملف projects.json",
     'console.bulk.title': "استيراد جماعي",
-    'console.content.desc': "استورد ملفات الأقسام وانشر المشاريع — كل تغيير يظهر فوراً.",
+    'console.content.desc': "استورد ملفات الأقسام وانشر المشاريع, كل تغيير يظهر فوراً.",
     'console.content.title': "المحتوى والاستيراد",
     'console.fBrief': "طلب العميل",
     'console.fCategory': "الفئة",
@@ -528,7 +528,7 @@ const CONSOLE_UI: Record<Lang, Dict> = {
     'console.openSite': "فتح الموقع",
     'console.publish': "انشر على الموقع",
     'console.published': "الأعمال المنشورة",
-    'console.realNote': "أعمال حقيقية فقط — الملفات تُحفظ في public/work/<id>/ وتُنشر فوراً.",
+    'console.realNote': "أعمال حقيقية فقط, الملفات تُحفظ في public/work/<id>/ وتُنشر فوراً.",
     'console.subtitle': "لوحة الاستوديو",
   },
 };

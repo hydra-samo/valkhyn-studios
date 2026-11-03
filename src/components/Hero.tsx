@@ -35,24 +35,24 @@ export const Hero: React.FC = () => {
       gsap.from('.hero-mark', {
         opacity: 0,
         scale: 1.06,
-        duration: 1.8,
+        duration: 0.95,
         ease: 'expo.out',
       });
       gsap.from(figure.current, {
         opacity: 0,
         y: 34,
         scale: 1.03,
-        duration: 1.5,
+        duration: 0.9,
         ease: 'expo.out',
-        delay: 0.1,
+        delay: 0.05,
       });
       gsap.from('.hero-in', {
         opacity: 0,
         y: 16,
-        duration: 1,
-        stagger: 0.07,
+        duration: 0.45,
+        stagger: 0.05,
         ease: 'power3.out',
-        delay: 0.35,
+        delay: 0.2,
       });
 
       // The figure settles slower than the page scrolls.
@@ -92,8 +92,8 @@ export const Hero: React.FC = () => {
         HYDRA
       </span>
 
-      {/* Top strip: role on the left, availability on the right */}
-      <div className="hero-in relative z-20 flex items-start justify-between gap-6 px-5 pt-16 sm:px-8 md:pt-20">
+      {/* Top strip: role */}
+      <div className="hero-in relative z-20 flex items-start gap-6 px-5 pt-16 sm:px-8 md:pt-20">
         <div className="flex flex-col gap-0.5">
           <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.26em] text-accent">
             {t('hero.roleA')}
@@ -102,12 +102,6 @@ export const Hero: React.FC = () => {
             {t('hero.roleB')}
           </span>
         </div>
-        <span className="flex items-center gap-2">
-          <span className="font-sans text-[9px] font-medium uppercase tracking-[0.22em] text-white/55">
-            {t('hero.open')}
-          </span>
-          <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
-        </span>
       </div>
 
       {/* The figure: in flow on phones, poster ground from md up */}
@@ -122,8 +116,12 @@ export const Hero: React.FC = () => {
             aria-hidden="true"
           />
           <img
-            src={assetUrl('portrait/hero-figure.png')}
-            alt="Bendali Issam Eddine — Hydra Samo"
+            src={assetUrl('portrait/hero-figure.webp')}
+            alt="Bendali Issam Eddine, Hydra Samo"
+            width={1000}
+            height={972}
+            fetchPriority="high"
+            decoding="async"
             className="relative h-auto w-auto max-h-[38vh] object-contain md:max-h-[78vh] md:w-[48vw] md:max-w-[700px]"
             style={{
               maskImage:
