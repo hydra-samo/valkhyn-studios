@@ -5,6 +5,9 @@ Operating rules for this repo. It is a standalone site: no BRAND/ tree, no v1.x 
 ## Run
 
 - `npm ci` then `npm run dev` — dev server on **port 3100** (`host 0.0.0.0`), not Vite's 5173.
+- `http://<host>:3100/dashboard` — Studio Console (content imports, repo files, atmosphere,
+  agent drawer). Dev server only: its `/api` lives in `studio.plugin.mjs` and is not built
+  into `dist/`, so the route is inert on GitHub Pages.
 - `npm run build` — `tsc --noEmit` + `vite build` → `dist/`.
 - `npm run lint` — typecheck only. Both must be clean before pushing; the deploy workflow runs the build.
 - Deploy: `.github/workflows/deploy.yml` publishes `dist/` to GitHub Pages on every push to `main`.
