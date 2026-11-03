@@ -22,8 +22,12 @@ export const About: React.FC = () => {
           <div className="bezel portrait-lock">
             <div className="bezel-core relative aspect-[4/5] overflow-hidden">
               <img
-                src={assetUrl('portrait/about.png')}
+                src={assetUrl('portrait/about.webp')}
                 alt="Hydra Samo portrait"
+                width={1000}
+                height={1250}
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover object-[35%_50%]"
                 draggable={false}
               />

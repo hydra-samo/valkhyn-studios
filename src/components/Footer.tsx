@@ -2,9 +2,10 @@ import React from 'react';
 import { HydraLogo } from './HydraLogo';
 import { EMAIL } from '../data/content';
 import { useLanguage } from '../i18n/LanguageContext';
+import { LEGAL_PAGES } from '../i18n/legal';
 
 export const Footer: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const year = new Date().getFullYear();
 
   return (
@@ -43,6 +44,20 @@ export const Footer: React.FC = () => {
           <p className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/50">
             © {year} Bendali Issam Eddine · All rights reserved
           </p>
+          <div className="flex items-center gap-5">
+            <a
+              href="#legal"
+              className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/50 transition-colors duration-300 hover:text-accent"
+            >
+              {LEGAL_PAGES[lang].legal.linkLegal}
+            </a>
+            <a
+              href="#privacy"
+              className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/50 transition-colors duration-300 hover:text-accent"
+            >
+              {LEGAL_PAGES[lang].privacy.linkPrivacy}
+            </a>
+          </div>
           <p className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/50">
             {t('footer.motto')}
           </p>

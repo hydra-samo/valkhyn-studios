@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { CodedBackground } from './components/CodedBackground';
 import { useLenis } from './hooks/useLenis';
 import { Nav } from './components/Nav';
@@ -10,8 +10,16 @@ import { Process } from './components/Process';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { Splash } from './components/Splash';
+import { Legal, type LegalKind } from './components/Legal';
 
 const Dashboard = lazy(() => import('./dashboard/Dashboard'));
+
+/** Legal pages are hash routes: static hosting, no server rewrite needed. */
+const legalRoute = (): LegalKind | null => {
+  if (typeof window === 'undefined') return null;
+  const hash = window.location.hash.replace(/^#\/?/, '');
+  return hash === 'legal' || hash === 'privacy' ? hash : null;
+};
 
 export default function App() {
   // Studio console — same always-on server, own route. Dev-server only: the
@@ -28,7 +36,16 @@ export default function App() {
 
 function Site() {
   const [booted, setBooted] = useState(false);
+  const [legal, setLegal] = useState<LegalKind | null>(legalRoute);
   useLenis();
+
+  useEffect(() => {
+    const sync = () => setLegal(legalRoute());
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
+  }, []);
+
+  if (legal) return <Legal kind={legal} />;
 
   return (
     <div className="grain relative min-h-[100dvh] bg-canvas text-text">
