@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { CodedBackground } from './components/CodedBackground';
 import { useLenis } from './hooks/useLenis';
 import { Nav } from './components/Nav';
@@ -11,7 +11,22 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { Splash } from './components/Splash';
 
+const Dashboard = lazy(() => import('./dashboard/Dashboard'));
+
 export default function App() {
+  // Studio console — same always-on server, own route. Dev-server only: the
+  // /api middleware that backs it (studio.plugin.mjs) does not ship in dist/.
+  if (typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '').endsWith('/dashboard')) {
+    return (
+      <Suspense fallback={null}>
+        <Dashboard />
+      </Suspense>
+    );
+  }
+  return <Site />;
+}
+
+function Site() {
   const [booted, setBooted] = useState(false);
   useLenis();
 
