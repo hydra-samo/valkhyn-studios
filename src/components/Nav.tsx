@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ValkhynLogo } from './ValkhynLogo';
+import { ValkhynLockup } from './ValkhynLockup';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLanguage } from '../i18n/LanguageContext';
 import { cn } from '../lib/utils';
@@ -56,11 +56,8 @@ export const Nav: React.FC = () => {
               : 'border border-white/[0.06] bg-white/[0.02] backdrop-blur-md'
           )}
         >
-          <a href="#home" className="flex items-center gap-2">
-            <ValkhynLogo className="h-4 w-4 text-accent" />
-            <span className="whitespace-nowrap font-display text-[11px] font-bold uppercase tracking-[0.14em] text-white">
-              VALKHYN
-            </span>
+          <a href="#home" className="flex items-center gap-2" aria-label="VALKHYN — home">
+            <ValkhynLockup className="h-[15px] w-auto text-white sm:h-[17px]" />
           </a>
 
           <nav className="hidden items-center gap-6 lg:flex">

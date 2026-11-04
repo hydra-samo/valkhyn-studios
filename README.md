@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://valkhyn-samo.github.io/VALKHYN-SAMO-LABS/">
+  <a href="https://hydra-samo.github.io/valkhyn-studios/">
     <img src="./public/valkhyn-mark.svg" width="96" alt="VALKHYN" />
   </a>
 </p>
@@ -20,7 +20,7 @@
 This repository is the **production website**, the self-contained tree that GitHub
 Actions builds and deploys to GitHub Pages:
 
-**https://valkhyn-samo.github.io/VALKHYN-SAMO-LABS/**
+**https://hydra-samo.github.io/valkhyn-studios/**
 
 The site is one page in six chapters — hero → about → services → work → process →
 contact — written in **EN / FR / AR** with full RTL. Stack: React 19, TypeScript
@@ -46,7 +46,7 @@ Both must be clean before pushing — the deploy workflow runs the same build.
 
 `.github/workflows/deploy.yml` publishes `dist/` to GitHub Pages on every push to
 `main` (and on manual dispatch). `vite.config.ts` keeps `base: './'` so assets
-resolve from the `/VALKHYN-SAMO-LABS/` subpath.
+resolve from the `/valkhyn-studios/` subpath.
 
 ## Configuration
 
