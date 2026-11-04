@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useDeviceTier } from '../hooks/useDeviceTier';
 
 interface Particle {
   x: number;
@@ -13,32 +14,22 @@ interface Particle {
   tint: number;
 }
 
-/** Cheap device tier check — brand performance budget (DESIGN.md). */
-const isLowPower = () => {
-  const cores = navigator.hardwareConcurrency ?? 4;
-  const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
-  return cores <= 4 || mem <= 4 || window.matchMedia('(pointer: coarse)').matches;
-};
-
 /**
  * CodedBackground — the site's continuous motion layer.
  *
  * Everything is drawn: no image, no video. A single fixed canvas renders three
- * stacked systems on top of each other:
+ * stacked systems: an aurora of drifting radial gradients, particles tracing a
+ * sine flow field (faded each frame so they accumulate into silk trails), and
+ * slow upward dust.
  *
- *   1. aurora  — three large radial gradients drifting on Lissajous paths
- *   2. silk    — particles tracing a layered sine flow field; the canvas is
- *                faded (not cleared) each frame so the paths accumulate into
- *                long silk trails
- *   3. dust    — slow upward motes that give the field depth
- *
- * It is mounted once, fixed behind the page, so the motion runs continuously
- * as the site scrolls. Reduced-motion users get one static frame; the loop
- * pauses when the tab is hidden.
+ * Reduced-motion users get one static frame, the loop pauses on a hidden tab,
+ * and particle count / dust / DPR / aurora blobs all step down with the device
+ * tier (`useDeviceTier`).
  */
 export const CodedBackground: React.FC<{ className?: string }> = ({ className }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number | null>(null);
+  const tier = useDeviceTier();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,7 +38,8 @@ export const CodedBackground: React.FC<{ className?: string }> = ({ className })
     if (!ctx) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const low = isLowPower();
+    const low = tier === 'low';
+    const mid = tier === 'medium';
 
     let w = 0;
     let h = 0;
@@ -74,14 +66,15 @@ export const CodedBackground: React.FC<{ className?: string }> = ({ className })
 
     const build = () => {
       const area = w * h;
-      const count = Math.round(
-        Math.min(low ? 90 : 260, Math.max(low ? 40 : 90, area / (low ? 16000 : 7000)))
-      );
+      const max = low ? 90 : mid ? 170 : 260;
+      const min = low ? 40 : mid ? 70 : 90;
+      const divisor = low ? 16000 : mid ? 9500 : 7000;
+      const count = Math.round(Math.min(max, Math.max(min, area / divisor)));
       particles.length = 0;
       for (let i = 0; i < count; i++) particles.push(spawn());
 
       dust.length = 0;
-      const dustCount = low ? 24 : 70;
+      const dustCount = low ? 24 : mid ? 45 : 70;
       for (let i = 0; i < dustCount; i++) {
         dust.push({
           x: Math.random() * w,
@@ -94,7 +87,7 @@ export const CodedBackground: React.FC<{ className?: string }> = ({ className })
     };
 
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, low ? 1 : 1.5);
+      dpr = Math.min(window.devicePixelRatio || 1, low ? 1 : mid ? 1.25 : 1.5);
       w = canvas.clientWidth;
       h = canvas.clientHeight;
       canvas.width = Math.floor(w * dpr);
@@ -113,13 +106,19 @@ export const CodedBackground: React.FC<{ className?: string }> = ({ className })
 
     const aurora = (t: number) => {
       ctx.globalCompositeOperation = 'lighter';
-      const blobs = low
-        ? [{ cx: w * 0.55, cy: h * 0.45, r: h * 0.62 }]
-        : [
-            { cx: w * (0.5 + Math.sin(t * 0.09) * 0.18), cy: h * (0.46 + Math.cos(t * 0.07) * 0.12), r: h * 0.6 },
-            { cx: w * (0.22 + Math.cos(t * 0.06) * 0.1), cy: h * (0.72 + Math.sin(t * 0.08) * 0.08), r: h * 0.42 },
-            { cx: w * (0.82 + Math.sin(t * 0.11) * 0.08), cy: h * (0.3 + Math.cos(t * 0.05) * 0.1), r: h * 0.34 },
-          ];
+      const blobs =
+        low
+          ? [{ cx: w * 0.55, cy: h * 0.45, r: h * 0.62 }]
+          : mid
+            ? [
+                { cx: w * (0.5 + Math.sin(t * 0.09) * 0.18), cy: h * (0.46 + Math.cos(t * 0.07) * 0.12), r: h * 0.6 },
+                { cx: w * (0.78 + Math.cos(t * 0.06) * 0.1), cy: h * (0.35 + Math.sin(t * 0.08) * 0.08), r: h * 0.38 },
+              ]
+            : [
+                { cx: w * (0.5 + Math.sin(t * 0.09) * 0.18), cy: h * (0.46 + Math.cos(t * 0.07) * 0.12), r: h * 0.6 },
+                { cx: w * (0.22 + Math.cos(t * 0.06) * 0.1), cy: h * (0.72 + Math.sin(t * 0.08) * 0.08), r: h * 0.42 },
+                { cx: w * (0.82 + Math.sin(t * 0.11) * 0.08), cy: h * (0.3 + Math.cos(t * 0.05) * 0.1), r: h * 0.34 },
+              ];
 
       for (const b of blobs) {
         const g = ctx.createRadialGradient(b.cx, b.cy, 0, b.cx, b.cy, b.r);
@@ -272,7 +271,7 @@ export const CodedBackground: React.FC<{ className?: string }> = ({ className })
       window.removeEventListener('pointerout', onLeave);
       document.removeEventListener('visibilitychange', onVis);
     };
-  }, []);
+  }, [tier]);
 
   return (
     <canvas

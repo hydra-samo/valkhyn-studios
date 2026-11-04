@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HydraLogo } from './HydraLogo';
+import { ValkhynLogo } from './ValkhynLogo';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLanguage } from '../i18n/LanguageContext';
 import { cn } from '../lib/utils';
@@ -57,9 +57,9 @@ export const Nav: React.FC = () => {
           )}
         >
           <a href="#home" className="flex items-center gap-2">
-            <HydraLogo className="h-4 w-4 text-accent" />
+            <ValkhynLogo className="h-4 w-4 text-accent" />
             <span className="whitespace-nowrap font-display text-[11px] font-bold uppercase tracking-[0.14em] text-white">
-              Hydra Samo
+              VALKHYN
             </span>
           </a>
 

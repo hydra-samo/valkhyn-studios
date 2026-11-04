@@ -1,0 +1,41 @@
+{
+  "master": false,
+  "grain": false,
+  "layers": {
+    "haze": {
+      "enabled": true,
+      "opacity": 1,
+      "blend": "normal"
+    },
+    "env-secondary": {
+      "enabled": true,
+      "opacity": 1,
+      "blend": "screen"
+    },
+    "env-primary": {
+      "enabled": true,
+      "opacity": 1,
+      "blend": "screen"
+    },
+    "dust": {
+      "enabled": true,
+      "opacity": 1,
+      "blend": "screen"
+    },
+    "wisp": {
+      "enabled": true,
+      "opacity": 1,
+      "blend": "overlay"
+    },
+    "geometry-primary": {
+      "enabled": false,
+      "opacity": 1,
+      "blend": "screen"
+    },
+    "env-fragment": {
+      "enabled": false,
+      "opacity": 1,
+      "blend": "screen"
+    }
+  }
+}

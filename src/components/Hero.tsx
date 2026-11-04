@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
 import { MagneticButton } from './MagneticButton';
-import { assetUrl } from '../lib/utils';
+
 import { useLanguage } from '../i18n/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -17,7 +17,7 @@ const STATS = [
 /**
  * Hero — poster composition.
  *
- * The HYDRA wordmark is set enormous behind the figure and bleeds off both
+ * The VALKHYN wordmark is set enormous behind the figure and bleeds off both
  * edges, the portrait stands in front of it, and the name sits over the left
  * shoulder with the counts stacked on the right. Nothing floats above it.
  */
@@ -89,7 +89,7 @@ export const Hero: React.FC = () => {
           color: 'transparent',
         }}
       >
-        HYDRA
+        VALKHYN
       </span>
 
       {/* Top strip: role on the left, availability on the right */}
@@ -110,32 +110,8 @@ export const Hero: React.FC = () => {
         </span>
       </div>
 
-      {/* The figure: in flow on phones, poster ground from md up */}
-      <div
-        ref={figure}
-        className="portrait-lock relative z-10 mt-2 flex w-full justify-center md:pointer-events-none md:absolute md:inset-0 md:mt-0 md:items-end"
-      >
-        <div className="relative flex items-end justify-center md:ml-[8%]">
-          <div
-            className="pointer-events-none absolute bottom-[6%] left-1/2 h-[60%] w-[80%] -translate-x-1/2 rounded-full blur-[120px]"
-            style={{ background: 'rgba(16,185,129,0.09)' }}
-            aria-hidden="true"
-          />
-          <img
-            src={assetUrl('portrait/hero-figure.png')}
-            alt="Bendali Issam Eddine — Hydra Samo"
-            className="relative h-auto w-auto max-h-[38vh] object-contain md:max-h-[78vh] md:w-[48vw] md:max-w-[700px]"
-            style={{
-              maskImage:
-                'linear-gradient(to bottom, #000 62%, rgba(0,0,0,0.7) 86%, transparent 100%)',
-              WebkitMaskImage:
-                'linear-gradient(to bottom, #000 62%, rgba(0,0,0,0.7) 86%, transparent 100%)',
-              filter: 'drop-shadow(0 30px 80px rgba(0,0,0,0.65))',
-            }}
-            draggable={false}
-          />
-        </div>
-      </div>
+      {/* The figure: geometry asset placeholder */}
+      <div ref={figure} className="portrait-lock relative z-10 mt-2 flex w-full justify-center md:pointer-events-none md:absolute md:inset-0 md:mt-0 md:items-end" />
 
       {/* Name block and counts */}
       <div className="relative z-20 mt-auto px-5 pb-5 sm:px-8 sm:pb-7">
