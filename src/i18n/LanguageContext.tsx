@@ -3,7 +3,7 @@ import { Lang, UI } from './translations';
 
 export type { Lang };
 
-const LANG_KEY = 'hydra-lang';
+const LANG_KEY = 'valkhyn-lang';
 const LANGS: Lang[] = ['en', 'fr', 'ar'];
 
 function detectLang(): Lang {

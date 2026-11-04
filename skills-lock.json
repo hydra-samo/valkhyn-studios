@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "alpha-cutout": {
+      "source": "Moh4696/open-3d-skills",
+      "sourceType": "github",
+      "skillPath": "skills/alpha-cutout/SKILL.md",
+      "computedHash": "2b390628c65ec909f6306e0f5634857bbe9f692287e02e99b602eda32fa0b28c"
+    }
+  }
+}

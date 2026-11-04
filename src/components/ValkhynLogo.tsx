@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '../lib/utils';
 
-interface HydraLogoProps {
+interface ValkhynLogoProps {
   className?: string;
   variant?: 'fill' | 'outline';
 }
@@ -12,7 +12,7 @@ const HEAD_PATH =
 const CORE_PATH =
   'M 50.00 33.00 L 64.72 41.50 L 64.72 58.50 L 50.00 67.00 L 35.28 58.50 L 35.28 41.50 Z';
 
-export const HydraLogo: React.FC<HydraLogoProps> = ({ className, variant = 'fill' }) => {
+export const ValkhynLogo: React.FC<ValkhynLogoProps> = ({ className, variant = 'fill' }) => {
   const isOutline = variant === 'outline';
   return (
     <svg

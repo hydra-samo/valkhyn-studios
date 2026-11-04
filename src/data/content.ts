@@ -14,4 +14,4 @@ export const DISCIPLINES: Discipline[] = [
 export const PROCESS_STEPS = [{ index: '1' }, { index: '2' }, { index: '3' }, { index: '4' }, { index: '5' }];
 
 /** Single source of truth for the contact address. */
-export const EMAIL = 'hello@hydrasamo.com';
+export const EMAIL = 'hello@valkyhyn.com';

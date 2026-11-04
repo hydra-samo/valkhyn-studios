@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── HYDRA SAMO palette (brand-locked, BRAND/DESIGN.md) ────────────── */
+  /* ── VALKHYN palette (brand-locked, BRAND/DESIGN.md) ────────────── */
   --color-canvas: #060c09;
   --color-canvas-deep: #0b1410;
   --color-canvas-card: #0b1410;
@@ -156,7 +156,9 @@
   }
 }
 
-/* Film grain — fixed, pointer-events none, never on scrolling containers */
+/* Film grain — fixed, pointer-events none, never on scrolling containers.
+   Disabled on low-tier devices: a full-viewport feTurbulence re-rasterises the
+   layer on every repaint, which is what weak GPUs cannot afford. */
 .grain::after {
   content: '';
   position: fixed;
@@ -166,6 +168,11 @@
   opacity: 0.028;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 256px 256px;
+}
+
+/* Low-tier devices drop the grain overlay (see useDeviceTier) */
+[data-quality='low'] .grain::after {
+  display: none;
 }
 
 /* Custom scrollbar */

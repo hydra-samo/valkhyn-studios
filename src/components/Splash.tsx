@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HydraLogo } from './HydraLogo';
+import { ValkhynLogo } from './ValkhynLogo';
 import { useLanguage } from '../i18n/LanguageContext';
 
 interface SplashProps {
@@ -56,7 +56,7 @@ export const Splash: React.FC<SplashProps> = ({ onComplete }) => {
       />
 
       <div className="relative z-10 flex flex-col items-center">
-        <HydraLogo className="h-12 w-12 text-accent sm:h-14 sm:w-14" />
+        <ValkhynLogo className="h-12 w-12 text-accent sm:h-14 sm:w-14" />
         <span className="mt-5 font-display text-sm font-bold uppercase tracking-[0.35em] text-white sm:text-base">
           {t('splash.title')}
         </span>

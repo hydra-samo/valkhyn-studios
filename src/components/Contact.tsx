@@ -63,12 +63,6 @@ export const Contact: React.FC = () => {
               </a>
             </Reveal>
 
-            <Reveal delay={0.16} className="md:mt-auto">
-              <p className="mt-12 flex items-center gap-2 font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-white/50 md:mt-0">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
-                {t('contact.status')}
-              </p>
-            </Reveal>
           </div>
 
           {/* Right — form */}
