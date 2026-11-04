@@ -16,7 +16,7 @@ Operating rules for this repo. It is a standalone site: no BRAND/ tree, no v1.x 
 
 - **Relative imports only** (`../components/Nav`). There is no `@` alias.
 - Tailwind v4, CSS-first in `src/index.css`. Use `cn()` from `src/lib/utils.ts` for conditional classes; use `assetUrl()` for anything under `public/`.
-- `vite.config.ts` has `base: './'` — keep it, the site is served from a `/VALKHYN-SAMO-LABS/` subpath.
+- `vite.config.ts` has `base: './'` — keep it, the site is served from a `/valkhyn-studios/` subpath.
 - Chapters are one component each in `src/components/`; all copy lives in `src/i18n/translations.ts` (EN / FR / AR, full RTL).
 
 ## Content
