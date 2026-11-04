@@ -327,7 +327,7 @@ export const UI: Record<Lang, Dict> = {
     'footer.top': 'الأعلى',
     'footer.motto': 'جسد واحد، ثلاثة رؤوس',
 
-    'splash.title': 'هيدرا سامو',
+    'splash.title': 'VALKHYN',
     'splash.skip': 'انقر للتخطي',
   },
 };

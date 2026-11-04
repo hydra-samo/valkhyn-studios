@@ -1,4 +1,4 @@
-# AGENTS.md — VALKHYN LABS portfolio
+# AGENTS.md — VALKHYN portfolio
 
 Operating rules for this repo. It is a standalone site: no BRAND/ tree, no v1.x snapshots.
 
@@ -26,7 +26,7 @@ Operating rules for this repo. It is a standalone site: no BRAND/ tree, no v1.x 
 
 ## Brand
 
-- Mark: icon only, single SVG, `ValkhynLogo.tsx`, frozen geometry (optical frame `viewBox="11 2.94 78 78"`). No text, initials, borders; no baked-in glow; **no spinning** — glow lives in CSS utilities only.
+- Mark: `ValkhynLogo.tsx` (icon only, frozen geometry `viewBox="11 2.94 78 78"`). Navbar lockup: `ValkhynLockup.tsx` — generated from the certified `BRAND/ASSETS/LOGO_LOCKUPS` horizontal asset. No text, initials, borders; no baked-in glow; **no spinning** — glow lives in CSS utilities only.
 - Palette: emerald `#10b981` / `#059669` / `#34d399` as **light**, on abyssal slate `#060c09` / `#0b1410`. Black must stay dominant; never a green wash or green panels.
 - Forbidden: neon cyan, blue gradients, `// SECTION` eyebrow pills, numbered SaaS badges, comparison tables, location badges, emoji in UI copy.
 - Typography: Space Grotesk (display), Manrope (body), IBM Plex Sans Arabic (AR), JetBrains Mono (readouts only).
