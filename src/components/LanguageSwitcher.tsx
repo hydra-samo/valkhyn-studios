@@ -31,7 +31,7 @@ export const LanguageSwitcher: React.FC<{ className?: string }> = ({ className }
           className={cn(
             'md3-state-layer flex min-h-11 items-center rounded-full px-3 font-sans text-[10px] font-semibold tracking-[0.12em] transition-colors duration-200 lg:min-h-0 lg:px-2.5 lg:py-1',
             lang === o.id
-              ? 'bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]'
+              ? 'bg-[var(--chip-active)] text-[var(--md-sys-color-primary)]'
               : 'text-[var(--md-sys-color-on-surface-soft)] hover:text-[var(--md-sys-color-on-surface)]'
           )}
         >

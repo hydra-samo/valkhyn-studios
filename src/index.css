@@ -51,6 +51,20 @@
   --md-sys-elevation-1: 0 1px 0 rgba(255, 255, 255, 0.04);
   --md-sys-elevation-2: 0 8px 24px rgba(0, 0, 0, 0.32);
 
+  /* ── Liquid-glass layer — merged into the flat editorial surfaces ───
+     Translucency, a bright top edge and a layered shadow give depth; the
+     chapter bands themselves stay flat so the glass reads as chrome, not
+     decoration. */
+  --glass-tint: rgba(11, 20, 16, 0.72);
+  --glass-edge: rgba(255, 255, 255, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.07);
+  --glass-blur: 20px;
+  --glass-shadow: 0 16px 44px rgba(0, 0, 0, 0.42), 0 3px 10px rgba(0, 0, 0, 0.26);
+  --nav-glass: rgba(6, 12, 9, 0.88);
+  --nav-edge: rgba(255, 255, 255, 0.08);
+  --chip-active: rgba(243, 244, 246, 0.1);
+  --portrait-glass: rgba(6, 12, 9, 0.24);
+
   --md-sys-state-hover: rgba(243, 244, 246, 0.06);
   --md-sys-state-pressed: rgba(243, 244, 246, 0.1);
   --md-sys-state-focus: rgba(16, 185, 129, 0.35);
@@ -75,24 +89,24 @@
      without turning the page into a hard photocopy. */
   :root[data-theme='light'] {
     color-scheme: light;
-    --color-canvas: #f5f7f4;
-    --color-canvas-deep: #e9ede9;
-    --color-canvas-card: #fbfcfa;
-    --color-accent: #0a7a58;
+    --color-canvas: #e2e5e1;
+    --color-canvas-deep: #d7dbd7;
+    --color-canvas-card: #e7e9e6;
+    --color-accent: #086549;
     --color-accent-soft: #34d399;
-    --color-accent-deep: #059669;
+    --color-accent-deep: #064a35;
     --color-accent-dark: #063c2c;
     --color-text: #2b3830;
     --color-text-muted: #506158;
-    --md-sys-color-primary: #0a7a58;
-    --md-sys-color-primary-hover: #086549;
+    --md-sys-color-primary: #086549;
+    --md-sys-color-primary-hover: #064f3b;
     --md-sys-color-on-primary: #f7f9f6;
     --md-sys-color-primary-container: #dfeee7;
     --md-sys-color-on-primary-container: #0d4635;
-    --md-sys-color-surface: #f5f7f4;
-    --md-sys-color-surface-container-low: #fafbf9;
-    --md-sys-color-surface-container: #fbfcfa;
-    --md-sys-color-surface-container-high: #e9ede9;
+    --md-sys-color-surface: #e2e5e1;
+    --md-sys-color-surface-container-low: #e6e8e5;
+    --md-sys-color-surface-container: #e9ebe8;
+    --md-sys-color-surface-container-high: #d7dbd7;
     --md-sys-color-on-surface: #2b3830;
     --md-sys-color-on-surface-variant: #3f4f46;
     --md-sys-color-on-surface-soft: #3b4a41;
@@ -102,6 +116,16 @@
     --md-sys-color-scrim: rgba(24, 34, 28, 0.3);
     --md-sys-elevation-1: 0 1px 2px rgba(43, 56, 48, 0.06);
     --md-sys-elevation-2: 0 8px 24px rgba(43, 56, 48, 0.1);
+
+    --glass-tint: rgba(246, 248, 245, 0.78);
+    --glass-edge: rgba(255, 255, 255, 0.8);
+    --glass-highlight: rgba(255, 255, 255, 0.72);
+    --glass-shadow: 0 16px 38px rgba(43, 56, 48, 0.13), 0 3px 10px rgba(43, 56, 48, 0.08);
+    --nav-glass: rgba(230, 233, 228, 0.95);
+    --nav-edge: rgba(43, 56, 48, 0.1);
+    --chip-active: rgba(43, 56, 48, 0.08);
+    --portrait-glass: rgba(255, 255, 255, 0.26);
+
     --md-sys-state-hover: rgba(43, 56, 48, 0.05);
     --md-sys-state-pressed: rgba(43, 56, 48, 0.09);
 
@@ -114,7 +138,7 @@
     --md-sys-color-inverse-on-primary: #f7f9f6;
     --md-sys-color-inverse-outline: rgba(11, 20, 16, 0.22);
     --md-sys-color-inverse-outline-variant: rgba(11, 20, 16, 0.1);
-    --md-sys-color-inverse-surface: rgba(255, 255, 255, 0.9);
+    --md-sys-color-inverse-surface: rgba(226, 229, 225, 0.92);
   }
 
   html {
@@ -250,11 +274,22 @@
      slightly so the visible frame edges keep their detail. */
   .hero-video {
     filter: brightness(1);
+    object-fit: cover;
+    object-position: 50% 50%;
   }
 
+  /* Tall, narrow viewports crop a 16:9 reel heavily under cover. Lift the
+     focal point so the studio action stays inside the rounded frame. */
   @media (max-width: 1024px) {
     .hero-video {
       filter: brightness(1.08);
+      object-position: 50% 38%;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-video {
+      object-position: 50% 30%;
     }
   }
 
@@ -305,6 +340,9 @@
     border: 1px solid var(--md-sys-color-inverse-outline);
     border-radius: var(--shape-editorial-sm);
     padding: 24px;
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--glass-shadow);
     transition: background-color 240ms ease, border-color 240ms ease;
   }
 
@@ -415,21 +453,82 @@
 
   /* Operator portrait: the cutout fills the frame width and is lifted so only
      part of the head and shoulder breaks out of the top. The sides stay inside
-     the canvas; cover crops any excess internally. The rounded hairline frame
-     is kept with a soft token shadow, while the lower edge feathers into the
-     band so the plate still blends with the page. In LTR the figure is mirrored
-     to look toward the copy;
-     Arabic keeps the original direction. */
+     the canvas; cover crops any excess internally. A restrained studio sweep
+     sits behind the figure and a soft drop shadow seats it in the light, so the
+     cutout reads as a composed portrait instead of a sticker on a flat card.
+     In LTR the figure is mirrored and the glow follows its open side; Arabic
+     keeps the original direction. */
   .operator-portrait {
+    --operator-glow-x: 68%;
+    --operator-plate: #e2e5e1;
+    --operator-figure-filter:
+      drop-shadow(0 16px 26px rgba(6, 12, 9, 0.28))
+      drop-shadow(0 5px 10px rgba(6, 12, 9, 0.18));
+    isolation: isolate;
     overflow: visible;
-    /* 20% darker plate; the portrait itself is untouched. */
-    background-color: color-mix(in srgb, var(--md-sys-color-surface-container) 80%, #000);
-    box-shadow: 0 0 0 1px var(--md-sys-color-outline), var(--md-sys-elevation-2);
+    background-color: var(--operator-plate);
+    background-image:
+      radial-gradient(
+        120% 90% at var(--operator-glow-x) 28%,
+        rgba(16, 185, 129, 0.15) 0%,
+        rgba(16, 185, 129, 0.06) 38%,
+        transparent 66%
+      ),
+      linear-gradient(
+        158deg,
+        rgba(255, 255, 255, 0.42) 0%,
+        transparent 46%,
+        rgba(6, 12, 9, 0.045) 100%
+      );
+    box-shadow: 0 0 0 1px var(--glass-edge), var(--glass-shadow);
+  }
+
+  /* Frosted pane over the studio sweep — the gradient stays visible but is
+     softened, and the bright top edge reads as light catching real material.
+     The figure sits above it, so its shadow lands on the glass, not behind it. */
+  .operator-portrait::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    background-color: var(--portrait-glass);
+    backdrop-filter: blur(12px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px) saturate(125%);
+    box-shadow: inset 0 1px 0 var(--glass-highlight);
+    pointer-events: none;
+  }
+
+  /* Dark sweep: an emerald key light falling into abyssal slate, with a soft
+     bounce low on the opposite side — the studio gradient without a green wash. */
+  :root[data-theme='dark'] .operator-portrait {
+    --operator-plate: #060c09;
+    --operator-figure-filter:
+      drop-shadow(0 22px 36px rgba(0, 0, 0, 0.65))
+      drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+    background-image:
+      radial-gradient(
+        125% 92% at var(--operator-glow-x) 26%,
+        rgba(16, 185, 129, 0.42) 0%,
+        rgba(16, 185, 129, 0.14) 40%,
+        transparent 70%
+      ),
+      radial-gradient(
+        80% 68% at 84% 90%,
+        rgba(5, 150, 105, 0.16) 0%,
+        transparent 60%
+      ),
+      linear-gradient(155deg, #0a1711 0%, #060c09 56%, #030705 100%);
+  }
+
+  html.lang-ar .operator-portrait {
+    --operator-glow-x: 32%;
   }
 
   .operator-figure {
     --operator-flip: -1;
     position: absolute;
+    z-index: 2;
     top: -14%;
     left: 0;
     width: 100%;
@@ -438,8 +537,7 @@
     object-fit: cover;
     object-position: center top;
     border-radius: 0 0 var(--shape-editorial) var(--shape-editorial);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 88%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 88%, transparent 100%);
+    filter: var(--operator-figure-filter);
     transform: translateY(0) scaleX(var(--operator-flip));
     transform-origin: 50% 0%;
     transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -466,19 +564,44 @@
     }
   }
 
+  /* Mailto brief — a contained glass card so the form reads as its own surface
+     instead of sitting directly on the page. Shadow stays deliberately quiet. */
+  .brief-card {
+    --brief-shadow: 0 12px 36px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.18);
+    background-color: var(--glass-tint);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--shape-editorial-sm);
+    padding: 28px;
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--brief-shadow);
+  }
+
+  :root[data-theme='light'] .brief-card {
+    --brief-shadow: 0 12px 32px rgba(43, 56, 48, 0.1), 0 2px 6px rgba(43, 56, 48, 0.06);
+  }
+
+  @media (min-width: 768px) {
+    .brief-card {
+      padding: 32px;
+    }
+  }
+
   /* Mailto brief form — flat neutral fields, palette-only tokens. Labels and
      select options get explicit colours so no copy disappears in either theme. */
   .brief-field {
     width: 100%;
     border: 1px solid var(--md-sys-color-outline-variant);
     border-radius: 16px;
-    background-color: var(--md-sys-color-surface-container-low);
+    background-color: color-mix(in srgb, var(--md-sys-color-surface-container-low) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: var(--md-sys-color-on-surface);
     padding: 12px 16px;
     font-size: 14px;
     line-height: 1.5;
     outline: none;
-    transition: border-color 240ms ease;
+    transition: border-color 240ms ease, box-shadow 240ms ease;
   }
 
   .brief-field::placeholder {
@@ -488,6 +611,7 @@
 
   .brief-field:focus {
     border-color: var(--md-sys-color-primary);
+    box-shadow: 0 0 0 3px var(--md-sys-state-focus);
   }
 
   .brief-field option {
@@ -600,11 +724,17 @@
       background-color 160ms var(--ease-out-expo),
       color 160ms var(--ease-out-expo),
       border-color 160ms var(--ease-out-expo),
-      box-shadow 160ms var(--ease-out-expo);
+      box-shadow 160ms var(--ease-out-expo),
+      transform 100ms ease-out;
+  }
+  /* Feedback lives on the press, not the release. */
+  .md3-button:active {
+    transform: scale(0.97);
   }
   .md3-button--filled {
     background-color: var(--md-sys-color-primary);
     color: var(--md-sys-color-on-primary);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 18px rgba(16, 185, 129, 0.22);
   }
   .md3-button--filled:hover {
     background-color: var(--md-sys-color-primary-hover);
@@ -625,6 +755,22 @@
   .md3-nav {
     background-color: var(--md-sys-color-surface-container-low);
     border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  }
+
+  /* Glass chrome — translucent, saturated and softly shadowed so content reads
+     underneath without a hard divider. The sheet is heavier than the bar. */
+  .glass-nav {
+    background-color: var(--nav-glass);
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    box-shadow: 0 1px 0 var(--nav-edge), 0 10px 34px rgba(0, 0, 0, 0.08);
+  }
+
+  .glass-sheet {
+    background-color: var(--glass-tint);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), 0 -18px 60px rgba(0, 0, 0, 0.28);
   }
 
   .md3-divider {
@@ -655,6 +801,15 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* Reduced transparency: keep the depth cues, drop the blur and frost up the
+   surfaces so contrast never depends on what happens to be scrolling behind. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-nav { background-color: var(--md-sys-color-surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .glass-sheet { background-color: var(--md-sys-color-surface-container); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .hero-panel, .brief-card, .brief-field { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .operator-portrait::before { backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 
 /* Anchored sections must clear the fixed nav */

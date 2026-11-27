@@ -43,7 +43,7 @@ export const Contact: React.FC = () => {
           </div>
 
           <Reveal delay={0.1} className="md:col-span-5 md:col-start-8">
-            <div className="border-t border-[var(--md-sys-color-outline-variant)] pt-2">
+            <div className="brief-card">
               <form onSubmit={onSubmit} className="space-y-6">
                 {sent ? (
                   <div className="py-10" aria-live="polite">

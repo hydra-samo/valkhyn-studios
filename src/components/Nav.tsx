@@ -50,7 +50,7 @@ export const Nav: React.FC = () => {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-[70] border-b border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] pt-[env(safe-area-inset-top)]">
+      <header className="glass-nav fixed inset-x-0 top-0 z-[70] pt-[env(safe-area-inset-top)]">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
           <a href="#home" className="flex shrink-0 items-center" aria-label="VALKHYN — home">
             <ValkhynLockup className="h-[16px] w-auto text-[var(--md-sys-color-on-surface)] sm:h-[18px]" />
@@ -65,10 +65,10 @@ export const Nav: React.FC = () => {
                   href={l.href}
                   aria-current={isActive ? 'true' : undefined}
                   className={cn(
-                    'md3-state-layer relative py-2 font-sans text-[13px] font-medium transition-colors duration-300',
+                    'md3-state-layer relative rounded-full px-2.5 py-1.5 font-sans text-[13px] font-medium transition-colors duration-200',
                     isActive
-                      ? 'border-b-2 border-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-surface)]'
-                      : 'border-b-2 border-transparent text-[var(--md-sys-color-on-surface-soft)] hover:text-[var(--md-sys-color-on-surface)]'
+                      ? 'bg-[var(--chip-active)] text-[var(--md-sys-color-primary)]'
+                      : 'text-[var(--md-sys-color-on-surface-soft)] hover:text-[var(--md-sys-color-on-surface)]'
                   )}
                 >
                   {t(l.key)}
@@ -135,7 +135,7 @@ export const Nav: React.FC = () => {
           role="dialog"
           aria-modal="true"
           className={cn(
-            'absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-[var(--shape-editorial)] border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container)] px-6 pb-[max(3rem,env(safe-area-inset-bottom))] pt-8 transition-transform duration-300 md:mx-auto md:max-w-md md:rounded-[var(--shape-editorial)]',
+            'glass-sheet absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-[var(--shape-editorial)] border border-[var(--md-sys-color-outline-variant)] px-6 pb-[max(3rem,env(safe-area-inset-bottom))] pt-8 transition-transform duration-300 md:mx-auto md:max-w-md md:rounded-[var(--shape-editorial)]',
             open ? 'translate-y-0' : 'translate-y-full'
           )}
         >
