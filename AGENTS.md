@@ -4,8 +4,8 @@ Operating rules for this repo. It is a standalone site: no BRAND/ tree, no v1.x 
 
 ## Run
 
-- `npm ci` then `npm run dev` — dev server on **port 3100** (`host 0.0.0.0`), not Vite's 5173.
-- `http://<host>:3100/dashboard` — Studio Console (content imports, repo files, atmosphere,
+- `npm ci` then `npm run dev` — dev server on **port 1717** (`host 0.0.0.0`, strict), not Vite's 5173. This is the port the desktop launchers, `hydra-studio.service` and the tailnet proxy all use.
+- `http://<host>:1717/dashboard` — Studio Console (content imports, repo files, atmosphere,
   agent drawer). Dev server only: its `/api` lives in `studio.plugin.mjs` and is not built
   into `dist/`, so the route is inert on GitHub Pages.
 - `npm run build` — `tsc --noEmit` + `vite build` → `dist/`.
@@ -22,13 +22,15 @@ Operating rules for this repo. It is a standalone site: no BRAND/ tree, no v1.x 
 ## Content
 
 - **No fake content.** Work stays empty until real, released projects exist; its empty state is intentional. Never invent clients, metrics, testimonials or audio.
-- Contact is `mailto:` by design — no backend, no form endpoint, no `.env` needed. Don't add an env-driven form without a real endpoint.
+- Contact is a `mailto:` brief composed in the visitor's mail app — no backend, no form endpoint, no `.env` needed. Don't add a server-side form. Social icons are monochrome placeholders until real profile URLs exist.
 
 ## Brand
 
-- Mark: `ValkhynLogo.tsx` (icon only, frozen geometry `viewBox="11 2.94 78 78"`). Navbar lockup: `ValkhynLockup.tsx` — generated from the certified `BRAND/ASSETS/LOGO_LOCKUPS` horizontal asset. No text, initials, borders; no baked-in glow; **no spinning** — glow lives in CSS utilities only.
-- Palette: emerald `#10b981` / `#059669` / `#34d399` as **light**, on abyssal slate `#060c09` / `#0b1410`. Black must stay dominant; never a green wash or green panels.
-- Forbidden: neon cyan, blue gradients, `// SECTION` eyebrow pills, numbered SaaS badges, comparison tables, location badges, emoji in UI copy.
-- Typography: Space Grotesk (display), Manrope (body), IBM Plex Sans Arabic (AR), JetBrains Mono (readouts only).
-- Icons: `lucide-react` only.
+- Mark: `ValkhynLogo.tsx` (icon only, frozen geometry `viewBox="11 2.94 78 78"`). Navbar lockup: `ValkhynLockup.tsx` — generated from the certified `BRAND/ASSETS/LOGO_LOCKUPS` horizontal asset. No text, initials, borders; no baked-in glow; **no spinning**.
+- Palette: emerald `#10b981` / `#059669` / `#34d399` as the accent family, on abyssal slate `#060c09` / `#0b1410` in dark and neutral `#f5f7f4` / `#ffffff` in light. Flat surfaces only; never a green wash, green panels, gradients, glass or decorative glow.
+- Themes: `data-theme` on `<html>` selects the token set; `ThemeContext` persists `valkhyn-theme` and follows the OS preference until the visitor chooses. Public components use `var(--md-sys-color-*)` only.
+- Forbidden: neon cyan, blue gradients, `// SECTION` eyebrow pills, numbered SaaS badges, comparison tables, location badges, emoji in UI copy, card grids in public chapters, and pulsing availability dots. The hero uses one muted process video; other chapters use flat bands and ruled rows.
+- Typography: Manrope (display), IBM Plex Sans (body/UI), IBM Plex Sans Arabic (AR), JetBrains Mono (readouts only).
+- Icons: `lucide-react` only, except the four outline brand marks in `SocialIcons.tsx`: Facebook and Instagram use lucide; WhatsApp and TikTok use local monochrome outline SVG paths (no filled brand colours).
+- Shape: media frames use 32px rounded corners; buttons, language chips and icon controls use pill radii. Keep surfaces flat — rounding is not a card, glass or glow.
 - Motion: purposeful, `prefers-reduced-motion` respected everywhere.

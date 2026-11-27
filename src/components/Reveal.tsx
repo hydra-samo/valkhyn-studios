@@ -5,16 +5,14 @@ interface RevealProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
-  /** Blur-clear + deeper slide for cinematic moments */
-  cinematic?: boolean;
 }
 
 /**
- * Scroll-reveal wrapper. IntersectionObserver (not scroll listeners) drives a
- * one-shot CSS transition: translate + opacity + optional blur-clear.
- * Honors prefers-reduced-motion by rendering the final state immediately.
+ * Scroll-reveal wrapper. IntersectionObserver drives one short fade and a
+ * 12px rise, with no blur and no looping motion. Honors reduced motion by
+ * rendering the final state immediately.
  */
-export const Reveal: React.FC<RevealProps> = ({ children, className, delay = 0, cinematic }) => {
+export const Reveal: React.FC<RevealProps> = ({ children, className, delay = 0 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -44,15 +42,14 @@ export const Reveal: React.FC<RevealProps> = ({ children, className, delay = 0, 
     <div
       ref={ref}
       className={cn(
-        'transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform',
-        visible
-          ? 'opacity-100 translate-y-0 blur-0'
-          : cinematic
-            ? 'opacity-0 translate-y-16 blur-md'
-            : 'opacity-0 translate-y-10',
+        'transition-[opacity,transform] duration-300 will-change-transform',
+        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3',
         className
       )}
-      style={{ transitionDelay: `${delay}s` }}
+      style={{
+        transitionDelay: `${delay}s`,
+        transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+      }}
     >
       {children}
     </div>

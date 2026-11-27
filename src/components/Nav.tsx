@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ValkhynLockup } from './ValkhynLockup';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeToggle } from './ThemeToggle';
 import { useLanguage } from '../i18n/LanguageContext';
 import { cn } from '../lib/utils';
 
@@ -15,18 +16,20 @@ const LINKS = [
 
 export const Nav: React.FC = () => {
   const { t } = useLanguage();
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState('home');
 
+  // Modal pattern: Escape dismisses the mobile sheet.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
 
-  // Section-aware nav: the active link lights up with its own underline sweep.
+  // Section-aware navigation: the active link carries a solid underline rule.
   useEffect(() => {
     const els = LINKS.map((l) => document.getElementById(l.href.slice(1))).filter(
       (el): el is HTMLElement => Boolean(el)
@@ -47,20 +50,13 @@ export const Nav: React.FC = () => {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-[70] flex justify-center px-4 pt-3 sm:px-6">
-        <div
-          className={cn(
-            'flex w-full max-w-5xl items-center justify-between rounded-full px-3 py-1.5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-4',
-            scrolled
-              ? 'border border-white/10 bg-black/60 backdrop-blur-2xl'
-              : 'border border-white/[0.06] bg-white/[0.02] backdrop-blur-md'
-          )}
-        >
-          <a href="#home" className="flex items-center gap-2" aria-label="VALKHYN — home">
-            <ValkhynLockup className="h-[15px] w-auto text-white sm:h-[17px]" />
+      <header className="fixed inset-x-0 top-0 z-[70] border-b border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] pt-[env(safe-area-inset-top)]">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
+          <a href="#home" className="flex shrink-0 items-center" aria-label="VALKHYN — home">
+            <ValkhynLockup className="h-[16px] w-auto text-[var(--md-sys-color-on-surface)] sm:h-[18px]" />
           </a>
 
-          <nav className="hidden items-center gap-6 lg:flex">
+          <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
             {LINKS.map((l) => {
               const isActive = active === l.href.slice(1);
               return (
@@ -69,27 +65,24 @@ export const Nav: React.FC = () => {
                   href={l.href}
                   aria-current={isActive ? 'true' : undefined}
                   className={cn(
-                    'relative font-sans text-[10px] font-medium uppercase tracking-[0.2em] transition-colors duration-500',
-                    isActive ? 'text-accent' : 'text-white/50 hover:text-white'
+                    'md3-state-layer relative py-2 font-sans text-[13px] font-medium transition-colors duration-300',
+                    isActive
+                      ? 'border-b-2 border-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-surface)]'
+                      : 'border-b-2 border-transparent text-[var(--md-sys-color-on-surface-soft)] hover:text-[var(--md-sys-color-on-surface)]'
                   )}
                 >
                   {t(l.key)}
-                  <span
-                    className={cn(
-                      'absolute -bottom-1.5 left-0 h-px bg-accent transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
-                      isActive ? 'w-full opacity-100' : 'w-0 opacity-0'
-                    )}
-                  />
                 </a>
               );
             })}
           </nav>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+            <ThemeToggle />
             <LanguageSwitcher className="hidden sm:flex" />
             <a
               href="#contact"
-              className="cta-glass hidden rounded-full px-3.5 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] sm:inline-flex"
+              className="md3-button md3-button--filled md3-state-layer hidden rounded-full px-4 py-2 text-[12px] sm:inline-flex"
             >
               {t('nav.cta')}
             </a>
@@ -97,25 +90,25 @@ export const Nav: React.FC = () => {
               onClick={() => setOpen((v) => !v)}
               aria-label={t('nav.menu')}
               aria-expanded={open}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-white lg:hidden"
+              className="md3-state-layer flex h-11 w-11 items-center justify-center rounded-full border border-[var(--md-sys-color-outline-variant)] text-[var(--md-sys-color-on-surface)] lg:hidden"
             >
               <span className="relative block h-3 w-4">
                 <span
                   className={cn(
-                    'absolute left-0 top-0 h-px w-4 bg-current transition-all duration-300',
-                    open && 'top-1.5 rotate-45'
+                    'absolute left-0 top-0 h-px w-4 bg-current transition-[transform,opacity] duration-200',
+                    open && 'translate-y-1.5 rotate-45'
                   )}
                 />
                 <span
                   className={cn(
-                    'absolute left-0 top-1.5 h-px w-4 bg-current transition-all duration-300',
+                    'absolute left-0 top-1.5 h-px w-4 bg-current transition-[transform,opacity] duration-200',
                     open && 'opacity-0'
                   )}
                 />
                 <span
                   className={cn(
-                    'absolute left-0 top-3 h-px w-4 bg-current transition-all duration-300',
-                    open && 'top-1.5 -rotate-45'
+                    'absolute left-0 top-3 h-px w-4 bg-current transition-[transform,opacity] duration-200',
+                    open && '-translate-y-1.5 -rotate-45'
                   )}
                 />
               </span>
@@ -124,25 +117,50 @@ export const Nav: React.FC = () => {
         </div>
       </header>
 
-      {/* Mobile overlay */}
+      {/* Mobile sheet: flat surface, solid scrim, no blur. The whole layer is
+          hidden until the menu opens, so the scrim never darkens the page. */}
       <div
+        aria-hidden={!open}
         className={cn(
-          'fixed inset-0 z-[65] flex flex-col justify-center gap-2 bg-black/90 px-8 backdrop-blur-3xl transition-all duration-500 lg:hidden',
-          open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+          'fixed inset-0 z-[65] transition-[opacity,visibility] duration-300 lg:hidden',
+          open ? 'visible pointer-events-auto opacity-100' : 'invisible pointer-events-none opacity-0'
         )}
       >
-        {LINKS.map((l, i) => (
-          <a
-            key={l.href}
-            href={l.href}
-            onClick={() => setOpen(false)}
-            className="heading-display border-b border-white/10 py-4 text-4xl text-white/80 transition-colors duration-300 hover:text-accent"
-            style={{ transitionDelay: `${i * 40}ms` }}
-          >
-            {t(l.key)}
-          </a>
-        ))}
-        <LanguageSwitcher className="mt-6 self-start" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[var(--md-sys-color-scrim)]"
+          onClick={() => setOpen(false)}
+        />
+        <div
+          role="dialog"
+          aria-modal="true"
+          className={cn(
+            'absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-[var(--shape-editorial)] border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container)] px-6 pb-[max(3rem,env(safe-area-inset-bottom))] pt-8 transition-transform duration-300 md:mx-auto md:max-w-md md:rounded-[var(--shape-editorial)]',
+            open ? 'translate-y-0' : 'translate-y-full'
+          )}
+        >
+          <nav className="flex flex-col" aria-label="Mobile">
+            {LINKS.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  'md3-state-layer border-b border-[var(--md-sys-color-outline-variant)] py-4 font-display text-2xl transition-colors duration-300',
+                  active === l.href.slice(1)
+                    ? 'text-[var(--md-sys-color-primary)]'
+                    : 'text-[var(--md-sys-color-on-surface)]'
+                )}
+              >
+                {t(l.key)}
+              </a>
+            ))}
+          </nav>
+          <div className="mt-8 flex items-center gap-3">
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </div>
+        </div>
       </div>
     </>
   );

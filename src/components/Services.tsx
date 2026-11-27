@@ -1,67 +1,125 @@
-import React from 'react';
-import { Film, Layers, Mic } from 'lucide-react';
-import { DISCIPLINES } from '../data/content';
+import React, { useEffect, useRef, useState } from 'react';
+import { DISCIPLINES, SERVICE_FRAMES } from '../data/content';
 import { Reveal } from './Reveal';
+import { assetUrl } from '../lib/utils';
 import { useLanguage } from '../i18n/LanguageContext';
 
+const FRAME_DURATION = 4200;
+
 /**
- * Services — the three heads. Each row is a chapter with a stock lucide glyph,
- * a title, a statement and the real toolchain set as a plain technical line.
- * No cards, no chips, no eyebrow: rows separated only by hairlines.
+ * Services — three disciplines under one studio roof.
+ * A quiet four-frame studio reel (editing, motion, voice, delivery) and a
+ * ruled capability ledger replace the old three-card grid. Each still has an
+ * art-directed crop per breakpoint; none is presented as a client project.
  */
 export const Services: React.FC = () => {
   const { t } = useLanguage();
+  const frameRef = useRef<HTMLDivElement>(null);
+  const visibleRef = useRef(true);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer: number | undefined;
+
+    const stop = () => {
+      if (timer !== undefined) {
+        window.clearInterval(timer);
+        timer = undefined;
+      }
+    };
+
+    const start = () => {
+      if (timer !== undefined || reduce.matches || !visibleRef.current || document.hidden) return;
+      timer = window.setInterval(() => {
+        setActive((current) => (current + 1) % SERVICE_FRAMES.length);
+      }, FRAME_DURATION);
+    };
+
+    const sync = () => {
+      stop();
+      start();
+    };
+
+    reduce.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        visibleRef.current = entries[0]?.isIntersecting ?? true;
+        sync();
+      },
+      { threshold: 0.01 },
+    );
+    if (frameRef.current) observer.observe(frameRef.current);
+
+    sync();
+
+    return () => {
+      stop();
+      reduce.removeEventListener('change', sync);
+      document.removeEventListener('visibilitychange', sync);
+      observer.disconnect();
+    };
+  }, []);
 
   return (
-    <section id="services" className="relative overflow-hidden px-6 py-24 sm:px-10 md:px-14 md:py-36 lg:px-20">
-      <div className="mx-auto max-w-6xl">
+    <section id="services" className="relative px-6 py-24 sm:px-10 md:px-14 md:py-28 lg:py-36 lg:px-20">
+      <div className="mx-auto max-w-7xl">
         <Reveal>
-          <h2 className="heading-display max-w-3xl text-4xl text-white sm:text-5xl md:text-6xl">
-            {t('services.lead')} <span className="text-accent">{t('services.accent')}</span>
-          </h2>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <h2 className="heading-display max-w-3xl text-4xl text-[var(--md-sys-color-on-surface)] sm:text-5xl md:text-6xl">
+              {t('services.lead')} <span className="text-[var(--md-sys-color-primary)]">{t('services.accent')}</span>
+            </h2>
+          </div>
         </Reveal>
 
-        <div className="mt-16 flex flex-col">
-          {DISCIPLINES.map((d, i) => (
-            <Reveal key={d.id} delay={i * 0.06}>
-              <div className="group grid grid-cols-1 gap-6 border-t border-white/[0.08] py-10 transition-colors duration-500 hover:border-accent/30 sm:grid-cols-12 sm:gap-8 sm:py-12">
-                {/* Motif — stock lucide glyphs, per brand icon rule */}
-                <div className="flex items-start gap-5 sm:col-span-2">
-                  <Motif kind={d.id} />
-                </div>
+        <Reveal delay={0.06}>
+          <div
+            ref={frameRef}
+            className="soft-frame service-media relative mt-10 w-full overflow-hidden"
+          >
+            {SERVICE_FRAMES.map((frame, index) => (
+              <picture
+                key={frame.src}
+                className={`service-frame${index === active ? ' is-active' : ''}`}
+              >
+                <source media="(max-width: 640px)" srcSet={assetUrl(frame.srcPhone)} />
+                <img
+                  src={assetUrl(frame.src)}
+                  alt={t(frame.altKey)}
+                  aria-hidden={index !== active}
+                  width={1600}
+                  height={900}
+                  loading="lazy"
+                  decoding="async"
+                  className="agency-photo"
+                  draggable={false}
+                />
+              </picture>
+            ))}
+          </div>
+        </Reveal>
 
-                {/* Title */}
-                <div className="sm:col-span-4">
-                  <span className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">
-                    {t(`disc.${d.id}.subtitle`)}
-                  </span>
-                  <h3 className="mt-2 font-display text-2xl font-bold uppercase tracking-tight text-white transition-colors duration-500 group-hover:text-accent sm:text-3xl">
+        <div className="mt-14 border-t border-[var(--md-sys-color-outline-variant)]">
+          {DISCIPLINES.map((d, i) => (
+            <Reveal key={d.id} delay={i * 0.05}>
+              <article className="grid grid-cols-1 gap-4 border-b border-[var(--md-sys-color-outline-variant)] py-8 md:grid-cols-12 md:items-baseline md:gap-6">
+                <span className="section-number md:col-span-1">0{i + 1}</span>
+                <div className="md:col-span-4">
+                  <h3 className="font-display text-2xl font-semibold text-[var(--md-sys-color-on-surface)]">
                     {t(`disc.${d.id}.title`)}
                   </h3>
+                  <p className="section-subtext mt-1">{t(`disc.${d.id}.subtitle`)}</p>
                 </div>
-
-                {/* Description + tools */}
-                <div className="sm:col-span-6">
-                  <p className="max-w-sm text-sm leading-relaxed text-white/60">
-                    {t(`disc.${d.id}.desc`)}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <span className="label-tech">
-                      {d.tools.join('  ·  ')}
-                    </span>
-                  </div>
-                </div>
-              </div>
+                <p className="md3-body max-w-2xl text-sm leading-[1.75] text-[var(--md-sys-color-on-surface-soft)] md:col-span-7">
+                  {t(`disc.${d.id}.desc`)}
+                </p>
+              </article>
             </Reveal>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-/** Small coded motifs — one per discipline. No icon library, no images. */
-const Motif: React.FC<{ kind: 'video' | 'motion' | 'voice' }> = ({ kind }) => {
-  const Icon = kind === 'video' ? Film : kind === 'motion' ? Layers : Mic;
-  return <Icon size={26} strokeWidth={1.1} className="text-accent/75" aria-hidden="true" />;
 };

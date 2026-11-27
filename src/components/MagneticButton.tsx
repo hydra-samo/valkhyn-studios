@@ -14,7 +14,7 @@ interface MagneticButtonProps {
 /**
  * Magnetic CTA: the button (and its inner label) pull toward the cursor with
  * GSAP quickTo, then spring back. Reduced-motion and coarse pointers get a
- * plain button. Glass surface only — brand rule: no flat bright CTA fills.
+ * plain button. MD3 filled surface with label-large type and a state layer.
  */
 export const MagneticButton: React.FC<MagneticButtonProps> = ({
   children,
@@ -71,8 +71,8 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
         onClick={onClick}
         aria-label={ariaLabel}
         className={cn(
-          'cta-glass group relative inline-flex items-center gap-3 rounded-full px-6 py-3',
-          'text-[11px] font-semibold uppercase tracking-[0.18em]',
+          'md3-button md3-button--filled group relative inline-flex items-center gap-3',
+          'md3-state-layer font-sans text-sm font-medium',
           className
         )}
       >

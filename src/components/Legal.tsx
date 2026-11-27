@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { ValkhynLogo } from './ValkhynLogo';
-import { EMAIL } from '../data/content';
 import { useLanguage } from '../i18n/LanguageContext';
 import { LEGAL_PAGES } from '../i18n/legal';
 
@@ -21,36 +20,34 @@ export const Legal: React.FC<{ kind: LegalKind }> = ({ kind }) => {
   }, [page.title]);
 
   return (
-    <div className="min-h-[100dvh] bg-canvas px-6 py-16 text-text sm:px-10 md:px-14 lg:px-20">
+    <div className="md3-surface min-h-[100dvh] px-6 py-16 sm:px-10 md:px-14 lg:px-20">
       <div className="mx-auto max-w-3xl">
-        <div className="flex items-center justify-between gap-6 border-b border-white/[0.08] pb-6">
+        <div className="flex items-center justify-between gap-6 border-b border-[var(--md-sys-color-outline-variant)] pb-6">
           <a href="#home" className="flex items-center gap-3">
             <ValkhynLogo className="h-6 w-6 text-accent" />
-            <span className="font-display text-xs font-bold uppercase tracking-[0.14em] text-white">
+            <span className="font-display text-xs font-bold uppercase tracking-[0.14em] text-[var(--md-sys-color-on-surface)]">
               VALKHYN
             </span>
           </a>
           <a
             href="#home"
-            className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/55 transition-colors duration-300 hover:text-accent"
+            className="md3-label text-[var(--md-sys-color-on-surface-variant)] transition-colors duration-300 hover:text-[var(--md-sys-color-primary)]"
           >
             {page.back}
           </a>
         </div>
 
-        <h1 className="heading-display mt-12 text-4xl text-white sm:text-5xl">{page.title}</h1>
-        <p className="mt-3 font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">
+        <h1 className="md3-title normal-case mt-12 text-4xl text-[var(--md-sys-color-on-surface)] sm:text-5xl">{page.title}</h1>
+        <p className="mt-3 font-sans text-[10px] font-medium uppercase tracking-[0.18em] text-[var(--md-sys-color-on-surface-variant)]">
           {page.updated}
         </p>
 
         <div className="mt-12 space-y-10">
           {page.sections.map((section) => (
             <section key={section.heading}>
-              <h2 className="font-display text-sm font-bold uppercase tracking-[0.12em] text-white">
-                {section.heading}
-              </h2>
+              <h2 className="md3-title text-lg text-[var(--md-sys-color-on-surface)]">{section.heading}</h2>
               {section.body.map((paragraph) => (
-                <p key={paragraph} className="mt-3 text-sm leading-relaxed text-white/65">
+                <p key={paragraph} className="md3-body mt-3 text-sm leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
                   {paragraph}
                 </p>
               ))}
@@ -58,16 +55,10 @@ export const Legal: React.FC<{ kind: LegalKind }> = ({ kind }) => {
           ))}
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-white/[0.08] pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <a
-            href={`mailto:${EMAIL}`}
-            className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-white/55 transition-colors duration-300 hover:text-accent"
-          >
-            {EMAIL}
-          </a>
+        <div className="mt-16 flex justify-end border-t border-[var(--md-sys-color-outline-variant)] pt-8">
           <a
             href={`#${other}`}
-            className="font-sans text-[10px] font-medium uppercase tracking-[0.16em] text-accent"
+            className="md3-label text-[var(--md-sys-color-primary)] transition-colors duration-300 hover:text-[var(--md-sys-color-primary)]"
           >
             {LEGAL_PAGES[lang][other].title}
           </a>

@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>VALKHYN · Video Editing, Motion Design, Voice-Over</title>
     <meta
       name="description"
-      content="VALKHYN, Bendali Issam Eddine. A solo creative studio: video editing, motion design, and voice-over under one unified will."
+      content="VALKHYN Studio — video editing, motion design and voice-over under one roof, from first brief to final master."
     />
-    <meta property="og:title" content="VALKHYN: one body, three heads" />
+    <meta property="og:title" content="VALKHYN Studio" />
     <meta
       property="og:description"
-      content="Video editing · Motion design · Voice-over. One body, three heads."
+      content="Video editing, motion design and voice-over as one studio."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://hydra-samo.github.io/valkhyn-studios/" />
@@ -20,7 +20,21 @@
     <meta property="og:image" content="https://hydra-samo.github.io/valkhyn-studios/valkhyn-og.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://hydra-samo.github.io/valkhyn-studios/valkhyn-og.jpg" />
-    <meta name="theme-color" content="#060c09" />
+    <meta name="theme-color" content="#f5f7f4" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('valkhyn-theme');
+          var theme = stored === 'dark' ? 'dark' : 'light';
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', theme === 'light' ? '#f5f7f4' : '#060c09');
+        } catch (error) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https: ws: wss:; object-src 'none'; base-uri 'self'; form-action 'self' https:;"
@@ -33,11 +47,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body class="antialiased selection:bg-accent selection:text-black">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
