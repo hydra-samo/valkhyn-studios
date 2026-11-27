@@ -45,25 +45,31 @@ const TikTokOutline: React.FC<IconProps> = ({ size = 16, strokeWidth = 1.3, ...r
   </svg>
 );
 
-const SOCIALS: { label: string; Icon: React.ComponentType<IconProps> }[] = [
-  { label: 'Facebook', Icon: Facebook },
-  { label: 'WhatsApp', Icon: WhatsAppOutline },
-  { label: 'TikTok', Icon: TikTokOutline },
-  { label: 'Instagram', Icon: Instagram },
+const SOCIALS: { label: string; href: string; Icon: React.ComponentType<IconProps> }[] = [
+  {
+    label: 'Facebook',
+    href: 'https://www.facebook.com/profile.php?id=122095324065570291',
+    Icon: Facebook,
+  },
+  { label: 'WhatsApp', href: 'https://wa.me/213783097316', Icon: WhatsAppOutline },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@valkhyn.studio', Icon: TikTokOutline },
+  { label: 'Instagram', href: 'https://www.instagram.com/valkhyn.ar_en/', Icon: Instagram },
 ];
 
 export const SocialIcons: React.FC<{ className?: string }> = ({ className }) => (
   <div className={cn('flex flex-wrap items-center gap-3', className)}>
-    {SOCIALS.map(({ label, Icon }) => (
-      <span
+    {SOCIALS.map(({ label, href, Icon }) => (
+      <a
         key={label}
-        role="img"
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
         aria-label={label}
         title={label}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--md-sys-color-outline-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--md-sys-color-outline-variant)] text-[var(--md-sys-color-on-surface-variant)] transition-colors duration-300 hover:border-[var(--md-sys-color-primary)] hover:text-[var(--md-sys-color-primary)]"
       >
         <Icon size={16} strokeWidth={1.7} aria-hidden={true} />
-      </span>
+      </a>
     ))}
   </div>
 );
