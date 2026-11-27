@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLenis } from './hooks/useLenis';
 import { Nav } from './components/Nav';
 import { Hero } from './components/Hero';
@@ -10,8 +10,6 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { Legal, type LegalKind } from './components/Legal';
 
-const Dashboard = lazy(() => import('./dashboard/Dashboard'));
-
 /** Legal pages are hash routes: static hosting, no server rewrite needed. */
 const legalRoute = (): LegalKind | null => {
   if (typeof window === 'undefined') return null;
@@ -20,15 +18,6 @@ const legalRoute = (): LegalKind | null => {
 };
 
 export default function App() {
-  // Studio console — same always-on server, own route. Dev-server only: the
-  // /api middleware that backs it (studio.plugin.mjs) does not ship in dist/.
-  if (typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '').endsWith('/dashboard')) {
-    return (
-      <Suspense fallback={null}>
-        <Dashboard />
-      </Suspense>
-    );
-  }
   return <Site />;
 }
 

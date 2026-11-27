@@ -1,0 +1,40 @@
+# Dependencies and generated build output
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Personal studio console — never published or tracked
+studio.plugin.mjs
+vite.local.config.ts
+dashboard.html
+src/dashboard/
+public/dashboard.webmanifest
+
+# Local tooling, QA captures and caches
+.playwright-mcp/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+Thumbs.db
+*.log
+
+# Large working assets for the avatar pipeline (not published site assets)
+assets/
+.venv/
+.venv-avatar/
+
+# Secrets and local configuration — templates are the only exception
+.env
+.env.*
+!.env.example
+.secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
