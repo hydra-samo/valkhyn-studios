@@ -45,31 +45,43 @@ const TikTokOutline: React.FC<IconProps> = ({ size = 16, strokeWidth = 1.3, ...r
   </svg>
 );
 
-const SOCIALS: { label: string; href: string; Icon: React.ComponentType<IconProps> }[] = [
-  {
-    label: 'Facebook',
-    href: 'https://www.facebook.com/profile.php?id=122095324065570291',
-    Icon: Facebook,
-  },
+type Social = { label: string; href?: string; Icon: React.ComponentType<IconProps> };
+
+const SOCIALS: Social[] = [
+  { label: 'Facebook', Icon: Facebook },
   { label: 'WhatsApp', href: 'https://wa.me/213783097316', Icon: WhatsAppOutline },
   { label: 'TikTok', href: 'https://www.tiktok.com/@valkhyn.studio', Icon: TikTokOutline },
   { label: 'Instagram', href: 'https://www.instagram.com/valkhyn.ar_en/', Icon: Instagram },
 ];
 
+const ICON_CLASS =
+  'flex h-9 w-9 items-center justify-center rounded-full border border-[var(--md-sys-color-outline-variant)] text-[var(--md-sys-color-on-surface-variant)]';
+
 export const SocialIcons: React.FC<{ className?: string }> = ({ className }) => (
   <div className={cn('flex flex-wrap items-center gap-3', className)}>
-    {SOCIALS.map(({ label, href, Icon }) => (
-      <a
-        key={label}
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={label}
-        title={label}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--md-sys-color-outline-variant)] text-[var(--md-sys-color-on-surface-variant)] transition-colors duration-300 hover:border-[var(--md-sys-color-primary)] hover:text-[var(--md-sys-color-primary)]"
-      >
-        <Icon size={16} strokeWidth={1.7} aria-hidden={true} />
-      </a>
-    ))}
+    {SOCIALS.map(({ label, href, Icon }) => {
+      const glyph = <Icon size={16} strokeWidth={1.7} aria-hidden={true} />;
+
+      return href ? (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          title={label}
+          className={cn(
+            ICON_CLASS,
+            'transition-colors duration-300 hover:border-[var(--md-sys-color-primary)] hover:text-[var(--md-sys-color-primary)]',
+          )}
+        >
+          {glyph}
+        </a>
+      ) : (
+        <span key={label} role="img" aria-label={label} title={label} className={ICON_CLASS}>
+          {glyph}
+        </span>
+      );
+    })}
   </div>
 );
