@@ -7,3 +7,5 @@ API Worker for `https://api.valkhyn.site`. Deployed from this directory via Clou
 - `d1/migrations/0001_init.sql` — schema already applied to the live D1 database.
 
 The public site uses a `mailto:` brief form and does not call this API. These endpoints exist for the future private publishing dashboard and integrations.
+
+Live build source: this repository, path `worker/` (Cloudflare Workers Builds).
