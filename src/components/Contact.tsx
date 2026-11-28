@@ -15,14 +15,29 @@ export const Contact: React.FC = () => {
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const [error, setError] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Project inquiry — ${name || 'New brief'}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\nDiscipline: ${discipline || t('form.disc.video')}\n\n${message}`
-    );
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
-    setSent(true);
+    setError(false);
+    try {
+      const res = await fetch(
+        'https://valkhyn-api.valkhynstudio.workers.dev/api/contact',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            message: `Discipline: ${discipline || t('form.disc.video')}\n\n${message}`,
+          }),
+        }
+      );
+      if (!res.ok) throw new Error('Request failed');
+      setSent(true);
+    } catch {
+      setError(true);
+    }
   };
 
   return (
@@ -45,7 +60,16 @@ export const Contact: React.FC = () => {
           <Reveal delay={0.1} className="md:col-span-5 md:col-start-8">
             <div className="brief-card">
               <form onSubmit={onSubmit} className="space-y-6">
-                {sent ? (
+                {error ? (
+                  <div className="py-10" aria-live="polite">
+                    <h3 className="heading-display text-2xl text-[var(--md-sys-color-on-surface)]">
+                      Unable to send
+                    </h3>
+                    <p className="md3-body mt-3 text-sm leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
+                      Please email <a className="underline" href={`mailto:${EMAIL}`}>{EMAIL}</a> directly.
+                    </p>
+                  </div>
+                ) : sent ? (
                   <div className="py-10" aria-live="polite">
                     <h3 className="heading-display text-2xl text-[var(--md-sys-color-on-surface)]">
                       {t('form.sentTitle')}
