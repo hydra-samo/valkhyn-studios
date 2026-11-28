@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://hydra-samo.github.io/valkhyn-studios/">
+  <a href="https://www.valkhyn.site/">
     <img src="./public/valkhyn-mark.svg" width="96" alt="VALKHYN" />
   </a>
 </p>
@@ -17,10 +17,12 @@
 
 ---
 
-This repository is the **production website**, the self-contained tree that GitHub
-Actions builds and deploys to GitHub Pages:
+This repository is the **production website**, built from `main` and deployed as
+static assets on the Cloudflare Worker `valkhyn-site`:
 
-**https://hydra-samo.github.io/valkhyn-studios/**
+**https://www.valkhyn.site/**
+
+`valkhyn.site` 301-redirects to the canonical `www` host.
 
 The site is one page in six chapters — hero → about → services → work → process →
 contact — written in **EN / FR / AR** with full RTL. The hero crossfades three muted
@@ -52,16 +54,19 @@ Both must be clean before pushing — the deploy workflow runs the same build.
 
 ## Deploy
 
-`.github/workflows/deploy.yml` publishes `dist/` to GitHub Pages on every push to
-`main` (and on manual dispatch). `vite.config.ts` keeps `base: './'` so assets
-resolve from the `/valkhyn-studios/` subpath.
+Cloudflare Workers Builds runs `bun run build` and `bunx wrangler deploy` on every
+push to `main`. `wrangler.toml` serves `dist/` as static assets through the
+`valkhyn-site` Worker, with `www.valkhyn.site` as the canonical host. The build
+inlines the stylesheet so first paint never waits on a CSS request; `public/_headers`
+sets long cache lifetimes for the hashed bundle and studio media. `base: './'` is
+kept so relative asset URLs also work from any subpath.
 
 ## Configuration
 
 None. The site is fully static: no environment variables, no API keys, no form
 endpoint. The Contact brief composes a real `mailto:` message in the visitor's
-mail app. The social icons are monochrome placeholders until the real profile
-URLs are available.
+mail app. The footer icons open Email, WhatsApp, TikTok and Instagram; the
+Facebook icon stays a placeholder until a Page URL exists.
 
 ## Content
 

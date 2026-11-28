@@ -6,35 +6,69 @@ interface SplashProps {
   onComplete: () => void;
 }
 
-const SETTLE_DELAY = 1400;
-const HARD_CAP = 4500;
+const SETTLE_DELAY = 900;
+const FADE_MS = 260;
+const HARD_CAP = 2600;
 
 /**
- * Studio splash — emerald wash, mark, progress readout. Sits above everything,
- * finishes on its own, and can be dismissed by a click.
+ * Studio splash — emerald wash, mark, smooth progress readout. Sits above
+ * everything, fades out on its own, and can be dismissed by a click.
  */
 export const Splash: React.FC<SplashProps> = ({ onComplete }) => {
   const { t } = useLanguage();
   const [percent, setPercent] = useState(0);
+  const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    const settle = window.setTimeout(onComplete, SETTLE_DELAY);
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+    if (reduced) {
+      setPercent(100);
+      const settle = window.setTimeout(() => setLeaving(true), 100);
+      const hardCap = window.setTimeout(onComplete, HARD_CAP);
+      return () => {
+        window.clearTimeout(settle);
+        window.clearTimeout(hardCap);
+      };
+    }
+
+    let frame = 0;
+    const started = performance.now();
+    const tick = (now: number) => {
+      const progress = Math.min(1, (now - started) / SETTLE_DELAY);
+      setPercent(Math.round(progress * 100));
+      if (progress < 1) frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
+
+    const settle = window.setTimeout(() => setLeaving(true), SETTLE_DELAY);
     const hardCap = window.setTimeout(onComplete, HARD_CAP);
-    const iv = window.setInterval(() => setPercent((p) => Math.min(100, p + 12)), 130);
 
     return () => {
+      window.cancelAnimationFrame(frame);
       window.clearTimeout(settle);
       window.clearTimeout(hardCap);
-      window.clearInterval(iv);
     };
   }, [onComplete]);
 
+  // Fade first, then unmount — the hero is already painted underneath.
+  useEffect(() => {
+    if (!leaving) return;
+    const done = window.setTimeout(onComplete, FADE_MS);
+    return () => window.clearTimeout(done);
+  }, [leaving, onComplete]);
+
   return (
     <div
-      onClick={onComplete}
+      onClick={() => setLeaving(true)}
       title={t('splash.skip')}
       className="fixed inset-0 z-[9999] flex cursor-pointer select-none flex-col items-center justify-center overflow-hidden"
-      style={{ background: '#060c09' }}
+      style={{
+        background: '#060c09',
+        opacity: leaving ? 0 : 1,
+        transition: `opacity ${FADE_MS}ms ease`,
+        pointerEvents: leaving ? 'none' : undefined,
+      }}
     >
       <div
         aria-hidden="true"
@@ -65,7 +99,7 @@ export const Splash: React.FC<SplashProps> = ({ onComplete }) => {
           <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-white/10">
             <div
               className="h-full rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-soft"
-              style={{ width: `${percent}%` }}
+              style={{ width: `${percent}%`, willChange: 'width' }}
             />
           </div>
         </div>
