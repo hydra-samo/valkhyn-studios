@@ -3,7 +3,7 @@ main = "index.ts"
 compatibility_date = "2026-11-03"
 
 [vars]
-PUBLIC_SITE_URL = "https://valkhyn.site"
+PUBLIC_SITE_URL = "https://www.valkhyn.site"
 CONTACT_TO_EMAIL = "contact@valkhyn.site"
 
 [[d1_databases]]
