@@ -9,6 +9,8 @@
   Cache-Control: public, max-age=604800
 /portrait/*
   Cache-Control: public, max-age=604800
+/fonts/*
+  Cache-Control: public, max-age=604800
 
 /valkhyn-og.jpg
   Cache-Control: public, max-age=604800

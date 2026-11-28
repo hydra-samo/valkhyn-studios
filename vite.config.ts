@@ -19,7 +19,11 @@ const inlineCss = (): Plugin => ({
     if (!entry) return html;
 
     const [fileName, asset] = entry;
-    const css = (asset.source as string).replace(/<\/style/gi, '<\\/style');
+    // Dev CSS resolves /fonts from public/; inlined HTML needs a relative path
+    // so the same bundle works from the site root and a Pages subpath.
+    const css = (asset.source as string)
+      .replace(/\/fonts\//g, './fonts/')
+      .replace(/<\/style/gi, '<\\/style');
     delete ctx.bundle[fileName];
 
     return html.replace(

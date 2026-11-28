@@ -6,9 +6,9 @@ interface SplashProps {
   onComplete: () => void;
 }
 
-const SETTLE_DELAY = 900;
-const FADE_MS = 260;
-const HARD_CAP = 2600;
+const SETTLE_DELAY = 520;
+const FADE_MS = 180;
+const HARD_CAP = 1800;
 
 /**
  * Studio splash — emerald wash, mark, smooth progress readout. Sits above
@@ -24,7 +24,7 @@ export const Splash: React.FC<SplashProps> = ({ onComplete }) => {
 
     if (reduced) {
       setPercent(100);
-      const settle = window.setTimeout(() => setLeaving(true), 100);
+      const settle = window.setTimeout(() => setLeaving(true), 60);
       const hardCap = window.setTimeout(onComplete, HARD_CAP);
       return () => {
         window.clearTimeout(settle);
