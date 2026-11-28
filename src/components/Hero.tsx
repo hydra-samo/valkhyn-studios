@@ -11,9 +11,9 @@ interface HeroReel {
 
 /** Editing → motion → voice. The stack dissolves; no clip uses `loop`. */
 const HERO_REELS: HeroReel[] = [
-  { src: 'video/studio-process.mp4', poster: 'video/studio-process.jpg' },
-  { src: 'video/video-motion.mp4', poster: 'video/video-motion.jpg' },
-  { src: 'video/video-voice.mp4', poster: 'video/video-voice.jpg' },
+  { src: 'video/studio-process.mp4', poster: 'video/studio-process.webp' },
+  { src: 'video/video-motion.mp4', poster: 'video/video-motion.webp' },
+  { src: 'video/video-voice.mp4', poster: 'video/video-voice.webp' },
 ];
 
 /**

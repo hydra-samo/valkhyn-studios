@@ -1,0 +1,14 @@
+# Build output is fingerprinted — safe to keep indefinitely.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Studio footage and art-directed stills keep their filenames across deploys.
+/images/*
+  Cache-Control: public, max-age=604800
+/video/*
+  Cache-Control: public, max-age=604800
+/portrait/*
+  Cache-Control: public, max-age=604800
+
+/valkhyn-og.jpg
+  Cache-Control: public, max-age=604800
