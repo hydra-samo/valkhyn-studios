@@ -3,14 +3,14 @@ import Lenis from 'lenis';
 import { useDeviceTier } from './useDeviceTier';
 
 /**
- * Global smooth scroll with light damping. Anchor links (`#work`, `#contact`, …)
- * are routed through Lenis manually so section navigation gets the same eased
- * travel with an offset that clears the fixed nav.
+ * Global smooth scroll for fine-pointer desktop wheels only.
  *
- * Low-tier devices skip Lenis entirely — the rAF loop and virtual-scroll
- * transforms add jank on weak CPUs, and native scroll is smoother there
- * (`scroll-margin-top` in index.css keeps anchors clear of the nav).
- * Touch input is untouched either way: Lenis only smooths wheel scrolling.
+ * Phones and tablets keep native touch scrolling: eased wheel tweening on a
+ * swipe viewport makes the page keep travelling after the finger stops, which
+ * reads as a two-line bounce. Narrow viewports skip Lenis for the same reason.
+ * Anchor links are routed through Lenis on desktop so they get the same eased
+ * travel with an offset that clears the fixed nav; on touch they use the
+ * native jump with `scroll-margin-top` from index.css.
  */
 export function useLenis() {
   const lenisRef = useRef<Lenis | null>(null);
@@ -20,9 +20,9 @@ export function useLenis() {
     if (typeof window === 'undefined') return;
     if (tier === 'low') return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (window.matchMedia('(max-width: 767px)').matches) return;
 
-    // A shorter ride on touch: long eased travel feels heavy when swiping.
-    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
     const ride = tier === 'medium' ? 0.95 : 1.2;
 
     const lenis = new Lenis({
@@ -43,10 +43,7 @@ export function useLenis() {
       if (!target) return;
 
       e.preventDefault();
-      lenis.scrollTo(target as HTMLElement, {
-        offset: -88,
-        duration: isCoarse ? 0.85 : ride,
-      });
+      lenis.scrollTo(target as HTMLElement, { offset: -88, duration: ride });
     };
 
     document.addEventListener('click', onClick);

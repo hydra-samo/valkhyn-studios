@@ -200,7 +200,8 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Lenis owns eased travel on desktop; mobile uses native touch scrolling. */
+    scroll-behavior: auto;
   }
 
   body {
@@ -837,18 +838,25 @@
   }
 }
 
-/* Custom scrollbar — flat, theme-aware */
-@media (hover: hover) and (pointer: fine) {
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--md-sys-color-outline) transparent;
-  }
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb {
-    background: var(--md-sys-color-outline);
-    border-radius: 9999px;
-  }
+/* Custom scrollbar — flat emerald, driven by the active theme tokens */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--md-sys-color-primary) var(--md-sys-color-surface);
+}
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: var(--md-sys-color-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-primary);
+  border: 2px solid var(--md-sys-color-surface);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-sys-color-primary-hover);
 }
 
 /* Reduced motion: kill ambient animation, keep layout intact */
