@@ -61,6 +61,12 @@ inlines the stylesheet so first paint never waits on a CSS request; `public/_hea
 sets long cache lifetimes for the hashed bundle and studio media. `base: './'` is
 kept so relative asset URLs also work from any subpath.
 
+The private API Worker `valkhyn-api` is built from the same repository: Workers
+Builds runs `npx wrangler deploy --config worker/wrangler.toml` from the repository
+root when files under `worker/` change. It serves `https://api.valkhyn.site` with
+D1 and R2 bindings; `PUBLISH_TOKEN` is a Cloudflare Worker secret. See
+`worker/README.md`.
+
 ## Configuration
 
 None. The site is fully static: no environment variables, no API keys, no form

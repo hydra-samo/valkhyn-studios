@@ -1,6 +1,6 @@
 # valkhyn-api Worker
 
-API Worker for `https://api.valkhyn.site`. Deployed from this directory via Cloudflare Workers Builds on the `valkhyn-studios` repo.
+API Worker for `https://api.valkhyn.site`. Deployed from the repository root via Cloudflare Workers Builds on the `valkhyn-studios` repo using `npx wrangler deploy --config worker/wrangler.toml`.
 
 - `index.ts` — Worker routes: `GET /health`, `GET /api`, `GET /api/projects`, `POST /api/contact`, `GET /api/inquiries`, `POST /api/publish`, `POST|DELETE /api/media/<key>`.
 - `wrangler.toml` — D1 (`valkhyn-db`) and R2 (`valkhyn-media`) bindings. `PUBLISH_TOKEN` is a Cloudflare Worker secret, never in Git.

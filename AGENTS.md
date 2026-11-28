@@ -7,7 +7,7 @@ Operating rules for this repo. It is a standalone site: no BRAND/ tree, no v1.x 
 - `npm ci` then `npm run dev` — dev server on **port 1717** (strict), not Vite's 5173.
 - `npm run build` — `tsc --noEmit` + `vite build` → `dist/`.
 - `npm run lint` — typecheck only. Both must be clean before pushing; the deploy workflow runs the build.
-- Deploy: Cloudflare Workers Builds publishes `dist/` as the `valkhyn-site` Worker on every push to `main`; canonical site is `https://www.valkhyn.site/`. The GitHub Pages workflow remains a mirror only.
+- Deploy: Cloudflare Workers Builds publishes `dist/` as the `valkhyn-site` Worker on every push to `main`; canonical site is `https://www.valkhyn.site/`. The private `valkhyn-api` Worker deploys from `worker/` in the same repo via `npx wrangler deploy --config worker/wrangler.toml`. The GitHub Pages workflow remains a mirror only.
 
 ## Code
 
