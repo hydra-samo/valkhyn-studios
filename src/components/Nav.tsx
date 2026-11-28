@@ -135,7 +135,7 @@ export const Nav: React.FC = () => {
           role="dialog"
           aria-modal="true"
           className={cn(
-            'glass-sheet absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-[var(--shape-editorial)] border border-[var(--md-sys-color-outline-variant)] px-6 pb-[max(3rem,env(safe-area-inset-bottom))] pt-8 transition-transform duration-300 md:mx-auto md:max-w-md md:rounded-[var(--shape-editorial)]',
+            'glass-sheet absolute inset-x-0 bottom-0 max-h-[85svh] overflow-y-auto rounded-t-[var(--shape-editorial)] border border-[var(--md-sys-color-outline-variant)] px-6 pb-[max(3rem,env(safe-area-inset-bottom))] pt-8 transition-transform duration-300 md:mx-auto md:max-w-md md:rounded-[var(--shape-editorial)]',
             open ? 'translate-y-0' : 'translate-y-full'
           )}
         >

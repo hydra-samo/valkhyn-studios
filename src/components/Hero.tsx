@@ -20,6 +20,8 @@ const HERO_REELS: HeroReel[] = [
  * Hero — company masthead over a slowly crossfading studio reel.
  * The footage keeps its real colour with a light cleanup grade; a flat plate
  * carries the copy in both themes, and small screens lift the clip brightness.
+ * The shell uses `100svh`, not `100dvh`: a growing hero when mobile browser
+ * chrome hides would make scroll anchoring snap the page back mid-fling.
  */
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
@@ -113,7 +115,7 @@ export const Hero: React.FC = () => {
     <section
       id="home"
       ref={root}
-      className="relative flex min-h-[100dvh] w-full items-center overflow-hidden px-5 pt-28 pb-[max(4rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-[max(5rem,env(safe-area-inset-bottom))]"
+      className="relative flex min-h-[100svh] w-full items-center overflow-hidden px-5 pt-28 pb-[max(4rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-[max(5rem,env(safe-area-inset-bottom))]"
     >
       <div className="soft-frame pointer-events-none absolute inset-3 sm:inset-5" aria-hidden="true">
         {HERO_REELS.map((reel, index) => (

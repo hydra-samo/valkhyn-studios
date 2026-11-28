@@ -37,7 +37,7 @@ function Site() {
   if (legal) return <Legal kind={legal} />;
 
   return (
-    <div className="relative min-h-[100dvh] bg-canvas text-text">
+    <div className="relative min-h-[100svh] bg-canvas text-text">
       {!booted && <Splash onComplete={finishBoot} />}
 
       <Nav />

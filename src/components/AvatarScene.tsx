@@ -152,7 +152,7 @@ export const AvatarScene: React.FC<AvatarSceneProps> = ({ className }) => {
   const low = tier === 'low';
 
   return (
-    <div className={cn('pointer-events-auto relative h-[38dvh] w-full md:absolute md:inset-0', className)}>
+    <div className={cn('pointer-events-auto relative h-[38svh] w-full md:absolute md:inset-0', className)}>
       <AvatarErrorBoundary>
         <Canvas
           dpr={low ? 1 : [1, 2]}

@@ -20,7 +20,7 @@ export const Legal: React.FC<{ kind: LegalKind }> = ({ kind }) => {
   }, [page.title]);
 
   return (
-    <div className="md3-surface min-h-[100dvh] px-6 py-16 sm:px-10 md:px-14 lg:px-20">
+    <div className="md3-surface min-h-[100svh] px-6 py-16 sm:px-10 md:px-14 lg:px-20">
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center justify-between gap-6 border-b border-[var(--md-sys-color-outline-variant)] pb-6">
           <a href="#home" className="flex items-center gap-3">
