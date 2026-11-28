@@ -40,5 +40,5 @@ export const SERVICE_FRAMES: ServiceFrame[] = [
 /** Copy lives in `i18n/translations.ts` under `process.<index>.*`. */
 export const PROCESS_STEPS = [{ index: '1' }, { index: '2' }, { index: '3' }, { index: '4' }, { index: '5' }];
 
-/** Mailto recipient for the Contact brief. Not rendered as visible-copy text. */
-export const EMAIL = 'hello@valkyhyn.com';
+/** Studio address used by the mailto brief, footer icon and contact copy. */
+export const EMAIL = 'contact@valkhyn.site';

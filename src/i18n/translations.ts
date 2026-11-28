@@ -84,6 +84,7 @@ export const UI: Record<Lang, Dict> = {
     'contact.accent': 'together.',
     'contact.body':
       'Have a project in mind? Tell us what you are building and we will shape the tone, pace and sound in one direct session. No middlemen, no handoffs.',
+    'contact.findUs': 'You can find us at:',
     'form.name': 'Your name',
     'form.namePh': 'Name',
     'form.email': 'Email',
@@ -91,6 +92,7 @@ export const UI: Record<Lang, Dict> = {
     'form.discipline': 'Discipline',
     'form.message': 'The project',
     'form.messagePh': 'Tell us about it',
+    'form.subject': 'Project brief — {discipline}',
     'form.submit': 'Send brief',
     'form.sentTitle': 'Brief ready',
     'form.sentBody': 'Your mail app should be open with the brief ready to send.',
@@ -183,6 +185,7 @@ export const UI: Record<Lang, Dict> = {
     'contact.accent': 'ensemble.',
     'contact.body':
       'Un projet en tête ? Dites-nous ce que vous construisez et nous fixerons le ton, le rythme et le son en une session directe. Sans intermédiaire, sans décalage.',
+    'contact.findUs': 'Vous pouvez nous joindre à :',
     'form.name': 'Votre nom',
     'form.namePh': 'Nom',
     'form.email': 'E-mail',
@@ -190,6 +193,7 @@ export const UI: Record<Lang, Dict> = {
     'form.discipline': 'Discipline',
     'form.message': 'Le projet',
     'form.messagePh': 'Parlez-nous du projet',
+    'form.subject': 'Brief projet — {discipline}',
     'form.submit': 'Envoyer le brief',
     'form.sentTitle': 'Brief prêt',
     'form.sentBody': "Votre application mail devrait être ouverte avec le brief prêt à envoyer.",
@@ -282,6 +286,7 @@ export const UI: Record<Lang, Dict> = {
     'contact.accent': 'معاً.',
     'contact.body':
       'لديك مشروع في بالك؟ أخبرنا بما تبنيه وسنضبط النبرة والإيقاع والصوت في جلسة مباشرة. بلا وسطاء وبلا تسليمات متقطعة.',
+    'contact.findUs': 'يمكنك مراسلتنا على:',
     'form.name': 'اسمك',
     'form.namePh': 'الاسم',
     'form.email': 'البريد',
@@ -289,6 +294,7 @@ export const UI: Record<Lang, Dict> = {
     'form.discipline': 'التخصص',
     'form.message': 'المشروع',
     'form.messagePh': 'أخبرنا عنه',
+    'form.subject': 'موجز مشروع — {discipline}',
     'form.submit': 'أرسل الموجز',
     'form.sentTitle': 'الموجز جاهز',
     'form.sentBody': 'سيُفتح تطبيق البريد لديك والموجز جاهز للإرسال.',

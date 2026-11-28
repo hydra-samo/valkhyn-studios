@@ -15,29 +15,21 @@ export const Contact: React.FC = () => {
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
 
-  const [error, setError] = useState(false);
-
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(false);
-    try {
-      const res = await fetch(
-        'https://api.valkhyn.site/api/contact',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name,
-            email,
-            message: `Discipline: ${discipline || t('form.disc.video')}\n\n${message}`,
-          }),
-        }
-      );
-      if (!res.ok) throw new Error('Request failed');
-      setSent(true);
-    } catch {
-      setError(true);
-    }
+    const chosen = discipline || t('form.disc.video');
+    const subject = t('form.subject', { discipline: chosen });
+    const body = [
+      `${t('form.name')}: ${name}`,
+      `${t('form.email')}: ${email}`,
+      `${t('form.discipline')}: ${chosen}`,
+      '',
+      message,
+    ].join('\n');
+
+    // Opens the visitor's own mail app (Gmail, Outlook, Apple Mail, …).
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setSent(true);
   };
 
   return (
@@ -54,22 +46,23 @@ export const Contact: React.FC = () => {
               <p className="md3-body mt-6 max-w-md text-sm leading-relaxed text-[var(--md-sys-color-on-surface-variant)] sm:text-base">
                 {t('contact.body')}
               </p>
+              <p className="md3-label mt-8 flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span>{t('contact.findUs')}</span>
+                <a
+                  href={`mailto:${EMAIL}`}
+                  dir="ltr"
+                  className="font-medium text-[var(--md-sys-color-primary)] underline underline-offset-4 transition-colors duration-300 hover:text-[var(--md-sys-color-on-surface)]"
+                >
+                  {EMAIL}
+                </a>
+              </p>
             </Reveal>
           </div>
 
           <Reveal delay={0.1} className="md:col-span-5 md:col-start-8">
             <div className="brief-card">
               <form onSubmit={onSubmit} className="space-y-6">
-                {error ? (
-                  <div className="py-10" aria-live="polite">
-                    <h3 className="heading-display text-2xl text-[var(--md-sys-color-on-surface)]">
-                      Unable to send
-                    </h3>
-                    <p className="md3-body mt-3 text-sm leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
-                      Please email <a className="underline" href={`mailto:${EMAIL}`}>{EMAIL}</a> directly.
-                    </p>
-                  </div>
-                ) : sent ? (
+                {sent ? (
                   <div className="py-10" aria-live="polite">
                     <h3 className="heading-display text-2xl text-[var(--md-sys-color-on-surface)]">
                       {t('form.sentTitle')}

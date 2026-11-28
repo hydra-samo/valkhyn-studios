@@ -1,6 +1,7 @@
 import React from 'react';
-import { Facebook, Instagram } from 'lucide-react';
+import { Facebook, Instagram, Mail } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { EMAIL } from '../data/content';
 
 /**
  * Unfilled brand outlines. Facebook and Instagram are lucide's stroke icons.
@@ -45,9 +46,10 @@ const TikTokOutline: React.FC<IconProps> = ({ size = 16, strokeWidth = 1.3, ...r
   </svg>
 );
 
-type Social = { label: string; href?: string; Icon: React.ComponentType<IconProps> };
+type Social = { label: string; href?: string; title?: string; Icon: React.ComponentType<IconProps> };
 
 const SOCIALS: Social[] = [
+  { label: 'Email', title: EMAIL, href: `mailto:${EMAIL}`, Icon: Mail },
   { label: 'Facebook', Icon: Facebook },
   { label: 'WhatsApp', href: 'https://wa.me/213783097316', Icon: WhatsAppOutline },
   { label: 'TikTok', href: 'https://www.tiktok.com/@valkhyn.studio', Icon: TikTokOutline },
@@ -59,17 +61,19 @@ const ICON_CLASS =
 
 export const SocialIcons: React.FC<{ className?: string }> = ({ className }) => (
   <div className={cn('flex flex-wrap items-center gap-3', className)}>
-    {SOCIALS.map(({ label, href, Icon }) => {
+    {SOCIALS.map(({ label, href, title, Icon }) => {
       const glyph = <Icon size={16} strokeWidth={1.7} aria-hidden={true} />;
+      const name = title ?? label;
+      const isMail = href?.startsWith('mailto:') ?? false;
 
       return href ? (
         <a
           key={label}
           href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={label}
-          title={label}
+          target={isMail ? undefined : '_blank'}
+          rel={isMail ? undefined : 'noopener noreferrer'}
+          aria-label={name}
+          title={name}
           className={cn(
             ICON_CLASS,
             'transition-colors duration-300 hover:border-[var(--md-sys-color-primary)] hover:text-[var(--md-sys-color-primary)]',
