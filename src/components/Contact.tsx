@@ -22,7 +22,7 @@ export const Contact: React.FC = () => {
     setError(false);
     try {
       const res = await fetch(
-        'https://valkhyn-api.valkhynstudio.workers.dev/api/contact',
+        'https://api.valkhyn.site/api/contact',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
