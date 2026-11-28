@@ -6,9 +6,9 @@ interface SplashProps {
   onComplete: () => void;
 }
 
-const SETTLE_DELAY = 520;
-const FADE_MS = 180;
-const HARD_CAP = 1800;
+const SETTLE_DELAY = 320;
+const FADE_MS = 120;
+const HARD_CAP = 1200;
 
 /**
  * Studio splash — emerald wash, mark, smooth progress readout. Sits above
