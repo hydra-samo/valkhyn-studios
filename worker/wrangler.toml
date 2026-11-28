@@ -1,0 +1,16 @@
+name = "valkhyn-api"
+main = "index.ts"
+compatibility_date = "2026-11-03"
+
+[vars]
+PUBLIC_SITE_URL = "https://valkhyn.site"
+CONTACT_TO_EMAIL = "contact@valkhyn.site"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "valkhyn-db"
+database_id = "ed22959a-24a3-4a40-9523-a001b31a88d1"
+
+[[r2_buckets]]
+binding = "MEDIA_BUCKET"
+bucket_name = "valkhyn-media"
