@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLenis } from './hooks/useLenis';
 import { Nav } from './components/Nav';
 import { Hero } from './components/Hero';
@@ -8,6 +8,7 @@ import { Work } from './components/Work';
 import { Process } from './components/Process';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
+import { Splash } from './components/Splash';
 import { Legal, type LegalKind } from './components/Legal';
 
 /** Legal pages are hash routes: static hosting, no server rewrite needed. */
@@ -23,6 +24,8 @@ export default function App() {
 
 function Site() {
   const [legal, setLegal] = useState<LegalKind | null>(legalRoute);
+  const [booted, setBooted] = useState(false);
+  const finishBoot = useCallback(() => setBooted(true), []);
   useLenis();
 
   useEffect(() => {
@@ -35,6 +38,8 @@ function Site() {
 
   return (
     <div className="relative min-h-[100dvh] bg-canvas text-text">
+      {!booted && <Splash onComplete={finishBoot} />}
+
       <Nav />
       <main className="relative">
         <Hero />
